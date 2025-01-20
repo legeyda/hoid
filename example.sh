@@ -2,7 +2,7 @@
 set -eu
 
 
-shelduck import https://raw.githubusercontent.com/legeyda/hoid/refs/heads/unstable/hoid.sh
+shelduck import https://raw.githubusercontent.com/legeyda/hoid/refs/heads/main/hoid.sh
 
 
 main() {

@@ -2,7 +2,7 @@
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/base.sh
 
 hoid_task_directory_src() {
-	shelduck resolve https://raw.githubusercontent.com/legeyda/hoid/refs/heads/unstable/task/directory.sh
+	shelduck resolve https://raw.githubusercontent.com/legeyda/hoid/refs/heads/main/task/directory.sh
 }
 
 hoid_task_directory() {

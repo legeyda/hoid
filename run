@@ -8,7 +8,7 @@ run_build() {
 }
 
 run_test() {
-	SHELDUCK_URL_RULES="${SHELDUCK_URL_RULES:-},https://raw.githubusercontent.com/legeyda/hoid/refs/heads/unstable/=file://$(pwd)/"
+	SHELDUCK_URL_RULES="${SHELDUCK_URL_RULES:-},https://raw.githubusercontent.com/legeyda/hoid/refs/heads/main/=file://$(pwd)/"
 	export SHELDUCK_URL_RULES
 
 
