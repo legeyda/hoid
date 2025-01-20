@@ -1,0 +1,30 @@
+#!/usr/bin/env shelduck_run
+set -eux
+
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/run.sh
+
+run_build() {
+	true
+}
+
+run_test() {
+	SHELDUCK_URL_RULES="${SHELDUCK_URL_RULES:-},https://raw.githubusercontent.com/legeyda/hoid/refs/heads/unstable/=file://$(pwd)/"
+	export SHELDUCK_URL_RULES
+
+
+	shelduck import "$(pwd)/hoid.sh"
+	#HOID_TARGET_DRIVER=local
+	# hoid shell 'echo hello all'
+	# hoid directory --mode 777 ./target/dir
+	# bobshell_log '================================'
+	# bobshell_log '================================'
+	# bobshell_log '================================'
+	# bobshell_log '================================'
+	# hoid shelduck run -c 'echo hello'
+
+
+	#hoid directory --mode 777 ./target/dir
+	hoid shell 'hoid directory --mode 777 ./target/dir'
+}
+
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/entry_point.sh
