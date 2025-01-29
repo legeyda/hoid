@@ -38,10 +38,10 @@ hoid() {
 	fi
 
 	# explicit init
-	if [ init = "$1" ] && ! bobshell_isset_2 "$@"; then
+	if [ init = "$1" ]; then
 		shift
 		hoid_buffer_flush
-		hoid_init
+		hoid_init "$@"
 		hoid_init_done=true
 		return
 	fi
@@ -49,9 +49,9 @@ hoid() {
 	# implicit init
 	if [ true != "${hoid_init_done:-false}" ]; then
 		hoid_buffer_flush
+		hoid_init
+		hoid_init_done=true
 	fi
-	hoid_init
-	hoid_init_done=true
 
 	# flush
 	if [ flush = "$1" ] && ! bobshell_isset_2 "$@"; then

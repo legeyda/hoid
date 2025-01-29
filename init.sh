@@ -11,6 +11,8 @@ hoid_init() {
 	unset hoid_target hoid_target_driver hoid_target_address
 
 	if bobshell_isset_1 "$@"; then
+		# shellcheck disable=SC2015
+		bobshell_isset_2 "$@" && bobshell_die "hoid init: unexpected argument: $2" || true
 		hoid_target="$1"
 	elif bobshell_isset HOID_TARGET; then
 		hoid_target="$HOID_TARGET"
