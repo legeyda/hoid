@@ -2,6 +2,9 @@
 
 # mock hoid
 shelduck import driver/local.sh
+shelduck import ./buffer.sh
+
+
 
 hoid() {
 	hoid_task_function="hoid_task_$1"
@@ -13,9 +16,9 @@ hoid() {
 	unset hoid_task_function
 }
 
-hoid_driver_shell() {
+hoid_driver_write() {
 	hoid_driver_local_shell "$@"
 }
 
 # flush buffer on success exit
-trap '[ $? -eq 0 ] && hoid_task_flush' EXIT
+trap '[ $? -eq 0 ] && hoid_buffer_flush' EXIT

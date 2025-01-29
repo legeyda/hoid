@@ -2,14 +2,9 @@
 # lib dependencies
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/base.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/scope.sh
-# shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/string.sh
-# shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/install.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/template.sh
-# shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/require.sh
-# shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/git.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/util.sh
-
-
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/str/equals.sh
 
 # import std drivers
 shelduck import ./driver/docker.sh
@@ -20,89 +15,96 @@ shelduck import ./driver/ssh.sh
 shelduck import ./task/command.sh
 shelduck import ./task/copy.sh
 shelduck import ./task/directory.sh
-shelduck import ./task/flush.sh
 shelduck import ./task/script.sh
 shelduck import ./task/shelduck.sh
 shelduck import ./task/shell.sh
 
+shelduck import ./buffer.sh
+shelduck import ./init.sh
+
 
 # main entry point
 hoid() {
-	if [ init = "$1" ]; then
-		if [ true != "${hoid_init_done:-false}" ]; then
-			hoid_task_flush
-		fi
-		hoid_init "$@"
+	# no arguments
+	if ! bobshell_isset_1 "$@"; then
+		hoid_usage 2>&1
+		exit 1
+	fi
+
+	# print usage
+	if bobshell_equals "$1" -h --help -? usage help && ! bobshell_isset_2 "$@" ; then
+		hoid_usage
+		return
+	fi
+
+	# explicit init
+	if [ init = "$1" ] && ! bobshell_isset_2 "$@"; then
+		shift
+		hoid_buffer_flush
+		hoid_init
 		hoid_init_done=true
 		return
 	fi
 
+	# implicit init
 	if [ true != "${hoid_init_done:-false}" ]; then
-		hoid_init
-		hoid_init_done=true
+		hoid_buffer_flush
+	fi
+	hoid_init
+	hoid_init_done=true
+
+	# flush
+	if [ flush = "$1" ] && ! bobshell_isset_2 "$@"; then
+		hoid_buffer_flush
+		return
 	fi
 
+	# delegate to task
 	hoid_task "$@"
 }
 
+hoid_usage() {
+	printf %s 'Usage: hoid [OPTIONS] command 
 
-# txt: 
-# env: hoid_target_driver
-#      hoid_target_address
-hoid_init() {
+Commands:
+	init
+	become
 
-	# local target
-	if bobshell_isset_1 "$@"; then
-		hoid_parse_target "$1"
-	else
-		if bobshell_isset HOID_TARGET; then
-			hoid_parse_target "$HOID_TARGET"
-		else
-			hoid_target_driver=local
-		fi
-
-		# todo load profile
-
-		# optionally override
-		if bobshell_isset HOID_TARGET_DRIVER; then
-			hoid_target_driver="$HOID_TARGET_DRIVER"
-		fi
-		if bobshell_isset HOID_TARGET_ADDRESS; then
-			hoid_target_address="$HOID_TARGET_ADDRESS"
-		fi
+'
+}
 
 
-		# load and init driver
-		if bobshell_command_available "hoid_driver_${hoid_target_driver}_init"; then
-			"hoid_driver_${hoid_target_driver}_init"
-		fi
-	fi
-	
+
+hoid_driver_write() {
+	"hoid_driver_${hoid_target_driver}_shell" "$*"
 }
 
 
 
 
-# env: hoid_target_driver
-#      hoid_target_address
-hoid_parse_target() {
-	if ! bobshell_split_first "$1" : hoid_target_driver hoid_target_address; then
-		hoid_target_driver=ssh
-		hoid_target_address="$1"
-	fi
-	if ! bobshell_split_first "$hoid_target_address" \; hoid_target_address hoid_target_options; then
-		: # todo parse hoid_target_options
-	fi
-}
-
-
-hoid_driver_shell() {
-	"hoid_driver_${hoid_target_driver}_shell" "set -eu;${bobshell_newline}$*"
-}
 
 
 
 hoid_task() {
+	unset hoid_task_become
+	while bobshell_isset_1 "$@"; do
+		case "$1" in
+			(-b|--become|--become=true)
+				shift
+				hoid_task_become=true ;;
+			(--become=false)
+				shift
+				hoid_task_become=false ;;
+			(-*)
+				bobshell_die "unrecognized option $1" ;;
+			(*)
+				break ;;
+		esac
+	done
+
+	
+
+
 	hoid_task_function="hoid_task_$1"
 	if ! bobshell_command_available "$hoid_task_function"; then
 		bobshell_die "hoid_task: task '$1' not available"
@@ -113,4 +115,4 @@ hoid_task() {
 }
 
 # flush buffer on success exit
-trap '[ $? -eq 0 ] && hoid_task_flush' EXIT
+trap '[ $? -eq 0 ] && hoid_buffer_flush' EXIT

@@ -2,29 +2,116 @@
 set -eux
 
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/run.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/map.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/misc/random.sh
+
+# var_append_output
+var_append_output() {
+	var_append_output_var="$1"
+	shift
+
+	var_append_output_old_value=$(bobshell_getvar "$var_append_output_var")
+
+	var_append_output_new_value=$("$@")
+	bobshell_putvar "$var_append_output_var" "$var_append_output_old_value$var_append_output_new_value"
+	unset var_append_output_var var_append_output_old_value var_append_output_new_value
+}
 
 run_build() {
-	true
+	mkdir -p target
+	hoid_compile "file://$(pwd)/hoid.sh" > target/hoid.sh
 }
+
+
+bobshell_defun() {
+	bobshell_defun_name="$1"
+	shift
+	eval "
+$bobshell_defun_name() {
+	$*
+}
+"
+	unset bobshell_defun_name
+}
+
+# fun: hoid_compile URL
+hoid_compile() {
+	unset hoid_compile_cache_data
+	# shellcheck disable=SC2016
+	bobshell_defun shelduck_event_url 'bobshell_map_put hoid_compile_cache "$1" "$2"'
+	shelduck resolve "$1" > /dev/null
+	hoid_compile_random="$(bobshell_random)$(bobshell_random)$(bobshell_random)"
+	# shellcheck disable=SC2016
+	printf '
+hoid_compile_cache_data=$(cat<<\EOF_HOID_COMPILE_%s
+%s
+EOF_HOID_COMPILE_%s
+)' "$hoid_compile_random" "$hoid_compile_cache_data" "$hoid_compile_random"
+	unset hoid_compile_random
+
+	# shellcheck disable=SC2016
+	printf %s '
+# fun: shelduck import http://example.com/file.sh
+# txt: mock shelduck 
+shelduck() {
+	if [ "$1" != import ]; then
+		bobshell_die "(offline mock) shelduck: import only supported"
+	fi
+	if bobshell_starts_with "$2" -; then
+		bobshell_die "(offline mock) shelduck: options not supported"
+	fi
+	: "${shelduck_import_history:=}"
+	if bobshell_contains "$shelduck_import_history" "$1"; then
+		return
+	fi
+	shelduck_value=$(bobshell_map_get "$2")
+	eval "$shelduck_value"
+	unset shelduck_value
+	shelduck_import_history="$shelduck_import_history $2"
+}
+
+'
+	unset hoid_compile_cache_data
+
+}
+
+
+
+# print_all_src() {
+# 	run_build_remote_mock_src=$(shelduck resolve remote_mock.sh)
+# 	run_build_output="
+# hoid_remote_mock_src() {
+# 	cat <<HOID_RUN_EOF
+# $run_build_remote_mock_src
+# HOID_RUN_EOF
+# }
+# "
+# 	unset run_build_remote_mock_src
+
+# 	for run_build_task_name in command directory flush script shelduck shell; do
+# 		run_build_task_src=$(shelduck resolve task/$task_name.sh)
+# 		run_build_output="$run_build_output
+
+# hoid_task_${task_name}_src() {
+# 	cat <<HOID_RUN_EOF
+# 	$run_build_task_src
+# HOID_RUN_EOF
+# }
+# "
+# 		unset run_build_task_src
+# 	done
+
+# }
 
 run_test() {
 	SHELDUCK_URL_RULES="${SHELDUCK_URL_RULES:-},https://raw.githubusercontent.com/legeyda/hoid/refs/heads/main/=file://$(pwd)/"
 	export SHELDUCK_URL_RULES
 
-
 	shelduck import "$(pwd)/hoid.sh"
-	#HOID_TARGET_DRIVER=local
-	# hoid shell 'echo hello all'
-	# hoid directory --mode 777 ./target/dir
-	# bobshell_log '================================'
-	# bobshell_log '================================'
-	# bobshell_log '================================'
-	# bobshell_log '================================'
-	# hoid shelduck run -c 'echo hello'
 
-
-	#hoid directory --mode 777 ./target/dir
-	hoid shell 'hoid directory --mode 777 ./target/dir'
+	#hoid init ubuntu24server
+	hoid shelduck run 'val:echo $xyz'
+	#hoid command echo hello
 }
 
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/entry_point.sh
