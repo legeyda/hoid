@@ -74,7 +74,6 @@ run_test() {
 
 	hoid init ubuntu24server
 	hoid command mkdir -p hello-from-hoid
-	reset
 	hoid --become true command id -u
 
 

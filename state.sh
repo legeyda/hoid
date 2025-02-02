@@ -20,6 +20,13 @@ hoid_state_init() {
 	elif [ -z "${hoid_become:-}" ]; then
 		hoid_set_become false
 	fi
+
+	if bobshell_isset hoid_cli_become_password; then
+		hoid_become_password="$hoid_cli_become_password"
+	elif [ -z "${hoid_cli_become_password:-}" ]; then
+		unset hoid_become_password
+	fi
+
 }
 
 hoid_state_valid() {
@@ -36,6 +43,9 @@ hoid_cli_differ() {
 		return 0
 	fi
 	if bobshell_isset hoid_cli_become && [ "$hoid_cli_become" != "${hoid_become:-}" ] ; then
+		return 0
+	fi
+	if bobshell_isset hoid_cli_become_password && [ "$hoid_cli_become_password" != "${hoid_become_password:-}" ] ; then
 		return 0
 	fi
 	return 1

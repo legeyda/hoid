@@ -46,17 +46,22 @@ hoid() {
 	hoid_cli_opts=false
 	while bobshell_isset_1 "$@"; do
 		case "$1" in
+			(-t|--target)
+				bobshell_isset_2 "$@" || bobshell_die "hoid: option $1: argument expected"
+				hoid_cli_target="$2"
+				shift 2
+				;;
 			(-b|--become)
 				bobshell_isset_2 "$@" || bobshell_die "hoid: option $1: argument expected"
 				bobshell_equals_any "$2" true false || bobshell_die "hoid: option $1: argument expected to be either true or false"
 				hoid_cli_become=true
 				shift 2
 				;;
-			(-t|--target)
+			(-p|--become-password)
 				bobshell_isset_2 "$@" || bobshell_die "hoid: option $1: argument expected"
-				hoid_cli_target="$2"
+				hoid_cli_become_password="$2"
 				shift 2
-				;;
+				;;			
 			(-n|--name)
 				bobshell_isset_2 "$@" || bobshell_die "hoid: option $1: argument expected"
 				hoid_cli_name="$2"
