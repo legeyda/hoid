@@ -9,8 +9,12 @@ hoid_buffer_write() {
 	hoid_buffer="${hoid_buffer:-}$*"
 }
 
-
+# fun: hoid_buffer_flush
+# env: hoid_buffer
 hoid_buffer_flush() {
+	if bobshell_isset_1 "$@"; then
+		bobshell_die "hoid flush: takes no arguments"
+	fi
 	if [ -n "${hoid_buffer:-}" ]; then
 		hoid_buffer_rewrite
 		hoid_driver_write "$hoid_buffer"
@@ -23,10 +27,11 @@ hoid_buffer_rewrite() {
 
 
 	hoid_buffer_rewrite_tasks=$(printf %s "$hoid_buffer" | sed -n 's/\(^\|[[:space:]]\)hoid\s\+\([A-Za-z_][A-Za-z0-9_-]*\).*$/\2/gp')
-	hoid_buffer_rewrite_tasks="${hoid_buffer_rewrite_tasks}${bobshell_newline}command${bobshell_newline}script${bobshell_newline}shell"
-	hoid_buffer_rewrite_tasks=$(printf %s "$hoid_buffer_rewrite_tasks" | sort -u)
 
 	if [ -n "$hoid_buffer_rewrite_tasks" ]; then
+		hoid_buffer_rewrite_tasks="${hoid_buffer_rewrite_tasks}${bobshell_newline}command${bobshell_newline}script${bobshell_newline}shell"
+		hoid_buffer_rewrite_tasks=$(printf %s "$hoid_buffer_rewrite_tasks" | sort -u)
+		
 		hoid_buffer_rewrite_orig="$hoid_buffer"
 		hoid_buffer=
 
@@ -51,4 +56,23 @@ hoid_buffer_rewrite() {
 	fi
 
 	hoid_buffer="${bobshell_newline}${bobshell_newline}set -eu${bobshell_newline}$hoid_buffer"
+
+	if [ "$hoid_become" = true ]; then
+		if bobshell_contains "$hoid_buffer" "'"; then
+			hoid_buffer="sudo sh -c '$hoid_buffer'"
+		else
+			bobshell_buffer_rewrite_random="$(bobshell_random)$(bobshell_random)$(bobshell_random)"
+			hoid_buffer="script=$(cat<<EOF_$bobshell_buffer_rewrite_random
+$hoid_buffer
+EOF_$bobshell_buffer_rewrite_random
+)"
+			hoid_buffer="$hoid_buffer
+
+sudo sh -c \"\$script\""
+		fi
+
+
+	fi
+
+
 }

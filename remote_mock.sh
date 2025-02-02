@@ -1,9 +1,6 @@
 
 
 # mock hoid
-shelduck import driver/local.sh
-shelduck import ./buffer.sh
-
 
 
 hoid() {
@@ -17,7 +14,23 @@ hoid() {
 }
 
 hoid_driver_write() {
-	hoid_driver_local_shell "$@"
+	sh -c "$1"
+}
+
+hoid_buffer_write() {
+	hoid_buffer="${hoid_buffer:-}$*"
+}
+
+# fun: hoid_buffer_flush
+# env: hoid_buffer
+hoid_buffer_flush() {
+	if bobshell_isset_1 "$@"; then
+		bobshell_die "hoid flush: takes no arguments"
+	fi
+	if [ -n "${hoid_buffer:-}" ]; then
+		hoid_driver_write "$hoid_buffer"
+		hoid_buffer=
+	fi
 }
 
 # flush buffer on success exit

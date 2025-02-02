@@ -6,7 +6,7 @@ shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/un
 # env: hoid_target_address
 #      HOID_DRIVER_SSH_*
 hoid_driver_ssh_init() {
-	hoid_driver_ssh_address="${HOID_DRIVER_SSH_ADDRESS:-$hoid_target_address}"
+	hoid_driver_ssh_address="${HOID_DRIVER_SSH_ADDRESS:-$1}"
 	bobshell_scope_mirror HOID_DRIVER_SSH_ BOBSHELL_SSH_
 }
 

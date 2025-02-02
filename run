@@ -4,6 +4,7 @@ set -eux
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/run.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/map.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/misc/random.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/code/defun.sh
 
 # var_append_output
 var_append_output() {
@@ -23,16 +24,6 @@ run_build() {
 }
 
 
-bobshell_defun() {
-	bobshell_defun_name="$1"
-	shift
-	eval "
-$bobshell_defun_name() {
-	$*
-}
-"
-	unset bobshell_defun_name
-}
 
 # fun: hoid_compile URL
 hoid_compile() {
@@ -75,43 +66,18 @@ shelduck() {
 
 }
 
-
-
-# print_all_src() {
-# 	run_build_remote_mock_src=$(shelduck resolve remote_mock.sh)
-# 	run_build_output="
-# hoid_remote_mock_src() {
-# 	cat <<HOID_RUN_EOF
-# $run_build_remote_mock_src
-# HOID_RUN_EOF
-# }
-# "
-# 	unset run_build_remote_mock_src
-
-# 	for run_build_task_name in command directory flush script shelduck shell; do
-# 		run_build_task_src=$(shelduck resolve task/$task_name.sh)
-# 		run_build_output="$run_build_output
-
-# hoid_task_${task_name}_src() {
-# 	cat <<HOID_RUN_EOF
-# 	$run_build_task_src
-# HOID_RUN_EOF
-# }
-# "
-# 		unset run_build_task_src
-# 	done
-
-# }
-
 run_test() {
 	SHELDUCK_URL_RULES="${SHELDUCK_URL_RULES:-},https://raw.githubusercontent.com/legeyda/hoid/refs/heads/main/=file://$(pwd)/"
 	export SHELDUCK_URL_RULES
 
 	shelduck import "$(pwd)/hoid.sh"
 
-	#hoid init ubuntu24server
-	hoid shelduck run 'val:echo $xyz'
-	#hoid command echo hello
+	hoid init ubuntu24server
+	hoid command mkdir -p hello-from-hoid
+	reset
+	hoid --become true command id -u
+
+
 }
 
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/entry_point.sh
