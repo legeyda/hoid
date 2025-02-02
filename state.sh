@@ -43,36 +43,69 @@ hoid_cli_differ() {
 
 # fun: hoid_state_push
 hoid_state_push() {
-	bobshell_stack_push hoid_stack_target "${hoid_target:-}"
-	bobshell_stack_push hoid_stack_become "${hoid_become:-}"
+	hoid_state_push_value=$(hoid_state_dump)
+	bobshell_stack_push hoid_state_stack "$hoid_state_push_value"
+	unset hoid_state_push_value
 }
 
 # fun: hoid_state_pop
 hoid_state_pop() {
-	hoid_state_pop_size=$(bobshell_stack_size hoid_stack_target)
-	if [ "$hoid_state_pop_size" = 0 ]; then
-		bobshell_die 'invalid state stack'
-	fi
-
-	hoid_state_pop_size=$(bobshell_stack_size hoid_stack_become)
+	hoid_state_pop_size=$(bobshell_stack_size hoid_state_stack)
 	if [ "$hoid_state_pop_size" = 0 ]; then
 		bobshell_die 'invalid state stack'
 	fi
 	unset hoid_state_pop_size
-	
-	bobshell_stack_pop hoid_stack_target hoid_state_pop_target
-	if [ -n "$hoid_state_pop_target" ]; then
-		hoid_set_target "${hoid_state_pop_target:-}"
-	else
-		hoid_set_target
-	fi
-	unset hoid_state_pop_target
 
-	bobshell_stack_pop hoid_stack_become hoid_state_pop_become
-	if [ -n "${hoid_state_pop_become:-}" ]; then
-		hoid_set_become "$hoid_state_pop_become"
+	bobshell_stack_pop hoid_state_stack hoid_state_pop_value
+	hoid_state_load "$hoid_state_pop_value"
+	unset hoid_state_pop_value
+}
+
+
+# fun: hoid_state_dump
+hoid_state_dump() {
+	hoid_state_dump_separator=
+	for hoid_state_dump_name in target become become_password; do
+		printf %s "$hoid_state_dump_separator"
+		if bobshell_isset "hoid_$hoid_state_dump_name"; then
+			printf 'hoid_state_load_%s=' "$hoid_state_dump_name"
+			hoid_state_dump_value=$(bobshell_getvar "hoid_$hoid_state_dump_name")
+			bobshell_quote "$hoid_state_dump_value"
+			unset hoid_state_dump_value
+		else
+			printf 'unset %s' "hoid_state_load_$hoid_state_dump_name"
+		fi
+		hoid_state_dump_separator="; "
+	done
+	unset hoid_state_dump_separator
+}
+
+hoid_state_load() {
+	eval "$1"
+	for hoid_state_load_name in target become; do
+		bobshell_optarg "hoid_state_load_$hoid_state_load_name" "hoid_set_$hoid_state_load_name"
+	done
+	# shellcheck disable=SC2043
+	for hoid_state_load_name in become_password; do
+		if bobshell_isset "hoid_state_load_$hoid_state_load_name"; then
+			bobshell_copy "var:hoid_state_load_$hoid_state_load_name" "var:hoid_$hoid_state_load_name"
+		else
+			unset "hoid_$hoid_state_load_name"
+		fi
+	done
+}
+
+
+# todo move to bobshell
+# fun: bobshell_optarg VARNAME COMMAND [ARGS...]
+bobshell_optarg() {
+	if bobshell_isset "$1"; then
+		bobshell_optarg="$1"
+		shift
+		"$@" "$bobshell_optarg"
+		unset bobshell_optarg
 	else
-		hoid_set_become
+		shift
+		"$@"
 	fi
-	unset hoid_state_pop_become
 }
