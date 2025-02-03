@@ -75,6 +75,7 @@ run_test() {
 	hoid init ubuntu24server
 	hoid command mkdir -p hello-from-hoid
 	hoid --become true command id -u
+	hoid copy run ./temp-copy-file
 
 
 }

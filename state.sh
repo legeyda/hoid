@@ -29,14 +29,6 @@ hoid_state_init() {
 
 }
 
-hoid_state_valid() {
-	if  [ -n "${hoid_target:-}" ] ; then
-		return 0
-	fi
-	if  [ -n "${hoid_become:-}" ] ; then
-		return 0
-	fi
-}
 
 hoid_cli_differ() {
 	if bobshell_isset hoid_cli_target && [ "$hoid_cli_target" != "${hoid_target:-}" ] ; then
@@ -110,7 +102,7 @@ hoid_state_load() {
 # fun: bobshell_optarg VARNAME COMMAND [ARGS...]
 bobshell_optarg() {
 	if bobshell_isset "$1"; then
-		bobshell_optarg="$1"
+		bobshell_optarg=$(bobshell_getvar "$1")
 		shift
 		"$@" "$bobshell_optarg"
 		unset bobshell_optarg
