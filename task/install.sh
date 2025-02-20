@@ -1,6 +1,8 @@
 
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/string.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/base.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/url.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/cmd/mktemp.sh
 
 hoid_task_install() {
 	case "$1" in

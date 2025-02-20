@@ -4,7 +4,7 @@ set -eux
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/run.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/map.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/misc/random.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/code/defun.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/misc/defun.sh
 
 # var_append_output
 var_append_output() {

@@ -6,6 +6,7 @@ shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/un
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/util.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/misc/equals_any.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/stack.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/event/fire.sh
 
 # import std drivers
 shelduck import ./driver/docker.sh
@@ -26,6 +27,8 @@ shelduck import ./buffer.sh
 shelduck import ./setter.sh
 shelduck import ./state.sh
 
+#
+shelduck import ./mod/target.sh
 
 # main entry point
 hoid() {
@@ -42,10 +45,15 @@ hoid() {
 	fi
 
 	# parse hoid cli (common for all tasks)
-	unset hoid_cli_become hoid_cli_target hoid_cli_name
+	bobshell_event_fire hoid_event_cli_start
+	unset hoid_cli_become hoid_cli_become_password
 	hoid_cli_opts=false
 	while bobshell_isset_1 "$@"; do
 		case "$1" in
+			(-n|--name)
+				bobshell_isset_2 "$@" || bobshell_die "hoid: option $1: argument expected"
+				shift 2
+				;;
 			(-t|--target)
 				bobshell_isset_2 "$@" || bobshell_die "hoid: option $1: argument expected"
 				hoid_cli_target="$2"
@@ -54,17 +62,12 @@ hoid() {
 			(-b|--become)
 				bobshell_isset_2 "$@" || bobshell_die "hoid: option $1: argument expected"
 				bobshell_equals_any "$2" true false || bobshell_die "hoid: option $1: argument expected to be either true or false"
-				hoid_cli_become=true
+				hoid_cli_become="$2"
 				shift 2
 				;;
 			(-p|--become-password)
 				bobshell_isset_2 "$@" || bobshell_die "hoid: option $1: argument expected"
 				hoid_cli_become_password="$2"
-				shift 2
-				;;			
-			(-n|--name)
-				bobshell_isset_2 "$@" || bobshell_die "hoid: option $1: argument expected"
-				hoid_cli_name="$2"
 				shift 2
 				;;
 			(-*)
@@ -91,28 +94,36 @@ hoid() {
 		shift
 		hoid_buffer_flush
 		hoid_state_init "$@"
-	elif [ flush = "$1" ]; then
-		if [ true = "$hoid_cli_opts" ]; then
-			bobshell_die "hoid flush: options not supported"
+		_hoid__state_default_done=true
+	else	
+		if [ true != "${_hoid__state_default_done:-false}" ]; then
+			hoid_state_init
+			_hoid__state_default_done=true
 		fi
-		shift
-		hoid_buffer_flush "$@"
-	elif [ block = "$1" ]; then
-		shift
-		hoid_block "$@"
-	elif hoid_cli_differ; then
-		hoid_state_push
-		hoid_state_init
-		hoid_task "$@"
-		hoid_state_pop
-	else
-		if [ -z "${hoid_target:-}" ]; then
-			hoid_set_target "$HOID_TARGET"
+		if [ flush = "$1" ]; then
+			if [ true = "$hoid_cli_opts" ]; then
+				bobshell_die "hoid flush: options not supported"
+			fi
+			shift
+			hoid_buffer_flush "$@"
+		elif [ block = "$1" ]; then
+			shift
+			hoid_block "$@"
+		elif hoid_state_cli_changed; then
+			hoid_state_push
+			hoid_state_init
+			hoid_task "$@"
+			hoid_state_pop
+		else
+			# if bobshell_isset hoid_target
+			if [ -z "${hoid_target:-}" ]; then
+				hoid_set_target "$HOID_TARGET"
+			fi
+			if [ -z "${hoid_become:-}" ]; then
+				hoid_set_become false
+			fi
+			hoid_task "$@"
 		fi
-		if [ -z "${hoid_become:-}" ]; then
-			hoid_set_become false
-		fi
-		hoid_task "$@"
 	fi
 
 }

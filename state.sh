@@ -1,7 +1,19 @@
 
 
 
+hoid_state_default() {
+	hoid_state_default_var HOID_TARGET          hoid_target
+	hoid_state_default_var HOID_BECOME          hoid_become
+	hoid_state_default_var HOID_BECOME_PASSWORD hoid_become_password
+}
 
+hoid_state_default_var() {
+	if bobshell_isset "$1"; then
+		bobshell_copy_var_to_var "$1" "$2"
+	else
+		unset "$2"
+	fi
+}
 
 hoid_state_init() {
 	if bobshell_isset_1 "$@"; then
@@ -30,7 +42,7 @@ hoid_state_init() {
 }
 
 
-hoid_cli_differ() {
+hoid_state_cli_changed() {
 	if bobshell_isset hoid_cli_target && [ "$hoid_cli_target" != "${hoid_target:-}" ] ; then
 		return 0
 	fi

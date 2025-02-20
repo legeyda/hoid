@@ -1,7 +1,7 @@
 
 
 #shelduck import https://raw.githubusercontent.com/legeyda/shelduck/refs/heads/main/shelduck.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/code/defun.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/misc/defun.sh
 
 
 hoid_remote_mock_src=$(shelduck resolve ./remote_mock.sh)

@@ -22,7 +22,7 @@ hoid_set_target() {
 
 	hoid_target="$1"
 
-	# possibly updates HOID_TARGET_DRIVER, HOID_TARGET_DRIVER
+	# possibly updates HOID_TARGET_DRIVER, HOID_TARGET_ADDRESS
 	hoid_load_profile "$hoid_target"
 
 	if bobshell_split_first "$hoid_target" : hoid_parse_target_driver hoid_parse_target_driver; then
@@ -75,4 +75,18 @@ hoid_set_become() {
 	fi
 
 	hoid_become="$1"
+}
+
+hoid_set_become_password() {
+	if bobshell_isset hoid_become_password && [ "$hoid_become_password" = "$1" ]; then
+		return
+	fi
+	hoid_buffer_flush
+
+	if ! bobshell_isset_1 "$@"; then
+		unset hoid_become_password
+		return
+	fi
+
+	hoid_become_password="$1"
 }
