@@ -24,11 +24,12 @@ shelduck import ./task/shell.sh
 # private dependencies
 shelduck import ./block.sh
 shelduck import ./buffer.sh
-shelduck import ./setter.sh
 shelduck import ./state.sh
 
 #
+shelduck import ./mod/name.sh
 shelduck import ./mod/target.sh
+shelduck import ./mod/become.sh
 
 # main entry point
 hoid() {
@@ -46,7 +47,6 @@ hoid() {
 
 	# parse hoid cli (common for all tasks)
 	bobshell_event_fire hoid_event_cli_start
-	unset hoid_cli_become hoid_cli_become_password
 	hoid_cli_opts=false
 	while bobshell_isset_1 "$@"; do
 		case "$1" in
@@ -97,7 +97,7 @@ hoid() {
 		_hoid__state_default_done=true
 	else	
 		if [ true != "${_hoid__state_default_done:-false}" ]; then
-			hoid_state_init
+			bobshell_event_fire hoid_event_state_default
 			_hoid__state_default_done=true
 		fi
 		if [ flush = "$1" ]; then
@@ -109,19 +109,12 @@ hoid() {
 		elif [ block = "$1" ]; then
 			shift
 			hoid_block "$@"
-		elif hoid_state_cli_changed; then
+		elif ! bobshell_event_fire hoid_event_cli_diff; then
 			hoid_state_push
 			hoid_state_init
 			hoid_task "$@"
 			hoid_state_pop
 		else
-			# if bobshell_isset hoid_target
-			if [ -z "${hoid_target:-}" ]; then
-				hoid_set_target "$HOID_TARGET"
-			fi
-			if [ -z "${hoid_become:-}" ]; then
-				hoid_set_become false
-			fi
 			hoid_task "$@"
 		fi
 	fi
@@ -145,7 +138,8 @@ Commands:
 	init
 	become
 
-'
+Options:'
+	bobshell_event_fire hoid_event_cli_usage
 }
 
 

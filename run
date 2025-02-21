@@ -67,17 +67,22 @@ shelduck() {
 }
 
 run_test() {
-	SHELDUCK_URL_RULES="${SHELDUCK_URL_RULES:-},https://raw.githubusercontent.com/legeyda/hoid/refs/heads/main/=file://$(pwd)/"
-	export SHELDUCK_URL_RULES
-
-	shelduck import "$(pwd)/hoid.sh"
-
+	import_hoid
 	hoid init ubuntu24server
 	hoid command mkdir -p hello-from-hoid
 	hoid --become true command id -u
 	hoid copy run ./temp-copy-file
+}
 
+import_hoid() {
+	SHELDUCK_URL_RULES="${SHELDUCK_URL_RULES:-},https://raw.githubusercontent.com/legeyda/hoid/refs/heads/main/=file://$(pwd)/"
+	export SHELDUCK_URL_RULES
+	shelduck import "$(pwd)/hoid.sh"
+}
 
+run_hoid() {
+	import_hoid
+	hoid "$@"
 }
 
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/entry_point.sh
