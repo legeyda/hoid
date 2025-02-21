@@ -7,6 +7,7 @@ shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/un
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/misc/equals_any.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/stack.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/event/fire.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/event/template.sh
 
 # import std drivers
 shelduck import ./driver/docker.sh
@@ -48,28 +49,15 @@ hoid() {
 	# parse hoid cli (common for all tasks)
 	bobshell_event_fire hoid_event_cli_start
 	hoid_cli_opts=false
+
+	bobshell_event_fire hoid_event_cli_options "$@"
+}
+
+# shellcheck disable=SC2016
+bobshell_event_template hoid_event_cli_options '
 	while bobshell_isset_1 "$@"; do
 		case "$1" in
-			(-n|--name)
-				bobshell_isset_2 "$@" || bobshell_die "hoid: option $1: argument expected"
-				shift 2
-				;;
-			(-t|--target)
-				bobshell_isset_2 "$@" || bobshell_die "hoid: option $1: argument expected"
-				hoid_cli_target="$2"
-				shift 2
-				;;
-			(-b|--become)
-				bobshell_isset_2 "$@" || bobshell_die "hoid: option $1: argument expected"
-				bobshell_equals_any "$2" true false || bobshell_die "hoid: option $1: argument expected to be either true or false"
-				hoid_cli_become="$2"
-				shift 2
-				;;
-			(-p|--become-password)
-				bobshell_isset_2 "$@" || bobshell_die "hoid: option $1: argument expected"
-				hoid_cli_become_password="$2"
-				shift 2
-				;;
+			{}
 			(-*)
 				bobshell_die "hoid: unrecognized option $1"
 				;;
@@ -79,7 +67,9 @@ hoid() {
 		esac
 		hoid_cli_opts=true
 	done
+	hoid_subcommand "$@"'
 
+hoid_subcommand() {
 
 	# check if task is defined
 	if ! bobshell_isset_1 "$@"; then

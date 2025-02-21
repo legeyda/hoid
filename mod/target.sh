@@ -4,10 +4,18 @@
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/base.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/event/listen.sh
 
-bobshell_event_listen hoid_event_cli_start unset hoid_cli_target
-
 bobshell_event_listen hoid_event_cli_usage "printf -- '    -t --target    Target
 '"
+
+bobshell_event_listen hoid_event_cli_start unset hoid_cli_target
+
+# shellcheck disable=SC2016
+bobshell_event_listen hoid_event_cli_options '
+			(-t|--target)
+				bobshell_isset_2 "$@" || bobshell_die "hoid: option $1: argument expected"
+				hoid_cli_target="$2"
+				shift 2
+				;;'
 
 
 bobshell_event_listen hoid_event_cli_diff '

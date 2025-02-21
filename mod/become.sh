@@ -4,10 +4,6 @@
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/base.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/event/listen.sh
 
-bobshell_event_listen hoid_event_cli_start unset hoid_cli_become hoid_cli_become_password
-
-
-
 hoid_mod_become_cli_usage() {
 	printf -- '    -b --become true|false    use privilege escalation
 '
@@ -15,6 +11,22 @@ printf -- '    -p --become-password PASSWD    sudo-password if privilege escalat
 '
 }
 bobshell_event_listen hoid_event_cli_usage hoid_mod_become_cli_usage
+
+bobshell_event_listen hoid_event_cli_start unset hoid_cli_become hoid_cli_become_password
+
+# shellcheck disable=SC2016
+bobshell_event_listen hoid_event_cli_options '
+			(-b|--become)
+				bobshell_isset_2 "$@" || bobshell_die "hoid: option $1: argument expected"
+				bobshell_equals_any "$2" true false || bobshell_die "hoid: option $1: argument expected to be either true or false"
+				hoid_cli_become="$2"
+				shift 2
+				;;
+			(-p|--become-password)
+				bobshell_isset_2 "$@" || bobshell_die "hoid: option $1: argument expected"
+				hoid_cli_become_password="$2"
+				shift 2
+				;;'
 
 
 hoid_mod_become_cli_diff() {
