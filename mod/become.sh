@@ -99,9 +99,9 @@ hoid_mod_become_init() {
 	fi
 
 	if bobshell_isset hoid_cli_become_password; then
-		hoid_become_password="$hoid_cli_become_password"
+		hoid_set_become_password "$hoid_cli_become_password"
 	elif [ -z "${hoid_cli_become_password:-}" ]; then
-		unset hoid_become_password
+		hoid_set_become_password
 	fi
 }
 bobshell_event_listen hoid_event_state_init 'hoid_mod_become_init "$@"'
@@ -112,7 +112,7 @@ bobshell_event_listen hoid_event_state_init 'hoid_mod_become_init "$@"'
 
 
 hoid_set_become() {
-	if bobshell_isset hoid_become && [ "$hoid_become" = "$1" ]; then
+	if bobshell_isset_1 "$@" && bobshell_isset hoid_become && [ "$hoid_become" = "$1" ]; then
 		return
 	fi
 	hoid_buffer_flush
@@ -126,7 +126,7 @@ hoid_set_become() {
 }
 
 hoid_set_become_password() {
-	if bobshell_isset hoid_become_password && [ "$hoid_become_password" = "$1" ]; then
+	if bobshell_isset_1 "$@" && bobshell_isset hoid_become_password && [ "$hoid_become_password" = "$1" ]; then
 		return
 	fi
 	hoid_buffer_flush

@@ -75,7 +75,7 @@ bobshell_event_listen hoid_event_state_init 'hoid_mod_target_init "$@"'
 #      HOID_TARGET_ADDRESS
 # shellcheck disable=SC2120
 hoid_set_target() {
-	if bobshell_isset hoid_target && [ "$hoid_target" = "$1" ]; then
+	if bobshell_isset_1 "$@" && bobshell_isset hoid_target && [ "$hoid_target" = "$1" ]; then
 		return
 	fi
 

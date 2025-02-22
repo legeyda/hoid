@@ -1,11 +1,8 @@
 
 # lib dependencies
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/base.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/scope.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/template.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/util.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/misc/equals_any.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/stack.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/event/fire.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/event/template.sh
 
@@ -85,31 +82,35 @@ hoid_subcommand() {
 		hoid_buffer_flush
 		hoid_state_init "$@"
 		_hoid__state_default_done=true
-	else	
-		if [ true != "${_hoid__state_default_done:-false}" ]; then
-			bobshell_event_fire hoid_event_state_default
-			_hoid__state_default_done=true
+		return
+	fi
+
+	if [ true != "${_hoid__state_default_done:-false}" ]; then
+		bobshell_event_fire hoid_event_state_default
+		_hoid__state_default_done=true
+	fi
+	
+	
+	if [ flush = "$1" ]; then
+		if [ true = "$hoid_cli_opts" ]; then
+			bobshell_die "hoid flush: options not supported"
 		fi
-		if [ flush = "$1" ]; then
-			if [ true = "$hoid_cli_opts" ]; then
-				bobshell_die "hoid flush: options not supported"
-			fi
-			shift
-			hoid_buffer_flush "$@"
-		elif [ block = "$1" ]; then
-			shift
-			hoid_block "$@"
-		elif ! bobshell_event_fire hoid_event_cli_diff; then
-			hoid_state_push
-			hoid_state_init
-			hoid_task "$@"
-			hoid_state_pop
-		else
-			hoid_task "$@"
-		fi
+		shift
+		hoid_buffer_flush "$@"
+	elif [ block = "$1" ]; then
+		shift
+		hoid_block "$@"
+	elif bobshell_event_fire hoid_event_cli_diff; then
+		hoid_task "$@"
+	else
+		hoid_state_push
+		hoid_state_init
+		hoid_task "$@"
+		hoid_state_pop
 	fi
 
 }
+
 
 hoid_task() {
 	hoid_task_function="hoid_task_$1"

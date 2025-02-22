@@ -1,13 +1,11 @@
 
 
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/misc/eqvar.sh
-
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/stack.sh
 
 hoid_state_init() {
 	bobshell_event_fire hoid_event_state_init "$@"
 }
-
-
 
 # fun: hoid_state_push
 hoid_state_push() {
