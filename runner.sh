@@ -2,7 +2,6 @@
 set -eu
 
 shelduck import hoid.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/base.sh
 
 main() {
 	hoid "$@"

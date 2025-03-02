@@ -57,22 +57,8 @@ hoid_buffer_rewrite() {
 
 	hoid_buffer="${bobshell_newline}${bobshell_newline}set -eu${bobshell_newline}$hoid_buffer"
 
-	if [ "$hoid_become" = true ]; then
-		if bobshell_contains "$hoid_buffer" "'"; then
-			hoid_buffer="sudo sh -c '$hoid_buffer'"
-		else
-			bobshell_buffer_rewrite_random="$(bobshell_random)$(bobshell_random)$(bobshell_random)"
-			hoid_buffer="script=$(cat<<EOF_$bobshell_buffer_rewrite_random
-$hoid_buffer
-EOF_$bobshell_buffer_rewrite_random
-)"
-			hoid_buffer="$hoid_buffer
-
-sudo sh -c \"\$script\""
-		fi
 
 
-	fi
-
+	bobshell_event_fire hoid_event_buffer_rewrite
 
 }
