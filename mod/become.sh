@@ -30,18 +30,24 @@ bobshell_event_listen hoid_event_cli_options '
 
 
 hoid_mod_become_cli_diff() {
-	if ! bobshell_eqvar hoid_cli_become hoid_become; then
-		return 1
+	if bobshell_isset hoid_cli_become; then
+		if ! bobshell_isset hoid_become; then
+			return 1
+		fi
+		if [ "$hoid_cli_become" != "$hoid_become" ]; then
+			return 1
+		fi
 	fi
-	if ! bobshell_eqvar hoid_cli_become_password hoid_become_password; then
-		return 1
-	fi	
+	if bobshell_isset hoid_cli_become_password; then
+		if ! bobshell_isset hoid_become_password; then
+			return 1
+		fi
+		if [ "$hoid_cli_become_password" != "$hoid_become_password" ]; then
+			return 1
+		fi
+	fi
 }
-bobshell_event_listen hoid_event_cli_diff '
-	if ! hoid_mod_become_cli_diff; then
-		return 1
-	fi
-'
+bobshell_event_listen hoid_event_cli_diff 'hoid_mod_become_cli_diff || return 1'
 
 
 hoid_mod_become_state_default() {
