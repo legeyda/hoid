@@ -18,6 +18,7 @@ shelduck import ./task/directory.sh
 shelduck import ./task/script.sh
 shelduck import ./task/shelduck.sh
 shelduck import ./task/shell.sh
+shelduck import ./task/reboot.sh
 
 # private dependencies
 shelduck import ./block.sh
