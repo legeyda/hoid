@@ -6,10 +6,6 @@ shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/un
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/event/fire.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/event/template.sh
 
-# import std drivers
-shelduck import ./driver/docker.sh
-shelduck import ./driver/local.sh
-shelduck import ./driver/ssh.sh
 
 # import std tasks
 shelduck import ./task/command.sh
@@ -20,15 +16,20 @@ shelduck import ./task/shelduck.sh
 shelduck import ./task/shell.sh
 shelduck import ./task/reboot.sh
 
-# private dependencies
-shelduck import ./block.sh
-shelduck import ./buffer.sh
-shelduck import ./state.sh
+# import std drivers
+shelduck import ./driver/docker.sh
+shelduck import ./driver/local.sh
+shelduck import ./driver/ssh.sh
 
 #
 shelduck import ./mod/name.sh
 shelduck import ./mod/target.sh
 shelduck import ./mod/become.sh
+
+# private dependencies
+shelduck import ./block.sh
+shelduck import ./buffer.sh
+shelduck import ./state.sh
 
 # main entry point
 hoid() {
