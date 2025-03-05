@@ -85,4 +85,15 @@ run_hoid() {
 	hoid "$@"
 }
 
+run_debug() {
+	import_hoid
+	rm -rf target/testcopy
+	mkdir -p target/testcopy
+	echo hello > target/testcopy/msg.txt
+	echo hi    > target/testcopy/grt.txt
+	hoid init ubuntu24server
+	hoid copy target/testcopy ./copy
+	
+}
+
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/entry_point.sh
