@@ -25,6 +25,7 @@ shelduck import ./driver/ssh.sh
 shelduck import ./mod/name.sh
 shelduck import ./mod/target.sh
 shelduck import ./mod/become.sh
+shelduck import ./mod/buffer.sh
 
 # private dependencies
 shelduck import ./block.sh
@@ -102,15 +103,18 @@ hoid_subcommand() {
 	elif [ block = "$1" ]; then
 		shift
 		hoid_block "$@"
-	elif bobshell_event_fire hoid_event_cli_diff; then
-		hoid_task "$@"
 	else
-		hoid_state_push
-		hoid_state_init
-		hoid_task "$@"
-		hoid_state_pop
+		bobshell_event_fire hoid_event_task_start
+		if bobshell_event_fire hoid_event_cli_diff; then
+			hoid_task "$@"
+		else
+			hoid_state_push
+			hoid_state_init
+			hoid_task "$@"
+			hoid_state_pop
+		fi
+		bobshell_event_fire hoid_event_task_finish
 	fi
-
 }
 
 
