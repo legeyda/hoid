@@ -1,6 +1,7 @@
 
 
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/string.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/resource/copy.sh
 
 shelduck import ./runtime.sh
 
@@ -12,12 +13,25 @@ hoid_buffer_write() {
 # fun: hoid_buffer_flush
 # env: hoid_buffer
 hoid_buffer_flush() {
+	unset _hoid_buffer_flush__input
+	while bobshell_isset_1 "$@"; do
+		case "$1" in
+			(-i|--input)
+				bobshell_isset_2 "$@" || bobshell_die "hoid: option $1: argument expected: locator"
+				_hoid_buffer_flush__input="$2"
+				shift 2
+		esac
+	done
 	if bobshell_isset_1 "$@"; then
 		bobshell_die "hoid flush: takes no arguments"
 	fi
 	if [ -n "${hoid_buffer:-}" ]; then
 		hoid_buffer_rewrite
-		hoid_driver_write "$hoid_buffer"
+		if bobshell_isset _hoid_buffer_flush__input; then
+			bobshell_resource_copy "$_hoid_buffer_flush__input" stdout: | hoid_driver_write "$hoid_buffer"
+		else
+			hoid_driver_write "$hoid_buffer"
+		fi
 		hoid_buffer=
 	fi
 }
