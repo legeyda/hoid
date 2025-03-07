@@ -7,17 +7,6 @@ shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/un
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/misc/defun.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/bobtest.sh
 
-# var_append_output
-var_append_output() {
-	var_append_output_var="$1"
-	shift
-
-	var_append_output_old_value=$(bobshell_getvar "$var_append_output_var")
-
-	var_append_output_new_value=$("$@")
-	bobshell_putvar "$var_append_output_var" "$var_append_output_old_value$var_append_output_new_value"
-	unset var_append_output_var var_append_output_old_value var_append_output_new_value
-}
 
 run_build() {
 	mkdir -p target
@@ -67,13 +56,6 @@ shelduck() {
 
 }
 
-run_test() {
-	import_hoid
-	hoid init ubuntu24server
-	hoid command mkdir -p hello-from-hoid
-	hoid --become true command id -u
-	hoid copy run ./temp-copy-file
-}
 
 import_hoid() {
 	SHELDUCK_URL_RULES="${SHELDUCK_URL_RULES:-},https://raw.githubusercontent.com/legeyda/hoid/refs/heads/main/=file://$(pwd)/"
@@ -84,17 +66,6 @@ import_hoid() {
 run_hoid() {
 	import_hoid
 	hoid "$@"
-}
-
-run_debug() {
-	import_hoid
-	rm -rf target/testcopy
-	mkdir -p target/testcopy
-	echo hello > target/testcopy/msg.txt
-	echo hi    > target/testcopy/grt.txt
-	hoid init ubuntu24server
-	hoid copy target/testcopy ./copy
-	
 }
 
 run_test() {

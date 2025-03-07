@@ -32,6 +32,7 @@ hoid_for_each_line() {
 }
 
 hoid_task_copy() {
+	# parse cli
 	unset _hoid_task_copy__mapper
 	while bobshell_isset_1 "$@"; do
 		case "$1" in
@@ -51,10 +52,9 @@ hoid_task_copy() {
 				;;
 		esac
 	done
-
-
 	_hoid_task_copy__src=$(bobshell_locator_resolve "$1")
 
+	# if it is directory
 	if bobshell_locator_is_file "$_hoid_task_copy__src" _hoid_task_copy__src_file; then
 		if [ -d "$_hoid_task_copy__src_file" ]; then
 			hoid command mkdir -p "$2"
@@ -66,11 +66,10 @@ hoid_task_copy() {
 					eval "$_hoid_task_copy__script"
 					unset _hoid_task_copy__script
 					tar --create --gzip --file - --directory "$_hoid_task_copy__temp/tree" . > "$_hoid_task_copy__temp/archive.tar.gz"
-					hoid command tar --extract --ungzip --file - --directory "$2"
 				else
-					tar --create --gzip --file - --directory "$_hoid_task_copy__src" . > "$_hoid_task_copy__temp/archive.tar.gz"
-					hoid command tar --extract --ungzip --file - --directory "$2"
+					tar --create --gzip --file - --directory "$_hoid_task_copy__src"       . > "$_hoid_task_copy__temp/archive.tar.gz"
 				fi
+					hoid command tar --extract --ungzip --file - --directory "$2"
 				hoid flush --input "file:$_hoid_task_copy__temp/archive.tar.gz"
 				rm -rf "$_hoid_task_copy__temp"
 				unset _hoid_task_copy__temp
@@ -80,6 +79,8 @@ hoid_task_copy() {
 		fi
 		unset _hoid_task_copy__src_file
 	fi
+
+	# if it any readable locator
 	if ! bobshell_locator_is_readable "$_hoid_task_copy__src"; then
 		bobshell_die "locator not readable: $1"
 	fi
@@ -96,7 +97,7 @@ hoid_task_copy() {
 		_hoid_task_copy__temp=$(hoid_mktemp_dir)
 		"$_hoid_task_copy__mapper" "$_hoid_task_copy__src" "file:$_hoid_task_copy__temp/result"
 		hoid flush --input "file:$_hoid_task_copy__temp/result"
-		#rm -rf "$_hoid_task_copy__temp"
+		rm -rf "$_hoid_task_copy__temp"
 		unset _hoid_task_copy__temp
 	else
 		hoid flush --input "$_hoid_task_copy__src"
