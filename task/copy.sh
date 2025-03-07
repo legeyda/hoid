@@ -27,6 +27,10 @@ hoid_mktemp_dir() {
 	unset _hoid_mktemp_dir
 }
 
+hoid_for_each_line() {
+	true
+}
+
 hoid_task_copy() {
 	unset _hoid_task_copy__mapper
 	while bobshell_isset_1 "$@"; do
@@ -57,13 +61,17 @@ hoid_task_copy() {
 			if hoid_dir_is_not_empty "$_hoid_task_copy__src_file"; then
 				_hoid_task_copy__temp=$(hoid_mktemp_dir)
 				if bobshell_isset _hoid_task_copy__mapper; then
-					# todo reset; find . -wholename './.*' -prune -o  -type d -printf "mkdir -p '%p'\n" -o -printf "hoid_task_map 'file://%p'\n"
-					bobshell_die 'not implemented'
-				else
-					tar --create --gzip --file - --directory "$1" . > "$_hoid_task_copy__temp/archive.tar.gz"
+					#
+					_hoid_task_copy__script=$(find "$_hoid_task_copy__src" -type d -printf "hoid_task_copy_found_dir '%P'\n" -o -printf "hoid_task_copy_found_file '%P'\n")
+					eval "$_hoid_task_copy__script"
+					unset _hoid_task_copy__script
+					tar --create --gzip --file - --directory "$_hoid_task_copy__temp/tree" . > "$_hoid_task_copy__temp/archive.tar.gz"
 					hoid command tar --extract --ungzip --file - --directory "$2"
-					hoid flush --input "file:$_hoid_task_copy__temp/archive.tar.gz"
+				else
+					tar --create --gzip --file - --directory "$_hoid_task_copy__src" . > "$_hoid_task_copy__temp/archive.tar.gz"
+					hoid command tar --extract --ungzip --file - --directory "$2"
 				fi
+				hoid flush --input "file:$_hoid_task_copy__temp/archive.tar.gz"
 				rm -rf "$_hoid_task_copy__temp"
 				unset _hoid_task_copy__temp
 			fi
@@ -86,9 +94,9 @@ hoid_task_copy() {
 
 	if bobshell_isset _hoid_task_copy__mapper; then
 		_hoid_task_copy__temp=$(hoid_mktemp_dir)
-		"$_hoid_task_copy__mapper" "$_hoid_task_copy__src" "file://$_hoid_task_copy__temp/result"
-		hoid flush --input "file:$_hoid_task_copy__temp/result"		
-		rm -rf "$_hoid_task_copy__temp"
+		"$_hoid_task_copy__mapper" "$_hoid_task_copy__src" "file:$_hoid_task_copy__temp/result"
+		hoid flush --input "file:$_hoid_task_copy__temp/result"
+		#rm -rf "$_hoid_task_copy__temp"
 		unset _hoid_task_copy__temp
 	else
 		hoid flush --input "$_hoid_task_copy__src"
@@ -96,11 +104,19 @@ hoid_task_copy() {
 	unset _hoid_task_copy__src _hoid_task_copy__mapper
 }
 
+hoid_task_copy_found_dir() {
+	mkdir -p "$_hoid_task_copy__temp/tree/$1"
+}
+
+hoid_task_copy_found_file() {
+	"$_hoid_task_copy__mapper" "file:$_hoid_task_copy__src_file/$1" "file:$_hoid_task_copy__temp/tree/$1"
+}
+
 hoid_task_copy_map() {
 	if bobshell_isset _hoid_task_copy__mapper; then
 		_hoid_task_copy_map__temp=$(hoid_mktemp_dir)
 		"$_hoid_task_copy__mapper" "$1" "$2"
-		hoid flush --input "file://$_hoid_task_copy_map__temp/result"		
+		hoid flush --input "file:$_hoid_task_copy_map__temp/result"		
 		rm -rf "$_hoid_task_copy_map__temp"
 		unset _hoid_task_copy_map__temp
 	else

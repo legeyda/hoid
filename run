@@ -1,10 +1,11 @@
 #!/usr/bin/env shelduck_run
-set -eux
+set -eu
 
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/run.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/map.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/misc/random.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/misc/defun.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/bobtest.sh
 
 # var_append_output
 var_append_output() {
@@ -100,8 +101,11 @@ run_test() {
 	if ! bobshell_isset HOID_TARGET; then
 		bobshell_die 'HOID_TARGET not set'
 	fi
-	shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/bobtest.sh
-	bobtest task/test_copy.sh:test_copy
+	if bobshell_isset_1 "$@"; then
+		bobtest "$@"
+	else
+		bobtest task/test_copy.sh
+	fi
 }
 
 
