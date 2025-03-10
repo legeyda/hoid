@@ -22,7 +22,7 @@ bobshell_event_listen hoid_event_cli_options '
 				hoid_cli_become="$2"
 				shift 2
 				;;
-			(-p|--become-password)
+			(--become-password)
 				bobshell_isset_2 "$@" || bobshell_die "hoid: option $1: argument expected"
 				hoid_cli_become_password="$2"
 				shift 2

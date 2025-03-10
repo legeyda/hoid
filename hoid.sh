@@ -141,7 +141,7 @@ Options:'
 
 
 hoid_driver_write() {
-	"hoid_driver_${hoid_target_driver}_shell" "$*"
+	"hoid_driver_${hoid_driver}_shell" "$*"
 }
 
 
