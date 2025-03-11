@@ -30,6 +30,9 @@ hoid_task_script() {
 	
 
 	if bobshell_isset _hoid_task_script__input || bobshell_isset _hoid_task_script__output; then
+	    # inline input
+		# echo hello | base64 | base64 -d
+		# echo hello | xxd    | xxd -r -p
 		if bobshell_isset _hoid_task_script__output; then
 			bobshell_die 'hoid_task_script: output not supported'
 		fi

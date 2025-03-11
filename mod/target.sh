@@ -3,6 +3,7 @@
 
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/base.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/event/listen.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/event/var/set.sh
 
 bobshell_event_listen hoid_event_cli_usage "printf -- '    -t --target    Target
     -d --driver    Driver
@@ -151,13 +152,16 @@ hoid_mod_target_refresh() {
 		if bobshell_isset hoid_driver && [ "$hoid_driver" = "$hoid_mod_target_refresh_driver" ]; then
 			if bobshell_isset hoid_profile && [ "$hoid_profile" = "$hoid_mod_target_refresh_profile" ]; then
 				return
-			fi			
+			fi
 		fi
 	fi
 
 	hoid_buffer_flush
 
-	hoid_profile=${hoid_mod_target_refresh_profile:-hoid_mod_target_refresh_target}
+	bobshell_event_var_set hoid_profile "${hoid_mod_target_refresh_profile:-hoid_mod_target_refresh_target}"
+
+
+
 
 	_hoid_mod_target_refresh__old_target=${HOID_TARGET:-}
 	_hoid_mod_target_refresh__old_driver=${HOID_DRIVER:-}
@@ -165,15 +169,20 @@ hoid_mod_target_refresh() {
 	# possibly updates HOID_TARGET & HOID_DRIVER 
 	hoid_load_profile "$hoid_profile"
 
-	if ! bobshell_isset hoid_mod_target_refresh_target && obshell_isset HOID_TARGET && [ "$_hoid_mod_target_refresh__old_target" != "$HOID_TARGET" ]; then
-		hoid_target=$HOID_TARGET
+	if bobshell_isset hoid_mod_target_refresh_target; then
+		bobshell_event_var_set hoid_target "$hoid_mod_target_refresh_target"
+	elif bobshell_isset HOID_TARGET && [ "$_hoid_mod_target_refresh__old_target" != "$HOID_TARGET" ]; then
+		bobshell_event_var_set hoid_target "$HOID_TARGET"
 	else
-		hoid_target=$hoid_mod_target_refresh_target
+		bobshell_die "target not set"
 	fi
-	if ! bobshell_isset hoid_mod_target_refresh_driver && bobshell_isset HOID_DRIVER && [ "$_hoid_mod_target_refresh__old_driver" != "$HOID_DRIVER" ]; then
+
+	if bobshell_isset hoid_mod_target_refresh_driver; then
+		hoid_driver=$hoid_mod_target_refresh_driver	
+	elif bobshell_isset HOID_DRIVER && [ "$_hoid_mod_target_refresh__old_driver" != "$HOID_DRIVER" ]; then
 		hoid_driver=$HOID_DRIVER
 	else
-		hoid_driver=$hoid_mod_target_refresh_driver
+		hoid_driver=ssh
 	fi
 
 
