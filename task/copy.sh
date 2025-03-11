@@ -31,6 +31,7 @@ hoid_for_each_line() {
 	true
 }
 
+
 hoid_task_copy() {
 	# parse cli
 	unset _hoid_task_copy__mapper
@@ -52,6 +53,22 @@ hoid_task_copy() {
 				;;
 		esac
 	done
+	hoid_task_do_copy "$@"
+}
+	# if ! bobshel_locator_parse "$_hoid_task_copy__src"; then
+	# 	_hoid_task_copy__temp=$(hoid_mktemp_dir)
+	# 	for _hoid_task_copy__found in $(hoid_finder_find_all "$1"); do
+	# 		true
+
+
+
+	# 	done
+	# 	unset _hoid_task_copy__found
+	# 	unset _hoid_task_copy__temp
+	# fi 
+
+
+hoid_task_do_copy() {
 	_hoid_task_copy__src=$(bobshell_locator_resolve "$1")
 
 	# if it is directory
@@ -91,7 +108,7 @@ hoid_task_copy() {
 	unset _hoid_task_copy__dest_dir
 
 	# 
-	_hoid_task_copy__dest=$(bobshell_quote "$2")	
+	_hoid_task_copy__dest=$(bobshell_quote "$2")
 	if bobshell_isset _hoid_task_copy__mapper; then
 		_hoid_task_copy__temp=$(hoid_mktemp_dir)
 		"$_hoid_task_copy__mapper" "$_hoid_task_copy__src" "file:$_hoid_task_copy__temp/result"
@@ -102,6 +119,14 @@ hoid_task_copy() {
 		hoid script --input "$_hoid_task_copy__src" "cat > $_hoid_task_copy__dest"
 	fi
 	unset _hoid_task_copy__src  _hoid_task_copy__dest
+}
+
+hoid_task_copy_dir() {
+	true
+}
+
+hoid_task_copy_file() {
+	true
 }
 
 hoid_task_copy_found_dir() {
