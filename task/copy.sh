@@ -69,31 +69,20 @@ hoid_task_copy() {
 		return
 	fi
 
-	bobshell_die 'NOT IMPLEMENTED' !!!
-
 	# if not locator, is search relative to HOID_FINDER_PATH
 	_hoid_task_copy__temp=$(hoid_mktemp_dir)
 	mkdir -p "$_hoid_task_copy__temp"
+	# hoid_finder_find_all "$1" eval ''
 	for _hoid_task_copy__found in $(hoid_finder_find_all "$1"); do
-
-		if ! [ -e "$_hoid_task_copy__temp/result" ]; then
-			if [ -d "$_hoid_task_copy__found" ]; then
-				true
-			fi
-		else
-			true
-		fi
-		cp -fR -- "$_hoid_task_copy__found" 
-
-
-
+		# todo check ither all files or all dirs
+		cp -RT "$_hoid_task_copy__found" "$_hoid_task_copy__temp/merged"	
 	done
-	if [ -z "$_hoid_task_copy__found" ]; then
-		boshell_die "file $1 not found relative to search path configured in HOID_FINDER_PATH"
+	if ! hoid_dir_is_not_empty "$_hoid_task_copy__temp/merged"; then
+		bobshell_die "something wrong: dir empty"
 	fi
 
-
-
+	shift
+	hoid_task_do_copy "file:$_hoid_task_copy__temp/merged" "$@"
 
 
 	unset _hoid_task_copy__found
@@ -111,7 +100,7 @@ hoid_task_do_copy() {
 			if hoid_dir_is_not_empty "$_hoid_task_do_copy__src_file"; then
 				_hoid_task_do_copy__temp=$(hoid_mktemp_dir)
 				if bobshell_isset _hoid_task_copy__mapper; then
-					#
+					# todo what if single quote in file path?
 					_hoid_task_do_copy__script=$(find "$_hoid_task_do_copy__src_file" -type d -printf "hoid_task_copy_found_dir '%P'\n" -o -printf "hoid_task_copy_found_file '%P'\n")
 					eval "$_hoid_task_do_copy__script"
 					unset _hoid_task_do_copy__script

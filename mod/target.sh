@@ -158,7 +158,7 @@ hoid_mod_target_refresh() {
 
 	hoid_buffer_flush
 
-	bobshell_event_var_set hoid_profile "${hoid_mod_target_refresh_profile:-hoid_mod_target_refresh_target}"
+	bobshell_event_var_set hoid_profile "${hoid_mod_target_refresh_profile:-$hoid_mod_target_refresh_target}"
 
 
 
