@@ -35,7 +35,7 @@ test_copy_multi_plain() {
 	echo 'hello' > dir/hello.txt
 	echo 'hi'    > dir/hi.txt
 	test_copy_name=somename
-	hoid copy dir test_copy_multi_plain
+	hoid copy file:dir test_copy_multi_plain
 	assert_equals 'hello' "$(ssh "$HOID_TARGET" 'cat test_copy_multi_plain/hello.txt')"
 	assert_equals 'hi' "$(ssh "$HOID_TARGET" 'cat test_copy_multi_plain/hi.txt')"
 }
@@ -47,7 +47,7 @@ test_copy_multi_template() {
 	echo 'hello, {{ test_copy_name }}' > dir/hello.txt
 	echo 'hi, {{ test_copy_name }}'    > dir/hi.txt
 	test_copy_name=somename
-	hoid copy --mustache  dir test_copy_multi_template
+	hoid copy --mustache  file:dir test_copy_multi_template
 	assert_equals 'hello, somename' "$(ssh "$HOID_TARGET" 'cat test_copy_multi_template/hello.txt')"
 	assert_equals 'hi, somename' "$(ssh "$HOID_TARGET" 'cat test_copy_multi_template/hi.txt')"
 }

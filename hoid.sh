@@ -30,6 +30,7 @@ shelduck import ./mod/become.sh
 shelduck import ./block.sh
 shelduck import ./buffer.sh
 shelduck import ./state.sh
+shelduck import ./finder.sh
 
 # main entry point
 hoid() {

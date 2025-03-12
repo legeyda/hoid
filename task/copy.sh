@@ -31,6 +31,10 @@ hoid_for_each_line() {
 	true
 }
 
+hoid_decrypt_secret() {
+	# todo implement
+	bobshell_resource_copy "$@"
+}
 
 hoid_task_copy() {
 	# parse cli
@@ -45,6 +49,10 @@ hoid_task_copy() {
 				_hoid_task_copy__mapper="bobshell_interpolate"
 				shift
 				;;
+			(-s|--secret)
+				_hoid_task_copy__mapper="hoid_decrypt_secret"
+				shift
+				;;
 			(-*)
 				bobshell_die "hoid_task_copy: unrecognized option $1"
 				;;
@@ -53,88 +61,116 @@ hoid_task_copy() {
 				;;
 		esac
 	done
-	hoid_task_do_copy "$@"
+
+	# src is explicit locator
+	if bobshell_locator_parse "$1"; then
+		hoid_task_do_copy "$@"
+		unset _hoid_task_copy__mapper 
+		return
+	fi
+
+	bobshell_die 'NOT IMPLEMENTED' !!!
+
+	# if not locator, is search relative to HOID_FINDER_PATH
+	_hoid_task_copy__temp=$(hoid_mktemp_dir)
+	mkdir -p "$_hoid_task_copy__temp"
+	for _hoid_task_copy__found in $(hoid_finder_find_all "$1"); do
+
+		if ! [ -e "$_hoid_task_copy__temp/result" ]; then
+			if [ -d "$_hoid_task_copy__found" ]; then
+				true
+			fi
+		else
+			true
+		fi
+		cp -fR -- "$_hoid_task_copy__found" 
+
+
+
+	done
+	if [ -z "$_hoid_task_copy__found" ]; then
+		boshell_die "file $1 not found relative to search path configured in HOID_FINDER_PATH"
+	fi
+
+
+
+
+
+	unset _hoid_task_copy__found
+	rm -rf "$_hoid_task_copy__temp"
+	unset _hoid_task_copy__temp
 }
-	# if ! bobshel_locator_parse "$_hoid_task_copy__src"; then
-	# 	_hoid_task_copy__temp=$(hoid_mktemp_dir)
-	# 	for _hoid_task_copy__found in $(hoid_finder_find_all "$1"); do
-	# 		true
-
-
-
-	# 	done
-	# 	unset _hoid_task_copy__found
-	# 	unset _hoid_task_copy__temp
-	# fi 
-
 
 hoid_task_do_copy() {
-	_hoid_task_copy__src=$(bobshell_locator_resolve "$1")
+	_hoid_task_do_copy__src=$(bobshell_locator_resolve "$1")
 
 	# if it is directory
-	if bobshell_locator_is_file "$_hoid_task_copy__src" _hoid_task_copy__src_file; then
-		if [ -d "$_hoid_task_copy__src_file" ]; then
+	if bobshell_locator_is_file "$_hoid_task_do_copy__src" _hoid_task_do_copy__src_file; then
+		if [ -d "$_hoid_task_do_copy__src_file" ]; then
 			hoid command mkdir -p "$2"
-			if hoid_dir_is_not_empty "$_hoid_task_copy__src_file"; then
-				_hoid_task_copy__temp=$(hoid_mktemp_dir)
+			if hoid_dir_is_not_empty "$_hoid_task_do_copy__src_file"; then
+				_hoid_task_do_copy__temp=$(hoid_mktemp_dir)
 				if bobshell_isset _hoid_task_copy__mapper; then
 					#
-					_hoid_task_copy__script=$(find "$_hoid_task_copy__src" -type d -printf "hoid_task_copy_found_dir '%P'\n" -o -printf "hoid_task_copy_found_file '%P'\n")
-					eval "$_hoid_task_copy__script"
-					unset _hoid_task_copy__script
-					tar --create --gzip --file - --directory "$_hoid_task_copy__temp/tree" . > "$_hoid_task_copy__temp/archive.tar.gz"
+					_hoid_task_do_copy__script=$(find "$_hoid_task_do_copy__src_file" -type d -printf "hoid_task_copy_found_dir '%P'\n" -o -printf "hoid_task_copy_found_file '%P'\n")
+					eval "$_hoid_task_do_copy__script"
+					unset _hoid_task_do_copy__script
+					_hoid_task_do_copy__pack_dir="$_hoid_task_do_copy__temp/tree"
 				else
-					tar --create --gzip --file - --directory "$_hoid_task_copy__src"       . > "$_hoid_task_copy__temp/archive.tar.gz"
+					_hoid_task_do_copy__pack_dir="$_hoid_task_do_copy__src_file"
 				fi
-				hoid command --input "file:$_hoid_task_copy__temp/archive.tar.gz" \
+				
+				if ! hoid_dir_is_not_empty "$_hoid_task_do_copy__pack_dir"; then
+					bobshell_die "something wrong: dir empty"
+				fi
+
+				tar --create --gzip --file - --directory "$_hoid_task_do_copy__pack_dir"  . > "$_hoid_task_do_copy__temp/archive.tar.gz"
+				unset _hoid_task_do_copy__pack_dir
+
+
+				hoid command --input "file:$_hoid_task_do_copy__temp/archive.tar.gz" \
 						tar --extract --ungzip --file - --directory "$2"
-				rm -rf "$_hoid_task_copy__temp"
-				unset _hoid_task_copy__temp
+				#bobshell_die "DEBUG: $_hoid_task_do_copy__temp" #!!!
+				rm -rf "$_hoid_task_do_copy__temp"
+				unset _hoid_task_do_copy__temp
 			fi
-			unset _hoid_task_copy__src_file _hoid_task_copy__mapper
+			unset _hoid_task_do_copy__src_file _hoid_task_copy__mapper
 			return
 		fi
-		unset _hoid_task_copy__src_file
+		unset _hoid_task_do_copy__src_file
 	fi
 
 	# if it any readable locator
-	if ! bobshell_locator_is_readable "$_hoid_task_copy__src"; then
+	if ! bobshell_locator_is_readable "$_hoid_task_do_copy__src"; then
 		bobshell_die "locator not readable: $1"
 	fi
 	
 	# create dir
-	_hoid_task_copy__dest_dir=$(dirname "$2")
-	hoid command mkdir -p "$_hoid_task_copy__dest_dir"
-	unset _hoid_task_copy__dest_dir
+	_hoid_task_do_copy__dest_dir=$(dirname "$2")
+	hoid command mkdir -p "$_hoid_task_do_copy__dest_dir"
+	unset _hoid_task_do_copy__dest_dir
 
 	# 
-	_hoid_task_copy__dest=$(bobshell_quote "$2")
+	_hoid_task_do_copy__dest=$(bobshell_quote "$2")
 	if bobshell_isset _hoid_task_copy__mapper; then
-		_hoid_task_copy__temp=$(hoid_mktemp_dir)
-		"$_hoid_task_copy__mapper" "$_hoid_task_copy__src" "file:$_hoid_task_copy__temp/result"
-		hoid script --input "file:$_hoid_task_copy__temp/result" "cat > $_hoid_task_copy__dest"
-		rm -rf "$_hoid_task_copy__temp"
-		unset _hoid_task_copy__temp _hoid_task_copy__mapper
+		_hoid_task_do_copy__temp=$(hoid_mktemp_dir)
+		"$_hoid_task_copy__mapper" "$_hoid_task_do_copy__src" "file:$_hoid_task_do_copy__temp/result"
+		hoid script --input "file:$_hoid_task_do_copy__temp/result" "cat > $_hoid_task_do_copy__dest"
+		rm -rf "$_hoid_task_do_copy__temp"
+		unset _hoid_task_do_copy__temp _hoid_task_copy__mapper
 	else
-		hoid script --input "$_hoid_task_copy__src" "cat > $_hoid_task_copy__dest"
+		hoid script --input "$_hoid_task_do_copy__src" "cat > $_hoid_task_do_copy__dest"
 	fi
-	unset _hoid_task_copy__src  _hoid_task_copy__dest
+	unset _hoid_task_do_copy__src  _hoid_task_do_copy__dest
 }
 
-hoid_task_copy_dir() {
-	true
-}
-
-hoid_task_copy_file() {
-	true
-}
 
 hoid_task_copy_found_dir() {
-	mkdir -p "$_hoid_task_copy__temp/tree/$1"
+	mkdir -p "$_hoid_task_do_copy__temp/tree/$1"
 }
 
 hoid_task_copy_found_file() {
-	"$_hoid_task_copy__mapper" "file:$_hoid_task_copy__src_file/$1" "file:$_hoid_task_copy__temp/tree/$1"
+	"$_hoid_task_copy__mapper" "file:$_hoid_task_do_copy__src_file/$1" "file:$_hoid_task_do_copy__temp/tree/$1"
 }
 
 hoid_task_copy_map() {
