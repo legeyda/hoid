@@ -52,7 +52,7 @@ hoid_finder_item_loop() {
 hoid_finder_find_all() {
 	unset _hoid_finder_get_all__any
 	for _hoid_finder_get_all__item in $hoid_finder_path_reverse_instance; do
-		if [ -f "$_hoid_finder_get_all__item/$1" ]; then
+		if [ -e "$_hoid_finder_get_all__item/$1" ]; then
 			if [ true = "${_hoid_finder_get_all__any:-false}" ]; then
 				printf %s ' '
 			fi
@@ -68,7 +68,7 @@ hoid_finder_find_all() {
 
 hoid_finder_find_one() {
 	for _hoid_finder_get_one__item in $hoid_finder_path_instance; do
-		if [ -f "$_hoid_finder_get_one__item/$1" ]; then
+		if [ -e "$_hoid_finder_get_one__item/$1" ]; then
 			printf %s "$_hoid_finder_get_one__item/$1"
 			unset _hoid_finder_get_one__item
 			return

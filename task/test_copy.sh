@@ -67,3 +67,21 @@ test_copy_first_file() {
 	assert_equals hello "$(ssh "$HOID_TARGET" 'cat test_copy_first_file.txt')"
 }
 
+
+test_copy_merged_dir() {
+	init_dir test_copy_merged_dir
+	mkdir -p "dir1/$HOID_TARGET/a/b/c" "dir2/$HOID_TARGET/a/b" "dir3/$HOID_TARGET/a/b/c"
+
+	HOID_FINDER_PATH='dir1/{{ hoid_profile }}:dir2/{{ hoid_profile }}:dir3/{{ hoid_profile }}'
+	#bobshell_event_var_set hoid_profile testprof
+
+	echo hello > "dir1/$HOID_TARGET/a/b/c/file.txt"
+	echo other > "dir2/$HOID_TARGET/a/b/f.txt"
+	echo hi    > "dir3/$HOID_TARGET/a/b/c/file.txt"
+	
+
+	hoid copy a test_copy_merged_dir
+	assert_equals hello "$(ssh "$HOID_TARGET" 'cat test_copy_merged_dir/b/c/file.txt')"
+	assert_equals other "$(ssh "$HOID_TARGET" 'cat test_copy_merged_dir/b/f.txt')"
+}
+
