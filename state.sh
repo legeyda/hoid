@@ -1,7 +1,8 @@
 
 
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/misc/eqvar.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/stack.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/stack/push.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/stack/pop.sh
 
 hoid_state_init() {
 	bobshell_event_fire hoid_event_state_init "$@"

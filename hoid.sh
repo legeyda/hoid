@@ -5,6 +5,7 @@ shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/un
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/misc/equals_any.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/event/fire.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/event/template.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/stack/set.sh
 
 
 # import std tasks
@@ -89,6 +90,7 @@ hoid_subcommand() {
 	fi
 
 	if [ true != "${_hoid__state_default_done:-false}" ]; then
+		bobshell_stack_set hoid_state_stack
 		bobshell_event_fire hoid_event_state_default
 		_hoid__state_default_done=true
 	fi
