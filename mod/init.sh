@@ -1,4 +1,5 @@
 
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/result/set.sh
 
 
 # fun: hoid_sub_init 
@@ -22,10 +23,10 @@ hoid_sub_init_ensure() {
 # shellcheck disable=SC2016
 bobshell_event_listen hoid_event_subcommand '
 
-
 	if [ init = "$1" ]; then
 		shift
 		hoid_sub_init "$@"
+		bobshell_result_set true
 		return
 	else
 		hoid_sub_init_ensure

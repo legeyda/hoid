@@ -83,12 +83,16 @@ hoid_subcommand() {
 		hoid_usage 2>&1
 		exit 1
 	fi
+
+	hoid_result_set false
 	bobshell_event_fire hoid_event_subcommand "$@"
+	if hoid_result_check; then
+		return
+	fi
+
+	hoid_subcommand_builtin "$@"
 }
 
-bobshell_event_template hoid_event_subcommand '{}
-	hoid_subcommand_builtin "$@"
-'
 
 
 hoid_subcommand_builtin() {
