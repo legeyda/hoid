@@ -23,15 +23,15 @@ shelduck import ./driver/local.sh
 shelduck import ./driver/ssh.sh
 
 #
-shelduck import ./mod/name.sh
-shelduck import ./mod/target.sh
-shelduck import ./mod/become.sh
+shelduck import ./mod/all.sh
 
 # private dependencies
 shelduck import ./block.sh
 shelduck import ./buffer.sh
 shelduck import ./state.sh
 shelduck import ./finder.sh
+
+
 
 # main entry point
 hoid() {
@@ -47,12 +47,18 @@ hoid() {
 		return
 	fi
 
+
+	hoid_cli_parse "$@"
+}
+
+
+hoid_cli_parse() {
 	# parse hoid cli (common for all tasks)
 	bobshell_event_fire hoid_event_cli_start
 	hoid_cli_opts=false
-
 	bobshell_event_fire hoid_event_cli_options "$@"
 }
+
 
 # shellcheck disable=SC2016
 bobshell_event_template hoid_event_cli_options '
@@ -70,22 +76,29 @@ bobshell_event_template hoid_event_cli_options '
 	done
 	hoid_subcommand "$@"'
 
-hoid_subcommand() {
 
+hoid_subcommand() {
 	# check if task is defined
 	if ! bobshell_isset_1 "$@"; then
 		printf %s 'hoid: command expected' 2>&1
 		hoid_usage 2>&1
 		exit 1
 	fi
+	bobshell_event_fire hoid_event_subcommand "$@"
+}
+
+bobshell_event_template hoid_event_subcommand '{}
+	hoid_subcommand_builtin "$@"
+'
+
+
+hoid_subcommand_builtin() {
 
 
 	# subcommand
-	if [ init = "$1" ]; then
+	if [ find = "$1" ]; then
 		shift
-		hoid_buffer_flush
-		hoid_state_init "$@"
-		_hoid__state_default_done=true
+		hoid_finder_find "$@"
 		return
 	fi
 

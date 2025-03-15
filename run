@@ -72,7 +72,7 @@ run_test() {
 	if ! bobshell_isset HOID_TARGET; then
 		bobshell_die 'HOID_TARGET not set'
 	fi
-	bobtest
+	bobtest "$@"
 }
 
 
