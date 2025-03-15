@@ -1,5 +1,5 @@
 
-shlelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/url.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/url.sh
 
 
 
