@@ -47,7 +47,6 @@ hoid() {
 		return
 	fi
 
-
 	hoid_cli_parse "$@"
 }
 
@@ -102,12 +101,7 @@ hoid_subcommand_builtin() {
 		return
 	fi
 
-	if [ true != "${_hoid__state_default_done:-false}" ]; then
-		bobshell_stack_set hoid_state_stack
-		bobshell_event_fire hoid_event_state_default
-		_hoid__state_default_done=true
-	fi
-	
+
 	if ! bobshell_isset hoid_target; then
 		bobshell_die "hoid target not set"
 	fi
