@@ -102,9 +102,7 @@ hoid_subcommand_builtin() {
 	fi
 
 
-	if ! bobshell_isset hoid_target; then
-		bobshell_die "hoid target not set"
-	fi
+
 
 	if [ flush = "$1" ]; then
 		if [ true = "$hoid_cli_opts" ]; then

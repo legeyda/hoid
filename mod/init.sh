@@ -30,6 +30,10 @@ bobshell_event_listen hoid_event_subcommand '
 	else
 		hoid_sub_init_ensure
 	fi
+
+	if ! bobshell_isset hoid_target; then
+		bobshell_die "hoid target not set"
+	fi
 '
 
 
