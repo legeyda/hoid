@@ -23,9 +23,11 @@ hoid_state_pop() {
 	fi
 	unset hoid_state_pop_size
 
-	bobshell_stack_pop hoid_state_stack hoid_state_pop_value
-	hoid_state_load "$hoid_state_pop_value"
-	unset hoid_state_pop_value
+	bobshell_stack_pop hoid_state_stack 
+	bobshell_result_assert _hoid_state_pop__value
+
+	hoid_state_load "$_hoid_state_pop__value"
+	unset _hoid_state_pop__value
 }
 
 

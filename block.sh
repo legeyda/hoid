@@ -25,10 +25,12 @@ hoid_block() {
 hoid_block_start() {
 	hoid_state_push
 	hoid_state_init
+	bobshell_event_fire hoid_state_change_event
 }
 
 hoid_block_end() {
 	hoid_state_pop
+	bobshell_event_fire hoid_state_change_event
 }
 
 

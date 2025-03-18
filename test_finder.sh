@@ -17,7 +17,8 @@ test_find_all() {
 	mkdir -p dir1/testprof dir2/testprof dir3/testprof
 
 	HOID_FINDER_PATH='dir1/{{ hoid_profile }}:dir2/{{ hoid_profile }}:dir3/{{ hoid_profile }}'
-	bobshell_event_var_set hoid_profile testprof
+	hoid_profile=testprof
+	bobshell_event_fire hoid_state_change_event
 
 	echo hello > dir1/testprof/file.txt
 	echo hi    > dir3/testprof/file.txt
@@ -33,7 +34,8 @@ test_find_one() {
 	mkdir -p dir1/testprof dir2/testprof dir3/testprof
 
 	HOID_FINDER_PATH='dir1/{{ hoid_profile }}:dir2/{{ hoid_profile }}:dir3/{{ hoid_profile }}'
-	bobshell_event_var_set hoid_profile testprof
+	hoid_profile=testprof
+	bobshell_event_fire hoid_state_change_event
 
 	echo hello > dir1/testprof/file.txt
 	echo hi    > dir3/testprof/file.txt

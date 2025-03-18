@@ -4,10 +4,10 @@ shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/un
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/template.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/string.sh
 
-hoid_finder_profile_listener() {
+hoid_finder_state_change_event_listener() {
 	hoid_finder_template_apply
 }
-bobshell_event_var_listen hoid_profile hoid_finder_profile_listener
+bobshell_event_listen hoid_state_change_event hoid_finder_state_change_event_listener
 
 
 hoid_finder_template_apply() {

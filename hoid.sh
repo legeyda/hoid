@@ -6,6 +6,8 @@ shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/un
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/event/fire.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/event/template.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/stack/set.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/result/set.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/result/check.sh
 
 
 # import std tasks
@@ -84,9 +86,9 @@ hoid_subcommand() {
 		exit 1
 	fi
 
-	hoid_result_set false
+	bobshell_result_set false
 	bobshell_event_fire hoid_event_subcommand "$@"
-	if hoid_result_check; then
+	if bobshell_result_check; then
 		return
 	fi
 
@@ -122,8 +124,10 @@ hoid_subcommand_builtin() {
 	else
 		hoid_state_push
 		hoid_state_init
+		bobshell_event_fire hoid_state_change_event
 		hoid_task "$@"
 		hoid_state_pop
+		bobshell_event_fire hoid_state_change_event
 	fi
 
 }

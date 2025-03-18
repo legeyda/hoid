@@ -10,12 +10,14 @@ hoid_sub_init() {
 	fi
 	hoid_buffer_flush
 	hoid_state_init "$@"
+	bobshell_event_fire hoid_state_change_event
 }
 
 hoid_sub_init_ensure() {
 	if [ true != "${_hoid__state_default_done:-false}" ]; then
 		bobshell_stack_set hoid_state_stack
 		bobshell_event_fire hoid_event_state_default
+		bobshell_event_fire hoid_state_change_event
 		_hoid__state_default_done=true
 	fi
 }
@@ -35,6 +37,8 @@ bobshell_event_listen hoid_event_subcommand '
 	if ! bobshell_isset hoid_target; then
 		bobshell_die "hoid target not set"
 	fi
+
+	bobshell_result_set false
 '
 
 
