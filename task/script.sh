@@ -28,25 +28,25 @@ hoid_task_script() {
 	done
 
 	
-
-	if bobshell_isset _hoid_task_script__input || bobshell_isset _hoid_task_script__output; then
-	    # inline input
-		# echo hello | base64 | base64 -d
-		# echo hello | xxd    | xxd -r -p
-		if bobshell_isset _hoid_task_script__output; then
-			bobshell_die 'hoid_task_script: output not supported'
-		fi
-		hoid_buffer_flush
-
-		
-		hoid shell "$@"
-		hoid_buffer_flush --input "$_hoid_task_script__input"
-	else
+	if ! bobshell_isset _hoid_task_script__input && ! bobshell_isset _hoid_task_script__output; then
 		hoid_task_script_separator
 		hoid shell "$@"
+		return
 	fi
 
+	hoid_buffer_flush
 
+	hoid shell "$@"
+
+	set --
+	if bobshell_isset _hoid_task_script__input; then
+		set -- "$@" --input "$_hoid_task_script__input"
+	fi
+	if bobshell_isset _hoid_task_script__output; then
+		set -- "$@" --output "$_hoid_task_script__output"
+	fi
+	
+	hoid_buffer_flush "$@"
 }
 
 hoid_task_script_separator() {

@@ -131,11 +131,11 @@ hoid_mod_target_init() {
 	if bobshell_isset hoid_cli_driver; then
 		hoid_mod_target_refresh_driver=$hoid_cli_driver
 	elif [ -z "${hoid_driver:-}" ]; then
-		hoid_mod_target_refresh_driver=$HOID_DRIVER
+		hoid_mod_target_refresh_driver=${HOID_DRIVER:-ssh}
 	fi
 	if bobshell_isset hoid_cli_profile; then
 		hoid_mod_target_refresh_profile=$hoid_cli_profile
-	elif [ -z "${hoid_profile:-}" ]; then
+	elif [ -z "${hoid_profile:-}" ] && bobshell_isset HOID_PROFILE; then
 		hoid_mod_target_refresh_profile=$HOID_PROFILE
 	fi
 	hoid_mod_target_refresh
@@ -148,9 +148,9 @@ bobshell_event_listen hoid_event_state_init 'hoid_mod_target_init "$@"'
 # env: HOID_TARGET
 # shellcheck disable=SC2120
 hoid_mod_target_refresh() {
-	if bobshell_isset hoid_target && [ "$hoid_target" = "$hoid_mod_target_refresh_target" ]; then
-		if bobshell_isset hoid_driver && [ "$hoid_driver" = "$hoid_mod_target_refresh_driver" ]; then
-			if bobshell_isset hoid_profile && [ "$hoid_profile" = "$hoid_mod_target_refresh_profile" ]; then
+	if bobshell_isset hoid_target && bobshell_isset hoid_mod_target_refresh_target && [ "$hoid_target" = "$hoid_mod_target_refresh_target" ]; then
+		if bobshell_isset hoid_driver && bobshell_isset hoid_mod_target_refresh_driver && [ "$hoid_driver" = "$hoid_mod_target_refresh_driver" ]; then
+			if bobshell_isset hoid_profile && bobshell_isset hoid_mod_target_refresh_profile && [ "$hoid_profile" = "$hoid_mod_target_refresh_profile" ]; then
 				return
 			fi
 		fi

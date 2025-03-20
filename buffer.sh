@@ -2,6 +2,7 @@
 
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/string.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/resource/copy.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/redirect/io.sh
 
 shelduck import ./runtime.sh
 
@@ -13,27 +14,43 @@ hoid_buffer_write() {
 # fun: hoid_buffer_flush
 # env: hoid_buffer
 hoid_buffer_flush() {
-	unset _hoid_buffer_flush__input
+	_hoid_buffer_flush__input=stdin:
+	_hoid_buffer_flush__output=stdout:
 	while bobshell_isset_1 "$@"; do
+		bobshell_isset_2 "$@" || bobshell_die "hoid: option $1: argument expected: locator"
 		case "$1" in
 			(-i|--input)
-				bobshell_isset_2 "$@" || bobshell_die "hoid: option $1: argument expected: locator"
 				_hoid_buffer_flush__input="$2"
 				shift 2
+				;;
+			(-o|--output)
+				_hoid_buffer_flush__output="$2"
+				shift 2
+				;;
+			(-*)
+				bobshell_die "unexpected option: $1"
+				;;
+			(*)
+				bobshell_die "unexpected parameter: $1"
 		esac
 	done
 	if bobshell_isset_1 "$@"; then
 		bobshell_die "hoid flush: takes no arguments"
 	fi
-	if [ -n "${hoid_buffer:-}" ]; then
-		hoid_buffer_rewrite
-		if bobshell_isset _hoid_buffer_flush__input; then
-			bobshell_resource_copy "$_hoid_buffer_flush__input" stdout: | hoid_driver_write "$hoid_buffer"
-		else
-			hoid_driver_write "$hoid_buffer"
-		fi
-		hoid_buffer=
+
+	if [ -z "${hoid_buffer:-}" ]; then
+		return
 	fi
+
+	hoid_buffer_rewrite
+	if [ -z "${hoid_buffer:-}" ]; then
+		return
+	fi
+
+	bobshell_redirect_io "$_hoid_buffer_flush__input" "$_hoid_buffer_flush__output" hoid_driver_write "$hoid_buffer"
+	hoid_buffer=
+
+	unset _hoid_buffer_flush__input _hoid_buffer_flush__output
 }
 
 
