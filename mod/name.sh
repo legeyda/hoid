@@ -17,7 +17,7 @@ bobshell_event_listen hoid_event_cli_options '
 				shift 2
 				;;'
 
-# bobshell_event_listen hoid_event_cli_diff '
+# bobshell_event_listen hoid_cli_diff_event '
 # 	if ! bobshell_eqvar hoid_cli_name hoid_name; then
 # 		return 1
 # 	fi

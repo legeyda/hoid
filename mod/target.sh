@@ -35,31 +35,42 @@ bobshell_event_listen hoid_event_cli_options '
 hoid_mod_target_cli_diff() {
 	if bobshell_isset hoid_cli_target; then
 		if ! bobshell_isset hoid_target; then
-			return 1
+			bobshell_result_set false
+			return
 		fi
 		if [ "$hoid_cli_target" != "$hoid_target" ]; then
-			return 1
+			bobshell_result_set false
+			return
 		fi
 	fi
 	if bobshell_isset hoid_cli_driver; then
 		if ! bobshell_isset hoid_driver; then
-			return 1
+			bobshell_result_set false
+			return
 		fi
 		if [ "$hoid_cli_driver" != "$hoid_driver" ]; then
-			return 1
+			bobshell_result_set false
+			return
 		fi
 	fi
 	if bobshell_isset hoid_cli_profile; then
 		if ! bobshell_isset hoid_profile; then
-			return 1
+			bobshell_result_set false
+			return
 		fi
 		if [ "$hoid_cli_profile" != "$hoid_profile" ]; then
-			return 1
+			bobshell_result_set false
+			return
 		fi
 	fi
+	bobshell_result_set true
 }
 # shellcheck disable=SC2016
-bobshell_event_listen hoid_event_cli_diff 'hoid_mod_target_cli_diff || return 1'
+bobshell_event_listen hoid_cli_diff_event '
+hoid_mod_target_cli_diff
+if ! bobshell_result_check; then
+	return
+fi'
 
 
 

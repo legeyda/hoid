@@ -119,17 +119,19 @@ hoid_subcommand_builtin() {
 	elif [ block = "$1" ]; then
 		shift
 		hoid_block "$@"
-	elif bobshell_event_fire hoid_event_cli_diff; then
-		hoid_task "$@"
 	else
-		hoid_state_push
-		hoid_state_init
-		bobshell_event_fire hoid_state_change_event
-		hoid_task "$@"
-		hoid_state_pop
-		bobshell_event_fire hoid_state_change_event
+		bobshell_event_fire hoid_cli_diff_event
+		if bobshell_result_check; then
+			hoid_task "$@"
+		else
+			hoid_state_push
+			hoid_state_init
+			bobshell_event_fire hoid_state_change_event
+			hoid_task "$@"
+			hoid_state_pop
+			bobshell_event_fire hoid_state_change_event
+		fi
 	fi
-
 }
 
 
