@@ -17,13 +17,14 @@ hoid_buffer_flush() {
 	_hoid_buffer_flush__input=stdin:
 	_hoid_buffer_flush__output=stdout:
 	while bobshell_isset_1 "$@"; do
-		bobshell_isset_2 "$@" || bobshell_die "hoid: option $1: argument expected: locator"
 		case "$1" in
 			(-i|--input)
+		bobshell_isset_2 "$@" || bobshell_die "hoid: option $1: argument expected: locator"
 				_hoid_buffer_flush__input="$2"
 				shift 2
 				;;
 			(-o|--output)
+		bobshell_isset_2 "$@" || bobshell_die "hoid: option $1: argument expected: locator"
 				_hoid_buffer_flush__output="$2"
 				shift 2
 				;;

@@ -14,7 +14,6 @@ x=xyz
 x=$(bobshell_replace "$x" x 1)
 x=$(bobshell_replace "$x" y 2)
 x=$(bobshell_replace "$x" z 3)
-bobshell_die "DEBUG: $x"
 printf %s "$x"
 '
 

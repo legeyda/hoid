@@ -3,6 +3,10 @@
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/base.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/string.sh
 
+hoid_task_script() {
+	hoid_task_script_cli hoid_task_script_go "$@"
+}
+
 hoid_task_script_cli() {
 	_hoid_task_script_cli__delegate="$1"
 	shift
@@ -33,9 +37,6 @@ hoid_task_script_cli() {
 	unset _hoid_task_script_cli__delegate
 }
 
-hoid_task_script() {
-	hoid_task_script_cli hoid_task_script_go "$@"
-}
 
 hoid_task_script_go() {
 	
