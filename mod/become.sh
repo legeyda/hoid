@@ -164,17 +164,17 @@ hoid_mod_become_rewrite() {
 
 
 	if bobshell_contains "$hoid_buffer" "'"; then
-		hoid_buffer="set -eu; sudo sh -c 'set -eu; $hoid_buffer'"
-	else
 		bobshell_buffer_rewrite_random="$(bobshell_random)$(bobshell_random)$(bobshell_random)"
 		hoid_buffer="set -eu;
-script=\$(cat<""<EOF_$bobshell_buffer_rewrite_random
+script=\$(cat<""<\EOF_$bobshell_buffer_rewrite_random
 set -eu
 $hoid_buffer
 EOF_$bobshell_buffer_rewrite_random
 )
 sudo sh -c \"\$script\"
-"
+"		
+	else
+		hoid_buffer="set -eu; sudo sh -c 'set -eu; $hoid_buffer'"
 	fi
 }
 bobshell_event_listen hoid_event_buffer_rewrite hoid_mod_become_rewrite

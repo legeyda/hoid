@@ -36,4 +36,4 @@ hoid_buffer_write() {
 
 
 # flush buffer on success exit
-trap '[ $? -eq 0 ] && hoid_command_flush' EXIT
+trap '[ $? -eq 0 ] && hoid_buffer_flush' EXIT
