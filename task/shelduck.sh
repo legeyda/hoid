@@ -20,19 +20,54 @@ hoid_task_shelduck() {
 
 # fun: hoid_task_shelduck_run SHELDUCKARGS
 hoid_task_shelduck_run() {
+	unset _hoid_task_shelduck_run__input _hoid_task_shelduck_run__output
+	while bobshell_isset_1 "$@"; do
+		case "$1" in
+			(-i|--input)
+				bobshell_isset_2 "$@" || bobshell_die "hoid_task_shelduck_run: option $1: argument expected: locator"
+				_hoid_task_shelduck_run__input="$2"
+				shift 2
+				;;
+			(-o|--output)
+				bobshell_isset_2 "$@" || bobshell_die "hoid_task_shelduck_run: option $1: argument expected: locator"
+				_hoid_task_shelduck_run__output="$2"
+				shift 2
+				;;
+			(-*)
+				bobshell_die "hoid_task_shelduck_run: unrecognized option $1"
+				;;
+			(*)
+				break
+				;;
+		esac
+	done
+	
 	if ! bobshell_isset_1 "$@"; then
 		bobshell_die '"hoid shelduck run" requires at least 1 argument'
 	fi
+	
 	hoid_task_shelduck_run_script=$(shelduck resolve "$1")
 	shift
 	hoid_task_shelduck_run_args=$(bobshell_quote "$@")
-
-	if [ -n "$hoid_task_shelduck_run_args" ]; then
-		hoid script "set -- $hoid_task_shelduck_run_args"
+	if [ -n "$hoid_task_shelduck_run_script" ]; then
+		hoid_task_shelduck_run_script="set -- $hoid_task_shelduck_run_args;
+		
+$hoid_task_shelduck_run_script"
 	fi
-	hoid script "$hoid_task_shelduck_run_script"
+	unset hoid_task_shelduck_run_args
 
-	unset hoid_task_shelduck_run_script hoid_task_shelduck_run_args
+	set -- "$hoid_task_shelduck_run_script"
+	unset hoid_task_shelduck_run_script
+	if bobshell_isset _hoid_task_shelduck_run__input; then
+		set -- --input "$_hoid_task_shelduck_run__input" "$@"
+		unset _hoid_task_shelduck_run__input
+	fi
+	if bobshell_isset _hoid_task_shelduck_run__output; then
+		set -- --output "$_hoid_task_shelduck_run__output" "$@"
+		unset _hoid_task_shelduck_run__output
+	fi
+
+	hoid script "$@"
 }
 
 # fun: hoid shelduck install hoid 
