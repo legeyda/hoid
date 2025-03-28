@@ -26,12 +26,9 @@ run_build() {
 	_run_build__index=1
 	_run_build__func=''
 
-	run_build_repo bobshell "$HOID_BUILD_BOBSHELL_BRANCH"
-	run_build_hoid "$HOID_BUILD_HOID_BRANCH"
-
-
-
 	{
+		run_build_repo bobshell "$HOID_BUILD_BOBSHELL_BRANCH"
+		run_build_hoid "$HOID_BUILD_HOID_BRANCH"
 		# shellcheck disable=SC2016
 		printf '
 shelduck_print_origin() {
@@ -57,7 +54,7 @@ run_build_repo() {
 	_run_build__func="$_run_build__func
 	if bobshell_starts_with \"\$1\" '$_run_build__url/'; then
 "
-	eval "$_run_build__script" >> "$HOID_BUILD_ROOT/release/fir.sh"
+	eval "$_run_build__script"
 	_run_build__func="$_run_build__func
 	fi
 "
@@ -79,7 +76,7 @@ run_build_hoid() {
 	_run_build__func="$_run_build__func
 	if bobshell_starts_with \"\$1\" '$_run_build__url/'; then
 "
-	eval "$_run_build__script" >> "$HOID_BUILD_ROOT/release/fir.sh"
+	eval "$_run_build__script"
 	_run_build__func="$_run_build__func
 	fi
 "
