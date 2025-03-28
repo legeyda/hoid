@@ -8,9 +8,103 @@ shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/un
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/bobtest.sh
 
 
+
+on_start() {
+	: "${HOID_BUILD_ROOT:=./target}"
+	export HOID_BUILD_ROOT
+	if ! bobshell_starts_with "$HOID_BUILD_ROOT" /  && ! bobshell_starts_with "$HOID_BUILD_ROOT" . ; then
+		HOID_BUILD_ROOT="./$HOID_BUILD_ROOT"
+	fi
+	: "${HOID_BUILD_BOBSHELL_BRANCH:=unstable}"
+	: "${HOID_BUILD_HOID_BRANCH:=main}"
+}
+
 run_build() {
-	mkdir -p target
-	hoid_compile "file://$(pwd)/hoid.sh" > target/hoid.sh
+	mkdir -p "$HOID_BUILD_ROOT/release"
+	bobshell_resource_copy https://github.com/legeyda/shelduck/releases/latest/download/shelduck.sh "file://$HOID_BUILD_ROOT/release/fir.sh"
+
+	_run_build__index=1
+	_run_build__func=''
+
+	run_build_repo bobshell "$HOID_BUILD_BOBSHELL_BRANCH"
+	run_build_hoid "$HOID_BUILD_HOID_BRANCH"
+
+
+
+	{
+		# shellcheck disable=SC2016
+		printf '
+shelduck_print_origin() {
+	%s
+	shelduck_cached_fetch_url "$1"
+}
+
+
+' "$_run_build__func"
+	} >> "$HOID_BUILD_ROOT/release/fir.sh"
+
+}
+
+# fun: run_build_repo REPO BRANCH
+run_build_repo() {
+	_run_build_repo__temp=$(mktemp -d)
+	bobshell_fetch_url "https://github.com/legeyda/$1/archive/refs/heads/$2.tar.gz" > "$_run_build_repo__temp/$1-$2.tar.gz"
+	tar --extract --ungzip --file "$_run_build_repo__temp/$1-$2.tar.gz" --directory "$_run_build_repo__temp"
+
+	_run_build__script=$(find "$_run_build_repo__temp/$1-$2" -path '*/.*' -o -path '*/test_*.sh' -prune -o -name '*.sh' -printf "run_build_file './%P'\n")
+	_run_build__url="https://raw.githubusercontent.com/legeyda/$1/refs/heads/$2"
+	_run_build__path="$_run_build_repo__temp/$1-$2"
+	_run_build__func="$_run_build__func
+	if bobshell_starts_with \"\$1\" '$_run_build__url/'; then
+"
+	eval "$_run_build__script" >> "$HOID_BUILD_ROOT/release/fir.sh"
+	_run_build__func="$_run_build__func
+	fi
+"
+	unset _run_build__script _run_build__url _run_build__path
+
+	rm -rf "$_run_build_repo__temp/$1-$2.tar.gz" "$_run_build_repo__temp/$1-$2"	
+	unset _run_build_repo__temp
+	
+	
+	
+}
+
+run_build_hoid() {
+
+	_run_build__script=$(find . -path '*/.*' -o -path '*/test_*.sh' -o -path "$HOID_BUILD_ROOT/*" -prune \
+			-o -name '*.sh' -printf "run_build_file './%P'\n")
+	_run_build__url="https://raw.githubusercontent.com/legeyda/hoid/refs/heads/$1"
+	_run_build__path="."
+	_run_build__func="$_run_build__func
+	if bobshell_starts_with \"\$1\" '$_run_build__url/'; then
+"
+	eval "$_run_build__script" >> "$HOID_BUILD_ROOT/release/fir.sh"
+	_run_build__func="$_run_build__func
+	fi
+"
+
+	unset _run_build__script _run_build__url _run_build__path
+}
+
+run_build_file() {
+	bobshell_remove_prefix "$1" ./ _run_build_file
+
+	# shellcheck disable=SC2016
+	printf '\n\n\nHOID_BUILD_%s=$(cat<<\HOID_BUILD_EOF_%s\n' "$_run_build__index" "$_run_build__index"
+	cat "$_run_build__path/$_run_build_file"
+	printf '\nHOID_BUILD_EOF_%s\n)\n' "$_run_build__index"
+
+	_run_build__func="$_run_build__func
+		if [ \"\$1\" = '$_run_build__url/$_run_build_file' ]; then
+			bobshell_getvar HOID_BUILD_$_run_build__index
+			return
+		fi
+
+"
+
+
+	_run_build__index=$(( 1 + _run_build__index ))
 }
 
 
