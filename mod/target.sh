@@ -25,7 +25,7 @@ bobshell_event_listen hoid_event_cli_options '
 				hoid_cli_driver="$2"
 				shift 2
 				;;
-			(-d|--prifile)
+			(-d|--profile)
 				bobshell_isset_2 "$@" || bobshell_die "hoid: option $1: argument expected"
 				hoid_cli_profile="$2"
 				shift 2
@@ -136,7 +136,7 @@ bobshell_event_listen hoid_event_state_load hoid_mod_target_state_load
 hoid_mod_target_init() {
 	if bobshell_isset hoid_cli_target; then
 		hoid_mod_target_refresh_target=$hoid_cli_target
-	elif [ -z "${hoid_target:-}" ]; then
+	elif [ -z "${hoid_target:-}" ] && bobshell_isset HOID_TARGET; then
 		hoid_mod_target_refresh_target=$HOID_TARGET
 	fi
 	if bobshell_isset hoid_cli_driver; then
@@ -170,7 +170,7 @@ hoid_mod_target_refresh() {
 	hoid_buffer_flush
 
 	bobshell_event_var_set hoid_profile "${hoid_mod_target_refresh_profile:-$hoid_mod_target_refresh_target}"
-
+	bobshell_event_fire hoid_state_change_event
 
 
 
@@ -209,14 +209,8 @@ hoid_mod_target_refresh() {
 
 
 hoid_load_profile() {
-	hoid_profile="$1"
-	: "${hoid_profile_parent_dir=${HOID_PROFILE_PARENT_DIR:-$HOME/.config/hoid/profile}}"
-	: "${hoid_profile_dir=${HOID_PROFILE_DIR:-$hoid_profile_parent_dir/$hoid_profile}}"
-	: "${hoid_env_file=${HOID_ENV_FILE:-$hoid_profile_dir/env.sh}}"
-
-	if [ -f "$hoid_env_file" ]; then
-		eval "$hoid_init_env_file"
-	fi
-
+	for x in $(hoid_finder_find_all env.sh); do
+		. "$x"
+	done
 }
 

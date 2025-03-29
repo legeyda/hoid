@@ -19,14 +19,20 @@ on_start() {
 	: "${HOID_BUILD_HOID_BRANCH:=main}"
 }
 
+run_bundle() {
+	true
+	# hoid_bundle.sh
+}
+
 run_build() {
 	mkdir -p "$HOID_BUILD_ROOT/release"
-	bobshell_resource_copy https://github.com/legeyda/shelduck/releases/latest/download/shelduck.sh "file://$HOID_BUILD_ROOT/release/fir.sh"
+	bobshell_resource_copy https://github.com/legeyda/shelduck/releases/latest/download/shelduck.sh "file://$HOID_BUILD_ROOT/release/hoid_bundle.sh"
 
 	_run_build__index=1
 	_run_build__func=''
 
 	{
+		run_build_repo shelduck main
 		run_build_repo bobshell "$HOID_BUILD_BOBSHELL_BRANCH"
 		run_build_hoid "$HOID_BUILD_HOID_BRANCH"
 		# shellcheck disable=SC2016
@@ -38,7 +44,7 @@ shelduck_print_origin() {
 
 
 ' "$_run_build__func"
-	} >> "$HOID_BUILD_ROOT/release/fir.sh"
+	} >> "$HOID_BUILD_ROOT/release/hoid_bundle.sh"
 
 }
 
@@ -104,6 +110,20 @@ run_build_file() {
 	_run_build__index=$(( 1 + _run_build__index ))
 }
 
+run_bundle_test() {
+	export HOID_BUILD_ROOT
+	x=$(sh -c '
+. "$HOID_BUILD_ROOT/release/hoid_bundle.sh"
+shelduck import https://raw.githubusercontent.com/legeyda/hoid/refs/heads/main/hoid.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/string.sh
+
+bobshell_replace abc b 1
+
+')
+
+	shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/assert.sh
+	assert_equals a1c "$x"
+}
 
 
 # fun: hoid_compile URL

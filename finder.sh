@@ -28,7 +28,6 @@ hoid_finder_path_ensure() {
 		return
 	fi
 
-
 	hoid_finder_path="$HOME/.local/share/hoid/profile/{{ hoid_profile }}";
 	hoid_finder_path="$hoid_finder_path:$HOME/.local/share/hoid/common"
 	hoid_finder_path="$hoid_finder_path:./hoid/profile/{{ hoid_profile }}"
