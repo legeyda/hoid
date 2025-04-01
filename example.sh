@@ -9,3 +9,10 @@ hoid find-all narrowboat/env.sh \
 hoid --become true --become-password 123 --target ubuntu24server --name 'example hoid script' block start
 hoid -n 'create working directory' directory ./target/hello
 hoid -n 'print greeting' command echo hello
+
+
+if bobshell_isset PAYREGISTRY_DEPLOY_SECRET_PASSWORD; then
+	HOID_SECRET_PASSWORD="$PAYREGISTRY_DEPLOY_SECRET_PASSWORD"
+fi
+
+
