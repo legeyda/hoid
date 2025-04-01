@@ -29,13 +29,17 @@ hoid_task_script() {
 
 	if ! bobshell_isset _hoid_task_script__input && ! bobshell_isset _hoid_task_script__output; then
 		hoid_task_script_separator
+		bobshell_event_fire hoid_script_start_event
 		hoid shell "$@"
+		bobshell_event_fire hoid_script_end_event
 		return
 	fi
 
 	hoid_buffer_flush
 
+	bobshell_event_fire hoid_script_start_event
 	hoid shell "$@"
+	bobshell_event_fire hoid_script_end_event
 
 	set --
 	if bobshell_isset _hoid_task_script__input; then
@@ -47,6 +51,9 @@ hoid_task_script() {
 	
 	hoid_buffer_flush "$@"
 }
+
+
+
 
 hoid_task_script_separator() {
 	while [ -n "${hoid_buffer:-}" ] && ! bobshell_ends_with "$hoid_buffer" "$bobshell_newline$bobshell_newline"; do
