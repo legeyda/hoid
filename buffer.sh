@@ -6,6 +6,12 @@ shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/un
 
 shelduck import ./runtime.sh
 
+hoid_buffer_printf() {
+	# shellcheck disable=SC2059
+	_hoid_buffer_printf=$(printf "$@")
+	hoid_buffer_write "$_hoid_buffer_printf"
+	unset _hoid_buffer_printf
+}
 
 hoid_buffer_write() {
 	hoid_buffer="${hoid_buffer:-}$*"
@@ -48,8 +54,10 @@ hoid_buffer_flush() {
 		return
 	fi
 
+	bobshell_event_fire hoid_buffer_flush_start_event
 	bobshell_redirect_io "$_hoid_buffer_flush__input" "$_hoid_buffer_flush__output" hoid_driver_write "$hoid_buffer"
 	hoid_buffer=
+	bobshell_event_fire hoid_buffer_flush_end_event
 
 	unset _hoid_buffer_flush__input _hoid_buffer_flush__output
 }
@@ -91,6 +99,6 @@ hoid_buffer_rewrite() {
 
 
 
-	bobshell_event_fire hoid_event_buffer_rewrite
+	bobshell_event_fire hoid_event_buffer_rewrite # todo deprecate hoid_event_buffer_rewrite in favor of hoid_buffer_flush_start_event
 
 }
