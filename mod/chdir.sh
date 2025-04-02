@@ -9,6 +9,19 @@ shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/un
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/event/var/unset.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/event/var/mimic.sh
 
+
+hoid_mod_chdir_setup_event_lisener() {
+	if bobshell_isset HOID_CHDIR; then
+		hoid_chdir="$HOID_CHDIR"
+	else
+		unset hoid_chdir
+	fi
+}
+bobshell_event_listen hoid_setup_event hoid_mod_chdir_setup_event_lisener
+
+
+
+
 bobshell_event_listen hoid_event_cli_usage "printf -- '    --chdir    Change into this directory before running remote commands
 '"
 
@@ -44,16 +57,7 @@ if ! bobshell_result_check; then
 fi'
 
 
-
-
-hoid_mod_chdir_state_default() {
-	if bobshell_isset HOID_CHDIR; then
-		hoid_chdir=$HOID_CHDIR
-	else
-		unset hoid_chdir
-	fi
-}
-bobshell_event_listen hoid_event_state_default hoid_mod_chdir_state_default
+bobshell_event_listen hoid_alt_clear unset hoid_alt_chdir
 
 
 
@@ -61,9 +65,9 @@ bobshell_event_listen hoid_event_state_default hoid_mod_chdir_state_default
 
 hoid_mod_chdir_state_dump() {
 	if bobshell_isset hoid_chdir; then
-		printf "bobshell_event_var_set hoid_chdir '%s'\n" "$hoid_chdir"
+		printf 'hoid_alt_chdir=%s\n' "$hoid_chdir"
 	else
-		printf 'bobshell_event_var_unset hoid_chdir' 
+		printf 'unset hoid_alt_chdir' 
 	fi
 }
 bobshell_event_listen hoid_event_state_dump hoid_mod_chdir_state_dump

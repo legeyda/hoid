@@ -5,6 +5,26 @@ shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/un
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/event/listen.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/event/var/set.sh
 
+
+hoid_mod_target_setup_event_lisener() {
+	if bobshell_isset HOID_TARGET; then
+		hoid_mod_target_refresh_target=$HOID_TARGET
+	else
+		unset hoid_mod_target_refresh_target
+	fi
+	hoid_mod_target_refresh_driver=${HOID_DRIVER:-ssh}
+	if bobshell_isset HOID_PROFILE; then
+		hoid_mod_target_refresh_profile=$HOID_PROFILE
+	else
+		unset hoid_mod_target_refresh_profile
+	fi
+	hoid_mod_target_refresh
+}
+bobshell_event_listen hoid_setup_event hoid_mod_target_setup_event_lisener
+
+
+
+
 bobshell_event_listen hoid_event_cli_usage "printf -- '    -t --target    Target
     -d --driver    Driver
 '"
@@ -73,57 +93,42 @@ if ! bobshell_result_check; then
 fi'
 
 
+bobshell_event_listen hoid_alt_clear unset hoid_alt_profile hoid_alt_target hoid_alt_driver
 
-
-hoid_mod_target_state_default() {
-	if bobshell_isset HOID_TARGET; then
-		hoid_mod_target_refresh_target=$HOID_TARGET
-	else
-		unset hoid_mod_target_refresh_target
-	fi
-	hoid_mod_target_refresh_driver=${HOID_DRIVER:-ssh}
-	if bobshell_isset HOID_PROFILE; then
-		hoid_mod_target_refresh_profile=$HOID_PROFILE
-	else
-		unset hoid_mod_target_refresh_profile
-	fi
-	hoid_mod_target_refresh
-}
-bobshell_event_listen hoid_event_state_default hoid_mod_target_state_default
 
 
 hoid_mod_target_state_dump() {
 	if bobshell_isset hoid_target; then
-		printf 'hoid_state_load_target=%s\n' "$hoid_target"
+		printf 'hoid_alt_target=%s\n' "$hoid_target"
 	else
-		printf '%s\n' "unset hoid_state_load_target"
+		printf '%s\n' "unset hoid_alt_target"
 	fi
 	if bobshell_isset hoid_driver; then
-		printf 'hoid_state_load_driver=%s\n' "$hoid_driver"
+		printf 'hoid_alt_driver=%s\n' "$hoid_driver"
 	else
-		printf '%s\n' "unset hoid_state_load_driver"
+		printf '%s\n' "unset hoid_alt_driver"
 	fi
 	if bobshell_isset hoid_profile; then
-		printf 'hoid_state_load_profile=%s\n' "$hoid_profile"
+		printf 'hoid_alt_profile=%s\n' "$hoid_profile"
 	else
-		printf '%s\n' "unset hoid_state_load_profile"
+		printf '%s\n' "unset hoid_alt_profile"
 	fi
 }
 bobshell_event_listen hoid_event_state_dump hoid_mod_target_state_dump
 
 hoid_mod_target_state_load() {
-	if bobshell_isset hoid_state_load_target; then
-		hoid_mod_target_refresh_target=$hoid_state_load_target
+	if bobshell_isset hoid_alt_target; then
+		hoid_mod_target_refresh_target=$hoid_alt_target
 	else
 		unset hoid_target
 	fi
-	if bobshell_isset hoid_state_load_driver; then
-		hoid_mod_target_refresh_driver=$hoid_state_load_driver
+	if bobshell_isset hoid_alt_driver; then
+		hoid_mod_target_refresh_driver=$hoid_alt_driver
 	else
 		unset hoid_driver
 	fi
-	if bobshell_isset hoid_state_load_profile; then
-		hoid_mod_target_refresh_profile=$hoid_state_load_profile
+	if bobshell_isset hoid_alt_profile; then
+		hoid_mod_target_refresh_profile=$hoid_alt_profile
 	else
 		unset hoid_profile
 	fi

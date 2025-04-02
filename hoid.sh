@@ -32,6 +32,7 @@ shelduck import ./block.sh
 shelduck import ./buffer.sh
 shelduck import ./state.sh
 shelduck import ./finder.sh
+shelduck import ./setup.sh
 
 
 
@@ -48,6 +49,8 @@ hoid() {
 		hoid_usage
 		return
 	fi
+
+	hoid_setup_ensure
 
 	hoid_cli_parse "$@"
 }

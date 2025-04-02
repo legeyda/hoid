@@ -4,6 +4,23 @@
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/base.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/event/listen.sh
 
+
+hoid_mod_become_setup_event_lisener() {
+	if bobshell_isset HOID_BECOME; then
+		hoid_become="$HOID_BECOME"
+	else
+		hoid_become=false
+	fi
+
+	if bobshell_isset HOID_BECOME_PASSWORD; then
+		hoid_become_password="$HOID_BECOME_PASSWORD"
+	else
+		unset hoid_become_password
+	fi
+}
+bobshell_event_listen hoid_setup_event hoid_mod_become_setup_event_lisener
+
+
 hoid_mod_become_cli_usage() {
 	printf -- '    -b --become true|false    use privilege escalation
 '
@@ -58,45 +75,32 @@ if ! bobshell_result_check; then
 	return
 fi'
 
+bobshell_event_listen hoid_alt_clear unset hoid_alt_become hoid_alt_become_password
 
-hoid_mod_become_state_default() {
-	if bobshell_isset HOID_BECOME; then
-		hoid_become="$HOID_BECOME"
-	else
-		hoid_become=false
-	fi
-
-	if bobshell_isset HOID_BECOME_PASSWORD; then
-		hoid_become_password="$HOID_BECOME_PASSWORD"
-	else
-		unset hoid_become_password
-	fi
-}
-bobshell_event_listen hoid_event_state_default hoid_mod_become_state_default
 
 
 hoid_mod_become_state_dump() {
 	if bobshell_isset hoid_become; then
-		printf 'hoid_state_load_become=%s\n' "$hoid_become"
+		printf 'hoid_alt_become=%s\n' "$hoid_become"
 	else
-		printf '%s\n' "unset hoid_state_load_become"
+		printf '%s\n' "unset hoid_alt_become"
 	fi
 	if bobshell_isset hoid_become_password; then
-		printf 'hoid_state_load_become_password=%s\n' "$hoid_become_password"
+		printf 'hoid_alt_become_password=%s\n' "$hoid_become_password"
 	else
-		printf '%s\n' "unset hoid_state_load_become_password"
+		printf '%s\n' "unset hoid_alt_become_password"
 	fi
 }
 bobshell_event_listen hoid_event_state_dump hoid_mod_become_state_dump
 
 hoid_mod_become_state_load() {
-	if bobshell_isset hoid_state_load_become; then
-		hoid_set_become "$hoid_state_load_become"
+	if bobshell_isset hoid_alt_become; then
+		hoid_set_become "$hoid_alt_become"
 	else
 		unset hoid_become
 	fi
-	if bobshell_isset "hoid_state_load_become_password"; then
-		hoid_become_password=hoid_state_load_become_password
+	if bobshell_isset "hoid_alt_become_password"; then
+		hoid_become_password=hoid_alt_become_password
 	else
 		unset hoid_become_password
 	fi

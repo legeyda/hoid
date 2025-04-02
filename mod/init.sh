@@ -13,15 +13,6 @@ hoid_sub_init() {
 	bobshell_event_fire hoid_state_change_event
 }
 
-hoid_sub_init_ensure() {
-	if [ true != "${_hoid__state_default_done:-false}" ]; then
-		bobshell_stack_set hoid_state_stack
-		bobshell_event_fire hoid_event_state_default
-		bobshell_event_fire hoid_state_change_event
-		_hoid__state_default_done=true
-	fi
-}
-
 # shellcheck disable=SC2016
 bobshell_event_listen hoid_event_subcommand '
 
@@ -30,8 +21,6 @@ bobshell_event_listen hoid_event_subcommand '
 		hoid_sub_init "$@"
 		bobshell_result_set true
 		return
-	else
-		hoid_sub_init_ensure
 	fi
 
 	if ! bobshell_isset hoid_target; then

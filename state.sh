@@ -11,7 +11,7 @@ hoid_state_init() {
 
 # fun: hoid_state_push
 hoid_state_push() {
-	hoid_state_push_value=$(bobshell_event_fire hoid_event_state_dump)
+	bobshell_redirect_output var:hoid_state_push_value bobshell_event_fire hoid_event_state_dump
 	bobshell_stack_push hoid_state_stack "$hoid_state_push_value"
 	unset hoid_state_push_value
 }
