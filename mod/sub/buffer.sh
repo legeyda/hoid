@@ -5,7 +5,18 @@ shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/un
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/redirect/io.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/redirect/output.sh
 
-shelduck import ./runtime.sh
+
+
+bobshell_event_listen hoid_event_subcommand '
+	if [ buffer = "$1" ]; then
+		shift
+		bobshell_subcommand hoid_buffer "$@"
+		bobshell_result_set true
+		return
+	fi
+	bobshell_result_set false
+'
+
 
 hoid_buffer_printf() {
 	bobshell_redirect_output var:_hoid_buffer_printf printf "$@"
@@ -20,6 +31,12 @@ hoid_buffer_write() {
 # fun: hoid_buffer_flush1
 # env: hoid_buffer
 hoid_buffer_flush() {
+	if [ -z "${hoid_buffer:-}" ]; then
+		return
+	fi
+	if [ true = "$hoid_cli_opts" ]; then
+		bobshell_die "hoid flush: options not supported"
+	fi
 	_hoid_buffer_flush__input=stdin:
 	_hoid_buffer_flush__output=stdout:
 	while bobshell_isset_1 "$@"; do
@@ -49,7 +66,8 @@ hoid_buffer_flush() {
 		return
 	fi
 
-	hoid_buffer_rewrite
+	bobshell_event_fire hoid_event_buffer_rewrite # todo deprecate hoid_event_buffer_rewrite in favor of hoid_buffer_flush_start_event
+
 	if [ -z "${hoid_buffer:-}" ]; then
 		return
 	fi
@@ -60,45 +78,4 @@ hoid_buffer_flush() {
 	bobshell_event_fire hoid_buffer_flush_end_event
 
 	unset _hoid_buffer_flush__input _hoid_buffer_flush__output
-}
-
-
-hoid_buffer_rewrite() {
-
-
-	hoid_buffer_rewrite_tasks=$(printf %s "$hoid_buffer" | sed -n 's/\(^\|[[:space:]]\)hoid\s\+\([A-Za-z_][A-Za-z0-9_-]*\).*$/\2/gp')
-
-	if [ -n "$hoid_buffer_rewrite_tasks" ]; then
-		hoid_buffer_rewrite_tasks="${hoid_buffer_rewrite_tasks}${bobshell_newline}command${bobshell_newline}script${bobshell_newline}shell"
-		hoid_buffer_rewrite_tasks=$(printf %s "$hoid_buffer_rewrite_tasks" | sort -u)
-		
-		hoid_buffer_rewrite_orig="$hoid_buffer"
-		hoid_buffer=
-
-		# hoid remote mock
-		hoid_buffer_rewrite_src=$(hoid_remote_mock_src)
-		hoid script "$hoid_buffer_rewrite_src"
-		unset hoid_buffer_rewrite_src
-		
-		# hoid all task scriptes
-		for hoid_buffer_rewrite_task in $hoid_buffer_rewrite_tasks; do
-			if ! bobshell_command_available "hoid_task_${hoid_buffer_rewrite_task}_src"; then
-				bobshell_die "hoid_task_shell: task '$hoid_buffer_rewrite_task' not supported in shell mode"
-			fi
-			hoid_buffer_rewrite_src=$("hoid_task_${hoid_buffer_rewrite_task}_src")
-			hoid script "$hoid_buffer_rewrite_src"
-			unset hoid_buffer_rewrite_src
-		done
-		unset hoid_buffer_rewrite_task hoid_buffer_rewrite_tasks
-
-		hoid_buffer_write "${bobshell_newline}${bobshell_newline}$hoid_buffer_rewrite_orig"
-		unset hoid_buffer_rewrite_orig
-	fi
-
-	hoid_buffer="${bobshell_newline}${bobshell_newline}set -eu${bobshell_newline}$hoid_buffer"
-
-
-
-	bobshell_event_fire hoid_event_buffer_rewrite # todo deprecate hoid_event_buffer_rewrite in favor of hoid_buffer_flush_start_event
-
 }

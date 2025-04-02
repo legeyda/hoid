@@ -28,7 +28,6 @@ shelduck import ./driver/ssh.sh
 shelduck import ./mod/all.sh
 
 # private dependencies
-shelduck import ./buffer.sh
 shelduck import ./state.sh
 shelduck import ./setup.sh
 
@@ -99,16 +98,7 @@ hoid_subcommand() {
 
 
 hoid_subcommand_builtin() {
-
-
-
-	if [ flush = "$1" ]; then
-		if [ true = "$hoid_cli_opts" ]; then
-			bobshell_die "hoid flush: options not supported"
-		fi
-		shift
-		hoid_buffer_flush "$@"
-	elif [ block = "$1" ]; then
+	if [ block = "$1" ]; then
 		shift
 		hoid_block "$@"
 	else

@@ -9,3 +9,4 @@ shelduck import ./become.sh
 shelduck import ./init.sh
 shelduck import ./sub/block.sh
 shelduck import ./sub/find.sh
+shelduck import ./sub/buffer.sh
