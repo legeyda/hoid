@@ -92,27 +92,16 @@ hoid_subcommand() {
 		return
 	fi
 
-	hoid_subcommand_builtin "$@"
-}
-
-
-
-hoid_subcommand_builtin() {
-	if [ block = "$1" ]; then
-		shift
-		hoid_block "$@"
+	bobshell_event_fire hoid_alt_diff_event
+	if bobshell_result_check; then
+		hoid_task "$@"
 	else
-		bobshell_event_fire hoid_alt_diff_event
-		if bobshell_result_check; then
-			hoid_task "$@"
-		else
-			hoid_state_push
-			hoid_state_init
-			bobshell_event_fire hoid_state_change_event
-			hoid_task "$@"
-			hoid_state_pop
-			bobshell_event_fire hoid_state_change_event
-		fi
+		hoid_state_push
+		hoid_state_init
+		bobshell_event_fire hoid_state_change_event
+		hoid_task "$@"
+		hoid_state_pop
+		bobshell_event_fire hoid_state_change_event
 	fi
 }
 
