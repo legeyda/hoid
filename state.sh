@@ -11,9 +11,9 @@ hoid_state_init() {
 
 # fun: hoid_state_push
 hoid_state_push() {
-	bobshell_redirect_output var:hoid_state_push_value bobshell_event_fire hoid_event_state_dump
-	bobshell_stack_push hoid_state_stack "$hoid_state_push_value"
-	unset hoid_state_push_value
+	bobshell_redirect_output var:_hoid_state_push bobshell_event_fire hoid_event_state_dump
+	bobshell_stack_push hoid_state_stack "$_hoid_state_push"
+	unset _hoid_state_push
 }
 
 # fun: hoid_state_pop
@@ -29,7 +29,7 @@ hoid_state_pop() {
 	bobshell_stack_pop hoid_state_stack 
 	bobshell_result_assert _hoid_state_pop__value
 
-	hoid_state_load "$_hoid_state_pop__value"
+	eval "$_hoid_state_pop__value"
 	unset _hoid_state_pop__value
 }
 
@@ -37,10 +37,5 @@ hoid_state_pop() {
 # fun: hoid_state_dump
 hoid_state_dump() {
 	bobshell_event_fire hoid_event_state_dump
-}
-
-hoid_state_load() {
-	eval "$1"
-	bobshell_event_fire hoid_event_state_load
 }
 

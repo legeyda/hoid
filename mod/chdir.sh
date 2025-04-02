@@ -67,7 +67,7 @@ hoid_mod_chdir_state_dump() {
 	if bobshell_isset hoid_chdir; then
 		printf 'hoid_alt_chdir=%s\n' "$hoid_chdir"
 	else
-		printf 'unset hoid_alt_chdir' 
+		printf 'unset hoid_alt_chdir\n'
 	fi
 }
 bobshell_event_listen hoid_event_state_dump hoid_mod_chdir_state_dump

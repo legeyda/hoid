@@ -28,7 +28,6 @@ shelduck import ./driver/ssh.sh
 shelduck import ./mod/all.sh
 
 # private dependencies
-shelduck import ./block.sh
 shelduck import ./buffer.sh
 shelduck import ./state.sh
 shelduck import ./finder.sh

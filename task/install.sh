@@ -1,22 +1,12 @@
 
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/string.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/base.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/misc/subcommand.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/url.sh
 shelduck import ./install/docker.sh
 
 hoid_task_install() {
-	hoid_task_subcommand hoid_task_install "$@"
-}
-
-# hoid_util_subcommand BASECMD SUBCMD ARGS
-hoid_util_subcommand() {
-	_hoid_task_subcommand__function="${1}_${2}"
-	if ! bobshell_command_available "$_hoid_task_subcommand__function"; then
-		bobshell_die "hoid_task_install: unknown subcommand: $1"
-	fi
-	shift 2
-	"$_hoid_task_subcommand__function" "$@"
-	unset _hoid_task_subcommand__function
+	bobshell_subcommand hoid_task_install "$@"
 }
 
 hoid_task_install_shelduck() {
