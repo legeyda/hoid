@@ -3,12 +3,12 @@
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/string.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/resource/copy.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/redirect/io.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/redirect/output.sh
 
 shelduck import ./runtime.sh
 
 hoid_buffer_printf() {
-	# shellcheck disable=SC2059
-	_hoid_buffer_printf=$(printf "$@")
+	bobshell_redirect_output var:_hoid_buffer_printf printf "$@"
 	hoid_buffer_write "$_hoid_buffer_printf"
 	unset _hoid_buffer_printf
 }
@@ -17,7 +17,7 @@ hoid_buffer_write() {
 	hoid_buffer="${hoid_buffer:-}$*"
 }
 
-# fun: hoid_buffer_flush
+# fun: hoid_buffer_flush1
 # env: hoid_buffer
 hoid_buffer_flush() {
 	_hoid_buffer_flush__input=stdin:

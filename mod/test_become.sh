@@ -15,5 +15,6 @@ test_become() {
 
 	unset x
 	hoid --become true    script --output var:x    id -u
+	x=$(echo "$x") # remove trailing newline
 	assert_equals 0 "$x"
 }
