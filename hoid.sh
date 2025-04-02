@@ -30,7 +30,6 @@ shelduck import ./mod/all.sh
 # private dependencies
 shelduck import ./buffer.sh
 shelduck import ./state.sh
-shelduck import ./finder.sh
 shelduck import ./setup.sh
 
 
@@ -100,15 +99,6 @@ hoid_subcommand() {
 
 
 hoid_subcommand_builtin() {
-
-
-	# subcommand
-	if [ find = "$1" ]; then
-		shift
-		hoid_finder_find "$@"
-		return
-	fi
-
 
 
 

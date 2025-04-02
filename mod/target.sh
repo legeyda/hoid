@@ -4,6 +4,7 @@
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/base.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/event/listen.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/event/var/set.sh
+shelduck import ./sub/find.sh
 
 
 hoid_mod_target_setup_event_lisener() {
@@ -216,7 +217,7 @@ hoid_mod_target_refresh() {
 
 
 hoid_load_profile() {
-	for x in $(hoid_finder_find_all env.sh); do
+	for x in $(hoid_sub_find_find_all env.sh); do
 		. "$x"
 	done
 }

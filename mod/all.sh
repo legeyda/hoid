@@ -8,3 +8,4 @@ shelduck import ./become.sh
 # import order matters
 shelduck import ./init.sh
 shelduck import ./sub/block.sh
+shelduck import ./sub/find.sh

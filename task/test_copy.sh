@@ -57,7 +57,7 @@ test_copy_first_file() {
 	init_dir test_copy_first_file
 	mkdir -p "dir1/$HOID_TARGET" "dir2/$HOID_TARGET" "dir3/$HOID_TARGET"
 
-	HOID_FINDER_PATH='dir1/{{ hoid_profile }}:dir2/{{ hoid_profile }}:dir3/{{ hoid_profile }}'
+	HOID_FIND_PATH='dir1/{{ hoid_profile }}:dir2/{{ hoid_profile }}:dir3/{{ hoid_profile }}'
 	#bobshell_event_var_set hoid_profile testprof
 
 	echo hello > "dir1/$HOID_TARGET/file.txt"
@@ -72,7 +72,7 @@ test_copy_merged_dir() {
 	init_dir test_copy_merged_dir
 	mkdir -p "dir1/$HOID_TARGET/a/b/c" "dir2/$HOID_TARGET/a/b" "dir3/$HOID_TARGET/a/b/c"
 
-	HOID_FINDER_PATH='dir1/{{ hoid_profile }}:dir2/{{ hoid_profile }}:dir3/{{ hoid_profile }}'
+	HOID_FIND_PATH='dir1/{{ hoid_profile }}:dir2/{{ hoid_profile }}:dir3/{{ hoid_profile }}'
 	#bobshell_event_var_set hoid_profile testprof
 
 	echo hello > "dir1/$HOID_TARGET/a/b/c/file.txt"

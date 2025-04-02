@@ -3,7 +3,7 @@
 
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/event/var/set.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/assert.sh
-shelduck import ./finder.sh
+shelduck import ./find.sh
 
 init_dir() {
 	set -- "target/$1"
@@ -16,7 +16,7 @@ test_find_all() {
 	init_dir test_find_all
 	mkdir -p dir1/testprof dir2/testprof dir3/testprof
 
-	HOID_FINDER_PATH='dir1/{{ hoid_profile }}:dir2/{{ hoid_profile }}:dir3/{{ hoid_profile }}'
+	HOID_FIND_PATH='dir1/{{ hoid_profile }}:dir2/{{ hoid_profile }}:dir3/{{ hoid_profile }}'
 	hoid_profile=testprof
 	bobshell_event_fire hoid_state_change_event
 
@@ -24,7 +24,7 @@ test_find_all() {
 	echo hi    > dir3/testprof/file.txt
 
 
-	found=$(hoid_finder_find_all file.txt)
+	found=$(hoid_sub_find_find_all file.txt)
 	assert_equals 'dir3/testprof/file.txt dir1/testprof/file.txt'  "$found"
 
 }
@@ -33,7 +33,7 @@ test_find_one() {
 	init_dir test_find_all
 	mkdir -p dir1/testprof dir2/testprof dir3/testprof
 
-	HOID_FINDER_PATH='dir1/{{ hoid_profile }}:dir2/{{ hoid_profile }}:dir3/{{ hoid_profile }}'
+	HOID_FIND_PATH='dir1/{{ hoid_profile }}:dir2/{{ hoid_profile }}:dir3/{{ hoid_profile }}'
 	hoid_profile=testprof
 	bobshell_event_fire hoid_state_change_event
 
@@ -41,7 +41,7 @@ test_find_one() {
 	echo hi    > dir3/testprof/file.txt
 
 
-	found=$(hoid_finder_find_one file.txt)
+	found=$(hoid_sub_find_find_one file.txt)
 	assert_equals dir1/testprof/file.txt "$found"
 
 }
