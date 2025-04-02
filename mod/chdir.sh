@@ -12,24 +12,24 @@ shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/un
 bobshell_event_listen hoid_event_cli_usage "printf -- '    --chdir    Change into this directory before running remote commands
 '"
 
-bobshell_event_listen hoid_event_cli_start unset hoid_cli_chdir
+bobshell_event_listen hoid_event_cli_start unset hoid_alt_chdir
 
 # shellcheck disable=SC2016
 bobshell_event_listen hoid_event_cli_options '
 			(--chdir)
 				bobshell_isset_2 "$@" || bobshell_die "hoid: option $1: argument expected"
-				hoid_cli_chdir="$2"
+				hoid_alt_chdir="$2"
 				shift 2
 				;; '
 
 
-hoid_mod_chdir_cli_diff() {
-	if bobshell_isset hoid_cli_chdir; then
+hoid_mod_chdir_alt_diff() {
+	if bobshell_isset hoid_alt_chdir; then
 		if ! bobshell_isset hoid_chdir; then
 			bobshell_result_set false
 			return
 		fi
-		if [ "$hoid_cli_chdir" != "$hoid_target" ]; then
+		if [ "$hoid_alt_chdir" != "$hoid_target" ]; then
 			bobshell_result_set false
 			return
 		fi
@@ -37,8 +37,8 @@ hoid_mod_chdir_cli_diff() {
 	bobshell_result_set true
 }
 # shellcheck disable=SC2016
-bobshell_event_listen hoid_cli_diff_event '
-hoid_mod_chdir_cli_diff
+bobshell_event_listen hoid_alt_diff_event '
+hoid_mod_chdir_alt_diff
 if ! bobshell_result_check; then
 	return
 fi'
@@ -72,8 +72,8 @@ bobshell_event_listen hoid_event_state_dump hoid_mod_chdir_state_dump
 
 
 hoid_mod_chdir_init() {
-	bobshell_event_var_mimic hoid_chdir hoid_cli_chdir
-	unset hoid_cli_chdir
+	bobshell_event_var_mimic hoid_chdir hoid_alt_chdir
+	unset hoid_alt_chdir
 }
 bobshell_event_listen hoid_event_state_init 'hoid_mod_chdir_init "$@"'
 

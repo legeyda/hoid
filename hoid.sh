@@ -120,7 +120,7 @@ hoid_subcommand_builtin() {
 		shift
 		hoid_block "$@"
 	else
-		bobshell_event_fire hoid_cli_diff_event
+		bobshell_event_fire hoid_alt_diff_event
 		if bobshell_result_check; then
 			hoid_task "$@"
 		else

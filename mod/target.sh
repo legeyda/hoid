@@ -9,56 +9,56 @@ bobshell_event_listen hoid_event_cli_usage "printf -- '    -t --target    Target
     -d --driver    Driver
 '"
 
-bobshell_event_listen hoid_event_cli_start unset hoid_cli_target
-bobshell_event_listen hoid_event_cli_start unset hoid_cli_driver
-bobshell_event_listen hoid_event_cli_start unset hoid_cli_profile
+bobshell_event_listen hoid_event_cli_start unset hoid_alt_target
+bobshell_event_listen hoid_event_cli_start unset hoid_alt_driver
+bobshell_event_listen hoid_event_cli_start unset hoid_alt_profile
 
 # shellcheck disable=SC2016
 bobshell_event_listen hoid_event_cli_options '
 			(-t|--target)
 				bobshell_isset_2 "$@" || bobshell_die "hoid: option $1: argument expected"
-				hoid_cli_target="$2"
+				hoid_alt_target="$2"
 				shift 2
 				;;
 			(-d|--driver)
 				bobshell_isset_2 "$@" || bobshell_die "hoid: option $1: argument expected"
-				hoid_cli_driver="$2"
+				hoid_alt_driver="$2"
 				shift 2
 				;;
 			(-d|--profile)
 				bobshell_isset_2 "$@" || bobshell_die "hoid: option $1: argument expected"
-				hoid_cli_profile="$2"
+				hoid_alt_profile="$2"
 				shift 2
 				;; '
 
 
-hoid_mod_target_cli_diff() {
-	if bobshell_isset hoid_cli_target; then
+hoid_mod_target_alt_diff() {
+	if bobshell_isset hoid_alt_target; then
 		if ! bobshell_isset hoid_target; then
 			bobshell_result_set false
 			return
 		fi
-		if [ "$hoid_cli_target" != "$hoid_target" ]; then
+		if [ "$hoid_alt_target" != "$hoid_target" ]; then
 			bobshell_result_set false
 			return
 		fi
 	fi
-	if bobshell_isset hoid_cli_driver; then
+	if bobshell_isset hoid_alt_driver; then
 		if ! bobshell_isset hoid_driver; then
 			bobshell_result_set false
 			return
 		fi
-		if [ "$hoid_cli_driver" != "$hoid_driver" ]; then
+		if [ "$hoid_alt_driver" != "$hoid_driver" ]; then
 			bobshell_result_set false
 			return
 		fi
 	fi
-	if bobshell_isset hoid_cli_profile; then
+	if bobshell_isset hoid_alt_profile; then
 		if ! bobshell_isset hoid_profile; then
 			bobshell_result_set false
 			return
 		fi
-		if [ "$hoid_cli_profile" != "$hoid_profile" ]; then
+		if [ "$hoid_alt_profile" != "$hoid_profile" ]; then
 			bobshell_result_set false
 			return
 		fi
@@ -66,8 +66,8 @@ hoid_mod_target_cli_diff() {
 	bobshell_result_set true
 }
 # shellcheck disable=SC2016
-bobshell_event_listen hoid_cli_diff_event '
-hoid_mod_target_cli_diff
+bobshell_event_listen hoid_alt_diff_event '
+hoid_mod_target_alt_diff
 if ! bobshell_result_check; then
 	return
 fi'
@@ -134,24 +134,26 @@ bobshell_event_listen hoid_event_state_load hoid_mod_target_state_load
 
 
 hoid_mod_target_init() {
-	if bobshell_isset hoid_cli_target; then
-		hoid_mod_target_refresh_target=$hoid_cli_target
+	if bobshell_isset hoid_alt_target; then
+		hoid_mod_target_refresh_target=$hoid_alt_target
 	elif [ -z "${hoid_target:-}" ] && bobshell_isset HOID_TARGET; then
 		hoid_mod_target_refresh_target=$HOID_TARGET
 	fi
-	if bobshell_isset hoid_cli_driver; then
-		hoid_mod_target_refresh_driver=$hoid_cli_driver
+	if bobshell_isset hoid_alt_driver; then
+		hoid_mod_target_refresh_driver=$hoid_alt_driver
 	elif [ -z "${hoid_driver:-}" ]; then
 		hoid_mod_target_refresh_driver=${HOID_DRIVER:-ssh}
 	fi
-	if bobshell_isset hoid_cli_profile; then
-		hoid_mod_target_refresh_profile=$hoid_cli_profile
+	if bobshell_isset hoid_alt_profile; then
+		hoid_mod_target_refresh_profile=$hoid_alt_profile
 	elif [ -z "${hoid_profile:-}" ] && bobshell_isset HOID_PROFILE; then
 		hoid_mod_target_refresh_profile=$HOID_PROFILE
 	fi
 	hoid_mod_target_refresh
 }
 bobshell_event_listen hoid_event_state_init 'hoid_mod_target_init "$@"'
+
+
 
 
 

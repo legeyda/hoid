@@ -8,7 +8,7 @@ hoid_mod_name_cli_usage() {
 }
 bobshell_event_listen hoid_event_cli_usage hoid_mod_name_cli_usage
 
-bobshell_event_listen hoid_event_cli_start unset hoid_cli_name
+bobshell_event_listen hoid_event_cli_start unset hoid_alt_name
 
 # shellcheck disable=SC2016
 bobshell_event_listen hoid_event_cli_options '
@@ -17,8 +17,8 @@ bobshell_event_listen hoid_event_cli_options '
 				shift 2
 				;;'
 
-# bobshell_event_listen hoid_cli_diff_event '
-# 	if ! bobshell_eqvar hoid_cli_name hoid_name; then
+# bobshell_event_listen hoid_alt_diff_event '
+# 	if ! bobshell_eqvarhoid_alt_name hoid_name; then
 # 		return 1
 # 	fi
 # '

@@ -12,48 +12,48 @@ printf -- '    -p --become-password PASSWD    sudo-password if privilege escalat
 }
 bobshell_event_listen hoid_event_cli_usage hoid_mod_become_cli_usage
 
-bobshell_event_listen hoid_event_cli_start unset hoid_cli_become hoid_cli_become_password
+bobshell_event_listen hoid_event_cli_start unset hoid_alt_become hoid_alt_become_password
 
 # shellcheck disable=SC2016
 bobshell_event_listen hoid_event_cli_options '
 			(-b|--become)
 				bobshell_isset_2 "$@" || bobshell_die "hoid: option $1: argument expected"
 				bobshell_equals_any "$2" true false || bobshell_die "hoid: option $1: argument expected to be either true or false"
-				hoid_cli_become="$2"
+				hoid_alt_become="$2"
 				shift 2
 				;;
 			(--become-password)
 				bobshell_isset_2 "$@" || bobshell_die "hoid: option $1: argument expected"
-				hoid_cli_become_password="$2"
+				hoid_alt_become_password="$2"
 				shift 2
 				;;'
 
 
-hoid_mod_become_cli_diff() {
-	if bobshell_isset hoid_cli_become; then
+hoid_mod_become_alt_diff() {
+	if bobshell_isset hoid_alt_become; then
 		if ! bobshell_isset hoid_become; then
 			bobshell_result_set false
 			return
 		fi
-		if [ "$hoid_cli_become" != "$hoid_become" ]; then
+		if [ "$hoid_alt_become" != "$hoid_become" ]; then
 			bobshell_result_set false
 			return
 		fi
 	fi
-	if bobshell_isset hoid_cli_become_password; then
+	if bobshell_isset hoid_alt_become_password; then
 		if ! bobshell_isset hoid_become_password; then
 			bobshell_result_set false
 			return
 		fi
-		if [ "$hoid_cli_become_password" != "$hoid_become_password" ]; then
+		if [ "$hoid_alt_become_password" != "$hoid_become_password" ]; then
 			bobshell_result_set false
 			return
 		fi
 	fi
 	bobshell_result_set true
 }
-bobshell_event_listen hoid_cli_diff_event '
-hoid_mod_become_cli_diff
+bobshell_event_listen hoid_alt_diff_event '
+hoid_mod_become_alt_diff
 if ! bobshell_result_check; then
 	return
 fi'
@@ -107,15 +107,15 @@ bobshell_event_listen hoid_event_state_load hoid_mod_become_state_load
 
 
 hoid_mod_become_init() {
-	if bobshell_isset hoid_cli_become; then
-		hoid_set_become "$hoid_cli_become"
+	if bobshell_isset hoid_alt_become; then
+		hoid_set_become "$hoid_alt_become"
 	elif [ -z "${hoid_become:-}" ]; then
 		hoid_set_become false
 	fi
 
-	if bobshell_isset hoid_cli_become_password; then
-		hoid_set_become_password "$hoid_cli_become_password"
-	elif [ -z "${hoid_cli_become_password:-}" ]; then
+	if bobshell_isset hoid_alt_become_password; then
+		hoid_set_become_password "$hoid_alt_become_password"
+	elif [ -z "${hoid_alt_become_password:-}" ]; then
 		hoid_set_become_password
 	fi
 }
