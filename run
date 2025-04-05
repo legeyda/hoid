@@ -181,7 +181,7 @@ run_hoid() {
 
 run_test() {
 	if ! bobshell_isset HOID_TARGET; then
-		bobshell_die 'HOID_TARGET not set'
+		bobshell_die 'HOID_TARGET not set' # todo auto start docker target
 	fi
 	bobtest "$@"
 }

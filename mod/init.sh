@@ -4,23 +4,30 @@ shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/un
 
 # fun: hoid_sub_init 
 hoid_sub_init() {
-	if [ true != "${_hoid__state_default_done:-false}" ]; then
-		bobshell_stack_set hoid_state_stack
-		_hoid__state_default_done=true
-	fi
 	hoid_buffer_flush
 	hoid_state_init "$@"
 	bobshell_event_fire hoid_state_change_event
 }
 
-# shellcheck disable=SC2016
-bobshell_event_listen hoid_event_subcommand '
+
+hoid_setup_done=false
+
+
+bobshell_sub_init_subcommand_event_listener() {
+	if [ true != "${hoid_setup_done:-false}" ]; then
+		bobshell_stack_set hoid_state_stack
+	fi
 
 	if [ init = "$1" ]; then
 		shift
 		hoid_sub_init "$@"
+		hoid_setup_done=true
 		bobshell_result_set true
 		return
+	elif [ true != "${hoid_setup_done:-false}" ]; then
+		# load alts from env
+		bobshell_event_fire hoid_setup_event
+		hoid_setup_done=true
 	fi
 
 	if ! bobshell_isset hoid_target; then
@@ -28,6 +35,14 @@ bobshell_event_listen hoid_event_subcommand '
 	fi
 
 	bobshell_result_set false
+}
+
+# shellcheck disable=SC2016
+bobshell_event_listen hoid_event_subcommand '
+	bobshell_sub_init_subcommand_event_listener "$@"
+	if bobshell_result_check; then
+		return
+	fi
 '
 
 

@@ -1,17 +1,7 @@
 
 
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/event/listen.sh
-
-
-
-hoid_mod_name_setup_event_lisener() {
-	if bobshell_isset HOID_NAME; then
-		hoid_name="$HOID_NAME"
-	else
-		unset hoid_name
-	fi
-}
-bobshell_event_listen hoid_setup_event hoid_mod_name_setup_event_lisener
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/event/var/mimic.sh
 
 
 

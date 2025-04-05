@@ -4,27 +4,12 @@
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/base.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/event/listen.sh
 
-
-hoid_mod_become_setup_event_lisener() {
-	if bobshell_isset HOID_BECOME; then
-		hoid_become="$HOID_BECOME"
-	else
-		hoid_become=false
-	fi
-
-	if bobshell_isset HOID_BECOME_PASSWORD; then
-		hoid_become_password="$HOID_BECOME_PASSWORD"
-	else
-		unset hoid_become_password
-	fi
-}
-bobshell_event_listen hoid_setup_event hoid_mod_become_setup_event_lisener
-
+shelduck import ../util.sh
 
 hoid_mod_become_cli_usage() {
 	printf -- '    -b --become true|false    use privilege escalation
 '
-printf -- '    -p --become-password PASSWD    sudo-password if privilege escalation requires escalation
+	printf -- '    -p --become-password PASSWD    sudo-password if privilege escalation requires escalation
 '
 }
 bobshell_event_listen hoid_event_cli_usage hoid_mod_become_cli_usage
@@ -78,86 +63,44 @@ fi'
 bobshell_event_listen hoid_alt_clear unset hoid_alt_become hoid_alt_become_password
 
 
+bobshell_event_var_listen hoid_become hoid_buffer_flush
+bobshell_event_var_listen hoid_become_password hoid_buffer_flush
+
+
+
 
 hoid_mod_become_state_dump() {
-	if bobshell_isset hoid_become; then
-		printf 'hoid_alt_become=%s\n' "$hoid_become"
-	else
-		printf '%s\n' "unset hoid_alt_become"
-	fi
-	if bobshell_isset hoid_become_password; then
-		printf 'hoid_alt_become_password=%s\n' "$hoid_become_password"
-	else
-		printf '%s\n' "unset hoid_alt_become_password"
-	fi
+	hoid_util_state_dump hoid_become hoid_become_password
 }
 bobshell_event_listen hoid_event_state_dump hoid_mod_become_state_dump
-
-hoid_mod_become_state_load() {
-	if bobshell_isset hoid_alt_become; then
-		hoid_set_become "$hoid_alt_become"
-	else
-		unset hoid_become
-	fi
-	if bobshell_isset "hoid_alt_become_password"; then
-		hoid_become_password=hoid_alt_become_password
-	else
-		unset hoid_become_password
-	fi
-}
-bobshell_event_listen hoid_event_state_load hoid_mod_become_state_load
-
 
 
 
 hoid_mod_become_init() {
+	
 	if bobshell_isset hoid_alt_become; then
-		hoid_set_become "$hoid_alt_become"
-	elif [ -z "${hoid_become:-}" ]; then
-		hoid_set_become false
+		bobshell_event_var_set hoid_become "$hoid_alt_become"
+		unset hoid_alt_become
+	else
+		bobshell_event_var_set hoid_become false
 	fi
+	
 
 	if bobshell_isset hoid_alt_become_password; then
-		hoid_set_become_password "$hoid_alt_become_password"
-	elif [ -z "${hoid_alt_become_password:-}" ]; then
-		hoid_set_become_password
+		bobshell_event_var_set hoid_become_password "$hoid_alt_become_password"
+		unset hoid_alt_become_password
+	else
+		bobshell_event_var_unset hoid_become_password
 	fi
+	
 }
 bobshell_event_listen hoid_event_state_init 'hoid_mod_become_init "$@"'
 
 
 
 
-
-
-hoid_set_become() {
-	if bobshell_isset_1 "$@" && bobshell_isset hoid_become && [ "$hoid_become" = "$1" ]; then
-		return
-	fi
-	hoid_buffer_flush
-
-	if ! bobshell_isset_1 "$@"; then
-		unset hoid_become
-		return
-	fi
-
-	hoid_become="$1"
-}
-
-hoid_set_become_password() {
-	if bobshell_isset_1 "$@" && bobshell_isset hoid_become_password && [ "$hoid_become_password" = "$1" ]; then
-		return
-	fi
-	hoid_buffer_flush
-
-	if ! bobshell_isset_1 "$@"; then
-		unset hoid_become_password
-		return
-	fi
-
-	hoid_become_password="$1"
-}
-
+bobshell_event_var_listen hoid_become hoid_buffer_flush
+bobshell_event_var_listen hoid_become_password hoid_buffer_flush
 
 
 

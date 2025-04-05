@@ -52,6 +52,17 @@ hoid() {
 	hoid_cli_parse "$@"
 }
 
+hoid_usage() {
+	printf %s 'Usage: hoid [OPTIONS] command
+
+Commands:
+	init
+	become
+
+Options:'
+	bobshell_event_fire hoid_event_cli_usage
+}
+
 
 hoid_cli_parse() {
 	# parse hoid cli (common for all tasks)
@@ -94,10 +105,12 @@ hoid_subcommand() {
 
 	bobshell_event_fire hoid_alt_diff_event
 	if bobshell_result_check; then
+		hoid_state_validate
 		hoid_task "$@"
 	else
 		hoid_state_push
 		hoid_state_init
+		hoid_state_validate
 		bobshell_event_fire hoid_state_change_event
 		hoid_task "$@"
 		hoid_state_pop
@@ -116,16 +129,6 @@ hoid_task() {
 	unset hoid_task_function
 }
 
-hoid_usage() {
-	printf %s 'Usage: hoid [OPTIONS] command
-
-Commands:
-	init
-	become
-
-Options:'
-	bobshell_event_fire hoid_event_cli_usage
-}
 
 
 
@@ -136,7 +139,7 @@ hoid_driver_write() {
 
 
 
-
-
-# flush buffer on success exit
-trap '[ $? -eq 0 ] && hoid_buffer_flush' EXIT
+bobshell_event_listen hoid_success_exit_event hoid_success_exit_event
+hoid_success_exit_event() {
+	hoid_buffer_flush
+}

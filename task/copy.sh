@@ -72,11 +72,13 @@ hoid_task_copy() {
 	# if not locator, is search relative to HOID_FINDER_PATH
 	_hoid_task_copy__temp=$(hoid_mktemp_dir)
 	mkdir -p "$_hoid_task_copy__temp"
-	# hoid_sub_find_find_all "$1" eval ''
-	for _hoid_task_copy__found in $(hoid_sub_find_find_all "$1"); do
+	for _hoid_task_copy__found in $(hoid_find_all "$1"); do
 		# todo check ither all files or all dirs
 		cp -RT "$_hoid_task_copy__found" "$_hoid_task_copy__temp/merged"	
 	done
+	if [ ! -e "$_hoid_task_copy__temp/merged" ]; then
+		bobshell_die "hoid_task_copy: no files found: $1"
+	fi
 	if ! hoid_dir_is_not_empty "$_hoid_task_copy__temp/merged"; then
 		bobshell_die "something wrong: dir empty"
 	fi
