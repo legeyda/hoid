@@ -10,7 +10,7 @@ shelduck import ../util.sh
 bobshell_event_listen hoid_event_cli_usage "printf -- '    -t --target    Target
 '"
 
-bobshell_event_listen hoid_event_cli_start unset hoid_alt_profile
+bobshell_event_listen hoid_event_cli_start unset hoid_alt_target
 
 # shellcheck disable=SC2016
 bobshell_event_listen hoid_event_cli_options '
@@ -42,7 +42,7 @@ if ! bobshell_result_check; then
 fi'
 
 
-bobshell_event_listen hoid_alt_clear unset hoid_alt_profile hoid_alt_target hoid_alt_driver
+bobshell_event_listen hoid_alt_clear unset hoid_alt_target
 
 
 bobshell_event_listen hoid_state_validate_event '
@@ -61,8 +61,8 @@ bobshell_event_listen hoid_event_state_dump hoid_mod_target_state_dump
 
 
 hoid_mod_target_init_event_listener() {
-	if bobshell_isset hoid_alt_profile; then
-		bobshell_event_var_set hoid_target "$hoid_alt_profile"
+	if bobshell_isset hoid_alt_target; then
+		bobshell_event_var_set hoid_target "$hoid_alt_target"
 	elif bobshell_isset hoid_target; then
 		true
 	elif bobshell_isset HOID_TARGET; then

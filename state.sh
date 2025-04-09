@@ -36,9 +36,9 @@ hoid_state_pop() {
 # fun: hoid_state_dump
 hoid_state_dump() {
 	if bobshell_isset hoid_state_valid; then
-		printf "hoid_state_valid='%s'" "$hoid_state_valid"
+		printf "hoid_state_valid='%s'\n" "$hoid_state_valid"
 	else
-		printf %s 'unset hoid_state_valid'
+		printf '%s\n' 'unset hoid_state_valid'
 	fi
 	bobshell_event_fire hoid_event_state_dump 
 	# todo rename to hoid_state_dump_event

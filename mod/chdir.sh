@@ -94,7 +94,7 @@ hoid_mod_chdir_script_start_listener() {
 	hoid_buffer_printf '\n# hoid_mod_chdir_script_start_listener\n'
 	if [ . != "${hoid_chdir:-.}" ]; then
 		_hoid_mod_chdir_script_start_listener=$(bobshell_quote "$hoid_chdir")
-		hoid_buffer_printf "mkdir %s\ncd %s\n\n" "$_hoid_mod_chdir_script_start_listener" "$_hoid_mod_chdir_script_start_listener"
+		hoid_buffer_printf "mkdir -p %s\ncd %s\n\n" "$_hoid_mod_chdir_script_start_listener" "$_hoid_mod_chdir_script_start_listener"
 		unset _hoid_mod_chdir_script_start_listener
 	else
 		hoid_buffer_printf 'cd "$hoid_mod_chdir_init_dir"\n\n'

@@ -81,6 +81,10 @@ hoid_mod_become_init() {
 	if bobshell_isset hoid_alt_become; then
 		bobshell_event_var_set hoid_become "$hoid_alt_become"
 		unset hoid_alt_become
+	elif bobshell_isset hoid_become; then
+		true
+	elif bobshell_isset HOID_BECOME; then
+		bobshell_event_var_set hoid_become "$HOID_BECOME"
 	else
 		bobshell_event_var_set hoid_become false
 	fi
@@ -89,10 +93,13 @@ hoid_mod_become_init() {
 	if bobshell_isset hoid_alt_become_password; then
 		bobshell_event_var_set hoid_become_password "$hoid_alt_become_password"
 		unset hoid_alt_become_password
+	elif bobshell_isset hoid_become_password; then
+		true
+	elif bobshell_isset HOID_BECOME_PASSWORD; then
+		bobshell_event_var_set hoid_become "$HOID_BECOME_PASSWORD"
 	else
 		bobshell_event_var_unset hoid_become_password
 	fi
-	
 }
 bobshell_event_listen hoid_event_state_init 'hoid_mod_become_init "$@"'
 

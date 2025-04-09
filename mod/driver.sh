@@ -84,6 +84,11 @@ bobshell_event_listen hoid_event_state_dump hoid_mod_driver_state_dump
 
 
 hoid_mod_driver_init() {
+	if ! bobshell_isset hoid_target; then
+		# without target, driver cannot be configured, so skip driver configuration
+		bobshell_event_var_unset hoid_driver
+		return
+	fi
 	if bobshell_isset hoid_alt_driver; then
 		bobshell_event_var_set hoid_driver "$hoid_alt_driver"
 	elif bobshell_isset hoid_driver; then
@@ -100,10 +105,9 @@ bobshell_event_listen hoid_event_state_init 'hoid_mod_driver_init "$@"'
 
 
 hoid_mod_driver_var_event_listener() {
-	"hoid_driver_${hoid_driver}_init"
-	for x in $(hoid_find_all env.sh); do
-		. "$x"
-	done
+	if bobshell_isset hoid_driver && bobshell_isset hoid_target; then
+		"hoid_driver_${hoid_driver}_init"
+	fi
 }
 bobshell_event_var_listen hoid_driver hoid_mod_driver_var_event_listener 
 
