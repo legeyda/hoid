@@ -13,7 +13,7 @@ hoid_util_state_dump() {
 			printf "bobshell_event_var_set '%s' '%s'\n" "$1" "$_hoid_util_state_dump__value"
 			unset _hoid_util_state_dump__value
 		else
-			printf 'bobshell_event_var_unset %s' "$1"
+			printf 'bobshell_event_var_unset %s\n' "$1"
 		fi
 		shift
 	done

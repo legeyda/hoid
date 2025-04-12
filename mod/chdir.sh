@@ -101,12 +101,11 @@ bobshell_event_listen hoid_event_buffer_rewrite hoid_mod_chdir_rewrite_event_lis
 
 hoid_mod_chdir_script_start_listener() {
 	hoid_buffer_printf '\n# hoid_mod_chdir_script_start_listener\n'
+	hoid_buffer_printf 'cd "$hoid_mod_chdir_init_dir"\n\n'
 	if [ . != "${hoid_chdir:-.}" ]; then
 		_hoid_mod_chdir_script_start_listener=$(bobshell_quote "$hoid_chdir")
-		hoid_buffer_printf "mkdir -p %s\ncd %s\n\n" "$_hoid_mod_chdir_script_start_listener" "$_hoid_mod_chdir_script_start_listener"
+		hoid_buffer_printf "cd \"\$hoid_mod_chdir_init_dir\"\nmkdir -p %s\ncd %s\n\n" "$_hoid_mod_chdir_script_start_listener" "$_hoid_mod_chdir_script_start_listener"
 		unset _hoid_mod_chdir_script_start_listener
-	else
-		hoid_buffer_printf 'cd "$hoid_mod_chdir_init_dir"\n\n'
 	fi
 }
 bobshell_event_listen hoid_script_start_event 'hoid_mod_chdir_script_start_listener "$@"'

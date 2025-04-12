@@ -3,43 +3,56 @@ shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/un
 shelduck import ../hoid.sh
 
 test_chdir() {
+	print_pwd='printf %s $(pwd)'
+
 	unset root
-	hoid script --output var:root 'printf %s $(pwd)'
+	hoid script --output var:root "$print_pwd"
 	assert_isset root
 
 	unset x
-	hoid --chdir 1 script --output var:x 'printf %s $(pwd)'
+	hoid script --output var:x "$print_pwd"
 	assert_isset x
-	assert_equals "$x" "$root/1"
+	assert_equals "$root" "$x"
 
-	hoid --chdir 2 init
+	reset
 	unset x
-	hoid script --output var:x 'printf %s $(pwd)'
+	hoid --chdir 1 script --output var:x "$print_pwd"
 	assert_isset x
-	assert_equals "$x" "$root/1/2"
+	assert_equals "$root/1" "$x"
+
+	unset x
+	hoid script --output var:x "$print_pwd"
+	assert_isset x
+	assert_equals "$root" "$x"
+
+	hoid --chdir 1/2 init
+	unset x
+	hoid script --output var:x "$print_pwd"
+	assert_isset x
+	assert_equals "$root/1/2" "$x"
 
 	hoid --chdir 3 block start
 	unset x
-	hoid script --output var:x 'printf %s $(pwd)'
+	hoid script --output var:x "$print_pwd"
 	assert_isset x
-	assert_equals "$x" "$root/1/2/3"
+	assert_equals "$root/1/2/3" "$x"
 
 	hoid block end
 	unset x
-	hoid script --output var:x 'printf %s $(pwd)'
+	hoid script --output var:x "$print_pwd"
 	assert_isset x
-	assert_equals "$x" "$root/1/2"
+	assert_equals "$root/1/2" "$x"
 
 	hoid --chdir .. init
 	unset x
-	hoid script --output var:x 'printf %s $(pwd)'
+	hoid script --output var:x "$print_pwd"
 	assert_isset x
-	assert_equals "$x" "$root/1"
+	assert_equals "$root/1" "$x"
 
 	hoid --chdir /. init
 	unset x
-	hoid script --output var:x 'printf %s $(pwd)'
+	hoid script --output var:x "$print_pwd"
 	assert_isset x
-	assert_equals "$x" "/"
+	assert_equals "/" "$x"
 
 }
