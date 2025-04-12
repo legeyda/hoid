@@ -2,6 +2,8 @@
 
 
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/base.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/str/path/join.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/result/assert.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/buffer/config.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/buffer/printf.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/event/listen.sh
@@ -62,7 +64,14 @@ bobshell_event_listen hoid_event_state_dump hoid_mod_chdir_state_dump
 
 hoid_mod_chdir_init() {
 	if bobshell_isset hoid_alt_chdir; then
-		bobshell_event_var_set hoid_chdir "$hoid_alt_chdir"
+		if bobshell_isset hoid_chdir; then
+			bobshell_str_path_join "$hoid_chdir" "$hoid_alt_chdir"
+			bobshell_result_assert _hoid_mod_chdir_init
+			bobshell_event_var_set hoid_chdir "$_hoid_mod_chdir_init"
+			unset _hoid_mod_chdir_init
+		else
+			bobshell_event_var_set hoid_chdir "$hoid_alt_chdir"
+		fi
 	elif bobshell_isset hoid_chdir; then
 		true
 	elif bobshell_isset HOID_CHDIR; then

@@ -88,8 +88,6 @@ hoid_task_copy() {
 		bobshell_die "something wrong: dir empty"
 	fi
 
-	shift
-
 	if bobshell_locator_parse "$2" && ! bobshell_starts_with "$2" / ; then
 		bobshell_errcho ''
 		return 1
