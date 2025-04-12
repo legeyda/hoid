@@ -36,4 +36,10 @@ test_chdir() {
 	assert_isset x
 	assert_equals "$x" "$root/1"
 
+	hoid --chdir /. init
+	unset x
+	hoid script --output var:x 'printf %s $(pwd)'
+	assert_isset x
+	assert_equals "$x" "/"
+
 }

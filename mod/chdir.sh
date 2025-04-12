@@ -64,7 +64,7 @@ bobshell_event_listen hoid_event_state_dump hoid_mod_chdir_state_dump
 
 hoid_mod_chdir_init() {
 	if bobshell_isset hoid_alt_chdir; then
-		if bobshell_isset hoid_chdir; then
+		if bobshell_isset hoid_chdir && ! bobshell_starts_with "$hoid_alt_chdir" /; then
 			bobshell_str_path_join "$hoid_chdir" "$hoid_alt_chdir"
 			bobshell_result_assert _hoid_mod_chdir_init
 			bobshell_event_var_set hoid_chdir "$_hoid_mod_chdir_init"
