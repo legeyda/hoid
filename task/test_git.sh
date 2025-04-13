@@ -10,9 +10,16 @@ init_dir() {
 	cd "$1"
 }
 
-test_install() {
+test_install_1() {
 	init_dir test_git_install
 	ssh "$HOID_TARGET" rm -rf hoid-tailsitter
 	hoid git clone https://github.com/legeyda/tailsitter.git hoid-tailsitter
 	ssh "$HOID_TARGET" 'cat hoid-tailsitter/README.md'
+}
+
+test_install_2() {
+	init_dir test_git_install
+	ssh "$HOID_TARGET" rm -rf hoid-tailsitter
+	hoid --chdir hoid-tailsitter git clone https://github.com/legeyda/tailsitter.git
+	ssh "$HOID_TARGET" 'cat hoid-tailsitter/tailsitter/README.md'
 }
