@@ -30,6 +30,7 @@ hoid_find_item_loop() {
 	hoid_find_path_instance="$hoid_find_path_instance $_hoid_find_item_loop__result"
 	hoid_find_path_reverse_instance="$_hoid_find_item_loop__result $hoid_find_path_reverse_instance"
 
+	bobshell_result_set true
 	unset _hoid_find_item_loop__template _hoid_find_item_loop__result
 }
 

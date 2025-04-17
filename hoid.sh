@@ -19,6 +19,7 @@ shelduck import ./task/shelduck.sh
 shelduck import ./task/shell.sh
 shelduck import ./task/reboot.sh
 shelduck import ./task/git.sh
+shelduck import ./task/docker.sh
 
 # import std drivers
 shelduck import ./driver/docker.sh

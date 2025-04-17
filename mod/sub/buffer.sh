@@ -34,9 +34,6 @@ hoid_buffer_flush() {
 	if [ -z "${hoid_buffer:-}" ]; then
 		return
 	fi
-	if [ true = "$hoid_cli_opts" ]; then
-		bobshell_die "hoid flush: options not supported"
-	fi
 	_hoid_buffer_flush__input=stdin:
 	_hoid_buffer_flush__output=stdout:
 	while bobshell_isset_1 "$@"; do

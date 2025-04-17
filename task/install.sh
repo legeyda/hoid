@@ -10,12 +10,11 @@ hoid_task_install() {
 }
 
 hoid_task_install_shelduck() {
-	hoid_task_install_shelduck_installer=$(shelduck resolve https://raw.githubusercontent.com/legeyda/shelduck/refs/heads/main/install.sh)
-	hoid script "$hoid_task_install_shelduck_installer"
-	unset hoid_task_install_shelduck_installer
+	hoid script https://github.com/legeyda/shelduck/releases/latest/download/install.sh
 }
 
 hoid_task_install_hoid() {
+	
 	bobshell_die 'not implemented'
 	hoid_task_install_hoid_installer=$(shelduck resolve https://raw.githubusercontent.com/legeyda/shelduck/refs/heads/main/shelduck.sh)
 	hoid script "$hoid_task_install_hoid_installer"
