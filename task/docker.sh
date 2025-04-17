@@ -119,7 +119,7 @@ hoid_task_docker_image_save() {
 	fi
 	
 
-	_hoid_task_docker_image_save__temp=$(mkdir -c)
+	_hoid_task_docker_image_save__temp=$(mktemp -d)
 
 	# shellcheck disable=SC2016
 	hoid script --output "file://$_hoid_task_docker_image_save__temp/image.tar.gz" 'x=$(mktemp -d)

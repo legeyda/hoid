@@ -3,12 +3,6 @@ shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/un
 shelduck import ../hoid.sh
 
 
-init_dir() {
-	set -- "target/$1"
-	rm -rf "$1"
-	mkdir -p "$1"
-	cd "$1"
-}
 
 test_image_load() {
 	assert_ok ssh "$HOID_TARGET" echo hello from remote target
@@ -32,5 +26,18 @@ ssh_docker_save() {
 }
 
 test_image_save() {
-	true
+	# 
+	_test_image_save__tmp=$(mktemp -d)
+	docker image rm --force hello-world
+	assert_error docker image save --output "$_test_image_save__tmp/image1.tar" hello-world:latest
+
+	hoid command docker image pull hello-world
+	hoid docker image save --output "$_test_image_save__tmp/saved.tar.gz" hello-world:latest
+	docker image load --input "$_test_image_save__tmp/saved.tar.gz"
+
+	assert_ok docker image save --output "$_test_image_save__tmp/image2.tar" hello-world:latest
+
+
+	rm -rf "$_test_image_save__tmp"
+	unset _test_image_save__tmp
 }
