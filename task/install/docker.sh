@@ -18,7 +18,9 @@ hoid_task_install_docker() {
 	# https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user
 	hoid command groupadd docker
 	# shellcheck disable=SC2016
-	hoid script 'usermod -aG docker $USER'
+	hoid script 'if [ "$USER" != root ]; then 
+		usermod -aG docker $USER
+	fi'
 	hoid command newgrp docker
 
 	# https://docs.docker.com/engine/install/linux-postinstall/#configure-docker-to-start-on-boot-with-systemd
