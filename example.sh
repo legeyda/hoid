@@ -16,3 +16,32 @@ if bobshell_isset PAYREGISTRY_DEPLOY_SECRET_PASSWORD; then
 fi
 
 
+hoid copy --secret POSTGRES_PASSWORD var:POSTGRES_PASSWORD
+
+
+
+
+
+hoid --chdir /opt/narrowboat --name 'install narrowboat' \
+     block start
+
+hoid --chdir runway --name 'install runway src' \
+     block start
+hoid checkout git@github.com:legeyda/runway.git .
+#hoid --chdir runway command ./run install
+hoid block end
+
+
+
+hoid git clone git@github.com:legeyda/runway.git /opt/narrowboat/runway
+
+hoid copy 
+
+hoid --chdir /opt/narrowboat/runway --name 'provide runway project src' \
+     block start
+hoid copy https://github.com/legeyda/tailsitter/archive/refs/heads/main.zip ./tailsitter-main.zip
+hoid command unzip --file tailsitter-main.zip
+hoid --chdir ./tailsitter-main command ./run install
+hoid block end
+
+hoid docker load 
