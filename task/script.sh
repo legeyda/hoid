@@ -37,10 +37,23 @@ hoid_task_script() {
 
 	hoid_buffer_flush
 
+	# before event
 	bobshell_event_fire hoid_script_start_event
-	hoid shell "$@"
+
+	# optional rewrite
+	bobshell_result_set false
+	bobshell_event_fire hoid_script_rewrite_event "$@"
+	if bobshell_result_check _hoid_task_script__rewrite; then
+		hoid shell "$_hoid_task_script__rewrite"
+		unset _hoid_task_script__rewrite
+	else
+		hoid shell "$@"
+	fi
+
+	# after event
 	bobshell_event_fire hoid_script_end_event
 
+	# delegate --input & --output to hoid_buffer_flush
 	set --
 	if bobshell_isset _hoid_task_script__input; then
 		set -- "$@" --input "$_hoid_task_script__input"

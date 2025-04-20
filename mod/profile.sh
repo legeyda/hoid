@@ -82,3 +82,4 @@ hoid_mod_profile_var_event_listener() {
 
 
 
+bobshell_event_var_listen --before    hoid_profile hoid_buffer_flush 

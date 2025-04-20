@@ -110,22 +110,23 @@ hoid_task_docker_image_save() {
 		esac
 	done
 
-	hoid_task_docker_image_save__args=
+	# 
+	bobshell_str_quote "$@"
+	bobshell_result_read hoid_task_docker_image_save__args
 	if bobshell_isset _hoid_task_docker_save__platform; then
 		bobshell_str_quote "$_hoid_task_docker_save__platform"
-		bobshell_result_read hoid_task_docker_image_save__args
-		unset _hoid_task_docker_save__platform
-		hoid_task_docker_image_save__args="--output $hoid_task_docker_image_save__args"
+		hoid_task_docker_image_save__args="--output $bobshell_result_1 $hoid_task_docker_image_save__args"
 	fi
+
 	
 
 	_hoid_task_docker_image_save__temp=$(mktemp -d)
 
 	# shellcheck disable=SC2016
 	hoid script --output "file://$_hoid_task_docker_image_save__temp/image.tar.gz" 'x=$(mktemp -d)
-docker image save '"$hoid_task_docker_image_save__args"' --output "$_hoid_task_docker_image_save__temp/image.tar"
-gzip -c "$_hoid_task_docker_image_save__temp/image.tar" # tood what if gzip not installed
-rm -rf "$_hoid_task_docker_image_save__temp"
+docker image save --output "$x/image.tar" '"$hoid_task_docker_image_save__args"'
+gzip -c "$x/image.tar" # todo what if gzip not installed
+rm -rf "$x"
 '
 
 	if bobshell_locator_is_file "$_hoid_task_docker_save__output" _hoid_task_docker_save__file \

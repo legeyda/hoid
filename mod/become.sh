@@ -106,8 +106,8 @@ bobshell_event_listen hoid_event_state_init 'hoid_mod_become_init "$@"'
 
 
 
-bobshell_event_var_listen hoid_become hoid_buffer_flush
-bobshell_event_var_listen hoid_become_password hoid_buffer_flush
+bobshell_event_var_listen --before  hoid_become hoid_buffer_flush
+bobshell_event_var_listen --before  hoid_become_password hoid_buffer_flush
 
 
 
@@ -132,3 +132,6 @@ sudo sh -c \"\$script\"
 	fi
 }
 bobshell_event_listen hoid_event_buffer_rewrite hoid_mod_become_rewrite
+
+
+

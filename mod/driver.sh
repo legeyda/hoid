@@ -104,6 +104,9 @@ bobshell_event_listen hoid_event_state_init 'hoid_mod_driver_init "$@"'
 
 
 
+
+
+
 hoid_mod_driver_var_event_listener() {
 	if bobshell_isset hoid_driver && bobshell_isset hoid_target; then
 		"hoid_driver_${hoid_driver}_init"
@@ -113,3 +116,5 @@ bobshell_event_var_listen hoid_driver hoid_mod_driver_var_event_listener
 
 
 
+
+bobshell_event_var_listen --before    hoid_driver hoid_buffer_flush 
