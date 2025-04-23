@@ -54,7 +54,7 @@ bobshell_event_listen hoid_state_validate_event '
 
 
 hoid_mod_target_state_dump() {
-	hoid_util_state_dump hoid_target hoid_target hoid_driver
+	hoid_util_state_dump hoid_target
 }
 bobshell_event_listen hoid_event_state_dump hoid_mod_target_state_dump
 
@@ -77,3 +77,6 @@ bobshell_event_listen hoid_event_state_init 'hoid_mod_target_init_event_listener
 
 
 bobshell_event_var_listen --before    hoid_target hoid_buffer_flush 
+
+
+bobshell_event_var_listen --after hoid_target hoid_mod_driver_init

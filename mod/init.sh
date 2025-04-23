@@ -24,14 +24,6 @@ bobshell_sub_init_subcommand_event_listener() {
 		hoid_setup_done=true
 		bobshell_result_set true
 		return
-	elif [ true != "${hoid_setup_done:-false}" ]; then
-		# load alts from env
-		bobshell_event_fire hoid_setup_event
-		hoid_setup_done=true
-	fi
-
-	if ! bobshell_isset hoid_target; then
-		bobshell_die "hoid target not set"
 	fi
 
 	bobshell_result_set false

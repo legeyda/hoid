@@ -18,7 +18,9 @@ bobshell_event_var_listen hoid_profile hoid_find_profile_event_var_listener
 hoid_find_profile_event_var_listener() {
 	hoid_find_path_instance=
 	hoid_find_path_reverse_instance=
-	bobshell_str_split "$hoid_path" : hoid_find_item_loop
+	if bobshell_isset hoid_profile; then
+		bobshell_str_split "$hoid_path" : hoid_find_item_loop
+	fi
 }
 
 
