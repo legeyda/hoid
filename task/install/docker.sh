@@ -16,7 +16,7 @@ hoid_task_install_docker() {
 	hoid_task_install_docker_verify
 
 	# https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user
-	hoid command groupadd docker
+	hoid script 'groupadd docker || true'
 	# shellcheck disable=SC2016
 	hoid script 'if [ "$USER" != root ]; then 
 		usermod -aG docker $USER
