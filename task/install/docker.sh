@@ -12,8 +12,8 @@ hoid_task_install_docker() {
 		_hoid_task_install_docker__script=$(bobshell_fetch_url 'https://get.docker.com/') # todo? bobshell_resource_copy 'https://get.docker.com/' var:_hoid_task_install_docker__script
 		hoid script "$_hoid_task_install_docker__script"
 		unset _hoid_task_install_docker__script
+		hoid_task_install_docker_verify
 	fi
-	hoid_task_install_docker_verify
 
 	# https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user
 	hoid script 'groupadd docker || true'
@@ -21,7 +21,7 @@ hoid_task_install_docker() {
 	hoid script 'if [ "$USER" != root ]; then 
 		usermod -aG docker $USER
 	fi'
-	hoid command newgrp docker
+	#hoid command newgrp docker
 
 	# https://docs.docker.com/engine/install/linux-postinstall/#configure-docker-to-start-on-boot-with-systemd
 	hoid command systemctl enable docker.service
