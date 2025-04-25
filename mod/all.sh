@@ -6,6 +6,7 @@ shelduck import ./driver.sh
 shelduck import ./name.sh
 shelduck import ./chdir.sh
 shelduck import ./become.sh
+shelduck import ./env.sh
 
 # import order matters
 shelduck import ./init.sh

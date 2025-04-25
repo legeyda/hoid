@@ -33,7 +33,7 @@ hoid_mod_chdir_alt_diff() {
 			bobshell_result_set false
 			return
 		fi
-		if [ "$hoid_alt_chdir" != "$hoid_target" ]; then
+		if [ "$hoid_alt_chdir" != "$hoid_chdir" ]; then
 			bobshell_result_set false
 			return
 		fi
