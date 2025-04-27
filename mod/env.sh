@@ -50,7 +50,7 @@ bobshell_mod_env_apply_arg() {
 
 	_bobshell_mod_env_apply_arg__value=$(bobshell_quote "$_bobshell_mod_env_apply_arg__value")
 	_bobshell_mod_env_apply_arg__line="
-	$_bobshell_mod_env_apply_arg__key=$_bobshell_mod_env_apply_arg__value
+	export $_bobshell_mod_env_apply_arg__key=$_bobshell_mod_env_apply_arg__value
 "
 	unset _bobshell_mod_env_apply_arg__key _bobshell_mod_env_apply_arg__value
 
