@@ -13,8 +13,8 @@ hoid_state_validate() {
 	bobshell_result_set true
 	bobshell_event_fire hoid_state_validate_event
 	if ! bobshell_result_check; then
-		bobshell_result_read _hoid_state_validate__result _hoid_state_validate__message
-		bobshell_die "hoid: state validation error: $_hoid_state_validate__message"
+		bobshell_result_read _hoid_state_validate__result _hoid_state_validate__message || true
+		bobshell_die "hoid: state validation error: ${_hoid_state_validate__message:-unknown error}"
 	fi
 }
 

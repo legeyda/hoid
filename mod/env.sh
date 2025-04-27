@@ -95,11 +95,11 @@ bobshell_event_listen hoid_event_state_dump hoid_mod_env_state_dump
 
 
 hoid_mod_env_init() {
-	if ! bobshell_isset hoid_env; then
-		if bobshell_isset HOID_ENV; then
-			hoid_env="$HOID_ENV"
-		fi
-	elif bobshell_isset hoid_alt_env; then
+	if ! bobshell_isset hoid_env && bobshell_isset HOID_ENV; then
+		hoid_env="$HOID_ENV"
+	fi
+
+	if bobshell_isset hoid_alt_env; then
 		hoid_env="$hoid_env$hoid_alt_env"
 	fi
 }
