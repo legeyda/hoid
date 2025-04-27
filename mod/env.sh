@@ -100,7 +100,7 @@ hoid_mod_env_init() {
 	fi
 
 	if bobshell_isset hoid_alt_env; then
-		hoid_env="$hoid_env$hoid_alt_env"
+		hoid_env="${hoid_env:-}$hoid_alt_env"
 	fi
 }
 bobshell_event_listen hoid_event_state_init 'hoid_mod_env_init "$@"'
