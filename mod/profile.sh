@@ -71,14 +71,20 @@ bobshell_event_listen hoid_event_state_init 'hoid_mod_profile_init_event_listene
 
 bobshell_event_var_listen hoid_profile hoid_mod_profile_var_event_listener 
 hoid_mod_profile_var_event_listener() {
+	if [ true = "${_hoid_mod_profile_var_event_listener__disabled:-false}" ]; then
+		return
+	fi
 	if ! bobshell_isset hoid_profile; then
 		return
 	fi
-	for _hoid_mod_profile_var_event_listener in $(hoid_find_all env.sh); do
-		. "$_hoid_mod_profile_var_event_listener"
+	for _hoid_mod_profile_var_event_listener__item in $(hoid_find_all env.sh); do
+		. "$_hoid_mod_profile_var_event_listener__item"
 	done
-	unset _hoid_mod_profile_var_event_listener
+	unset _hoid_mod_profile_var_event_listener__item
+	
+	_hoid_mod_profile_var_event_listener__disabled=true
 	hoid_state_init
+	unset _hoid_mod_profile_var_event_listener__disabled
 }
 
 
