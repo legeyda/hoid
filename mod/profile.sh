@@ -74,10 +74,11 @@ hoid_mod_profile_var_event_listener() {
 	if ! bobshell_isset hoid_profile; then
 		return
 	fi
-	for x in $(hoid_find_all env.sh); do
-		. "$x"
+	for _hoid_mod_profile_var_event_listener in $(hoid_find_all env.sh); do
+		. "$_hoid_mod_profile_var_event_listener"
 	done
-	unset x
+	unset _hoid_mod_profile_var_event_listener
+	hoid_state_init
 }
 
 

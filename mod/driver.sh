@@ -90,17 +90,12 @@ bobshell_event_listen hoid_event_state_dump hoid_mod_driver_state_dump
 
 
 hoid_mod_driver_init() {
-	if ! bobshell_isset hoid_target; then
-		# without target, driver cannot be configured, so skip driver configuration
-		bobshell_event_var_unset hoid_driver
-		return
-	fi
 	if bobshell_isset hoid_alt_driver; then
 		bobshell_event_var_set hoid_driver "$hoid_alt_driver"
 	elif bobshell_isset hoid_driver; then
 		true
 	elif bobshell_isset HOID_DRIVER; then
-		bobshell_event_var_set "$HOID_DRIVER"
+		bobshell_event_var_set hoid_driver "$HOID_DRIVER"
 	else
 		bobshell_event_var_set hoid_driver ssh
 	fi
