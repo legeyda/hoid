@@ -47,7 +47,7 @@ bobshell_event_listen hoid_alt_clear unset hoid_alt_target
 
 bobshell_event_listen hoid_state_validate_event '
 	if ! bobshell_isset hoid_target; then
-		bobshell_result_set false
+		bobshell_result_set false "hoid is in invalid state: hoid_target is not set"
 		return
 	fi
 '

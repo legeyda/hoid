@@ -75,6 +75,12 @@ fi'
 bobshell_event_listen hoid_alt_clear unset hoid_alt_driver
 
 
+bobshell_event_listen hoid_state_validate_event '
+	if ! bobshell_isset hoid_driver; then
+		bobshell_result_set false "hoid is in invalid state: hoid_driver is not set"
+		return
+	fi
+'
 
 hoid_mod_driver_state_dump() {
 	hoid_util_state_dump hoid_driver
