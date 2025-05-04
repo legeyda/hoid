@@ -142,7 +142,12 @@ hoid_driver_write() {
 
 
 
-bobshell_event_listen hoid_success_exit_event hoid_success_exit_event
+bobshell_event_listen bobshell_success_exit_event hoid_success_exit_event
 hoid_success_exit_event() {
 	hoid_buffer_flush
+}
+
+bobshell_event_listen bobshell_error_exit_event hoid_error_exit_event_listener
+hoid_error_exit_event_listener() {
+	printf %s 'HOID: THERE WAS AN ERROR'
 }

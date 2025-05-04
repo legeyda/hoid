@@ -172,7 +172,6 @@ import_hoid() {
 	SHELDUCK_URL_RULES="https://raw.githubusercontent.com/legeyda/hoid/refs/heads/main/=file://$(pwd)/"
 	export SHELDUCK_URL_RULES
 	shelduck import "$(pwd)/hoid.sh"
-	hoid "$@"
 }
 
 run_hoid() {
