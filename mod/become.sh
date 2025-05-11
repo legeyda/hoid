@@ -96,7 +96,7 @@ hoid_mod_become_init() {
 	elif bobshell_isset hoid_become_password; then
 		true
 	elif bobshell_isset HOID_BECOME_PASSWORD; then
-		bobshell_event_var_set hoid_become "$HOID_BECOME_PASSWORD"
+		bobshell_event_var_set hoid_become_password "$HOID_BECOME_PASSWORD"
 	else
 		bobshell_event_var_unset hoid_become_password
 	fi
