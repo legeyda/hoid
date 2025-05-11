@@ -116,6 +116,13 @@ hoid_mod_become_rewrite() {
 		return
 	fi
 
+	if bobshell_isset hoid_become_password; then
+		_hoid_mod_become_rewrite__sudo=$(bobshell_quote "hoid_become_password")
+		_hoid_mod_become_rewrite__sudo="printf %s $_hoid_mod_become_rewrite__sudo | sudo -S"
+	else
+		_hoid_mod_become_rewrite__sudo=sudo
+	fi
+
 
 	if bobshell_contains "$hoid_buffer" "'"; then
 		bobshell_buffer_rewrite_random="$(bobshell_random)$(bobshell_random)$(bobshell_random)"
@@ -125,11 +132,12 @@ set -eu
 $hoid_buffer
 EOF_$bobshell_buffer_rewrite_random
 )
-sudo sh -c \"\$script\"
-"		
+$_hoid_mod_become_rewrite__sudo sh -c \"\$script\"
+"
 	else
-		hoid_buffer="set -eu; sudo sh -c 'set -eu; $hoid_buffer'"
+		hoid_buffer="set -eu; $_hoid_mod_become_rewrite__sudo sh -c 'set -eu; $hoid_buffer'"
 	fi
+	unset _hoid_mod_become_rewrite__sudo
 }
 bobshell_event_listen hoid_event_buffer_rewrite hoid_mod_become_rewrite
 
