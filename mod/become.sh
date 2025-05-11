@@ -117,7 +117,7 @@ hoid_mod_become_rewrite() {
 	fi
 
 	if bobshell_isset hoid_become_password; then
-		_hoid_mod_become_rewrite__sudo=$(bobshell_quote "hoid_become_password")
+		_hoid_mod_become_rewrite__sudo=$(bobshell_quote "$hoid_become_password")
 		_hoid_mod_become_rewrite__sudo="printf %s $_hoid_mod_become_rewrite__sudo | sudo -S"
 	else
 		_hoid_mod_become_rewrite__sudo=sudo
