@@ -25,6 +25,7 @@ hoid_buffer_printf() {
 }
 
 hoid_buffer_write() {
+	# todo auto flush if buffer too big
 	hoid_buffer="${hoid_buffer:-}$*"
 }
 
