@@ -175,11 +175,7 @@ hoid_task_copy_found_file() {
 # fun: hoid_task_copy_map SRCLOCATOR DESTLOCATOR
 hoid_task_copy_map() {
 	if bobshell_isset _hoid_task_copy__mapper; then
-		_hoid_task_copy_map__temp=$(hoid_mktemp_dir)
 		"$_hoid_task_copy__mapper" "$1" "$2"
-		hoid flush --input "file:$_hoid_task_copy_map__temp/result"		
-		rm -rf "$_hoid_task_copy_map__temp"
-		unset _hoid_task_copy_map__temp
 	else
 		bobshell_resource_copy "$1" "$2"
 	fi
