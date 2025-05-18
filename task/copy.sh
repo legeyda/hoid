@@ -89,10 +89,10 @@ hoid_task_copy() {
 	fi
 
 	if bobshell_locator_parse "$2" && ! bobshell_starts_with "$2" / ; then
-		bobshell_errcho ''
-		return 1
+		hoid_task_copy_map "file://$_hoid_task_copy__temp/merged" "$2"
+		return
 	fi
-	hoid_task_copy_to_target "file:$_hoid_task_copy__temp/merged" "$@"
+	hoid_task_copy_to_target "file:$_hoid_task_copy__temp/merged" "$2"
 
 
 	unset _hoid_task_copy__found

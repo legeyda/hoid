@@ -2,7 +2,7 @@
 set -eu
 
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/run.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/map.sh
+# shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/map.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/misc/random.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/misc/defun.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/bobtest.sh
@@ -184,6 +184,16 @@ run_test() {
 		bobshell_die 'HOID_TARGET not set' # todo auto start docker target
 	fi
 	bobtest "$@"
+}
+
+run_debug() {
+	import_hoid
+	hoid --become true init
+	set -x
+
+	hoid_task_install_docker_verify
+
+	bobshell_die "DEBUG ($bobshell_result_size): $bobshell_result_1"
 }
 
 
