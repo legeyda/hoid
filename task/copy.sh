@@ -32,9 +32,28 @@ hoid_for_each_line() {
 }
 
 hoid_decrypt_secret() {
-	# todo implement
-	bobshell_resource_copy "$@"
+	hoid_ensure_secret_password
+	bobshell_decrypt var:hoid_secret_password "$@"
 }
+
+hoid_ensure_secret_password() {
+	if bobshell_isset hoid_secret_password; then
+		return
+	fi
+
+	if bobshell_isset HOID_SECRET_PASSWORD; then
+		hoid_secret_password="$HOID_SECRET_PASSWORD"
+		return
+	fi
+
+
+	hoid_ensure_secret_password_tty="$(tty)"
+	bobshell_require_not_empty "$hoid_ensure_secret_password_tty" 'terminal not found, not interactive shell?'
+	printf %s "Password:" > "$(tty)"
+	bobshell_read_secret hoid_secret_password
+
+}
+
 
 hoid_task_copy() {
 	# parse cli
