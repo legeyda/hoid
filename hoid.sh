@@ -34,10 +34,11 @@ shelduck import ./mod/all.sh
 shelduck import ./state.sh
 shelduck import ./setup.sh
 
-
-
 # main entry point
 hoid() {
+	: "${_hoid_recursion_depth=0}"
+	_hoid_recursion_depth=$(( _hoid_recursion_depth + 1 ))
+
 	# no arguments
 	if ! bobshell_isset_1 "$@"; then
 		hoid_usage 2>&1
@@ -53,6 +54,18 @@ hoid() {
 	hoid_setup_ensure
 
 	hoid_cli_parse "$@"
+
+	_hoid_recursion_depth=$(( _hoid_recursion_depth - 1 ))
+}
+
+hoid_assert_no_recursion() {
+	if [ "$_hoid_recursion_depth" -gt 1 ]; then
+		_hoid_assert_no_recursion__message='hoid_assert_no_recursion: assertion failed'
+		if bobshell_isset "$@"; then
+			_hoid_assert_no_recursion__message="$_hoid_assert_no_recursion__message: $*"
+			bobshell_die "$_hoid_assert_no_recursion__message"
+		fi
+	fi
 }
 
 hoid_usage() {
@@ -108,9 +121,12 @@ hoid_subcommand() {
 
 	bobshell_event_fire hoid_alt_diff_event
 	if bobshell_result_check; then
-		hoid_state_validate
+		if [ copy != "$1" ] || [ "$_hoid_recursion_depth" -le 1 ]; then
+			hoid_state_validate
+		fi
 		hoid_task "$@"
 	else
+		hoid_assert_no_recursion hoid cli arguments
 		hoid_state_push
 		hoid_state_init
 		hoid_state_validate

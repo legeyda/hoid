@@ -19,6 +19,7 @@ bobshell_sub_init_subcommand_event_listener() {
 	fi
 
 	if [ init = "$1" ]; then
+		hoid_assert_no_recursion init subcommand
 		shift
 		hoid_sub_init "$@"
 		hoid_setup_done=true

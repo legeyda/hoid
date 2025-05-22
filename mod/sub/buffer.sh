@@ -9,6 +9,7 @@ shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/un
 
 bobshell_event_listen hoid_event_subcommand '
 	if [ buffer = "$1" ]; then
+		hoid_assert_no_recursion buffer subcommand
 		shift
 		bobshell_subcommand hoid_buffer "$@"
 		bobshell_result_set true
