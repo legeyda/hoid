@@ -68,8 +68,13 @@ hoid_mod_target_init_event_listener() {
 	elif bobshell_isset HOID_TARGET; then
 		bobshell_event_var_set hoid_target "$HOID_TARGET"
 	fi
+	
 	if bobshell_isset hoid_target && ! bobshell_isset hoid_profile; then
 		bobshell_event_var_set hoid_profile "$hoid_target"
+	fi
+
+	if bobshell_isset hoid_profile && ! bobshell_isset hoid_target; then
+		bobshell_event_var_set hoid_target "$hoid_profile"
 	fi
 }
 bobshell_event_listen hoid_event_state_init 'hoid_mod_target_init_event_listener "$@"'
