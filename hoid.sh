@@ -61,7 +61,7 @@ hoid() {
 hoid_assert_no_recursion() {
 	if [ "$_hoid_recursion_depth" -gt 1 ]; then
 		_hoid_assert_no_recursion__message='hoid_assert_no_recursion: assertion failed'
-		if bobshell_isset "$@"; then
+		if bobshell_isset_1 "$@"; then
 			_hoid_assert_no_recursion__message="$_hoid_assert_no_recursion__message: $*"
 			bobshell_die "$_hoid_assert_no_recursion__message"
 		fi
