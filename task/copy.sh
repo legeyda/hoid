@@ -120,7 +120,7 @@ hoid_task_copy() {
 }
 
 hoid_task_copy_to_target() {
-	hoid_assert_no_recursion 'copy to target not supported when recursion'
+	hoid_state_validate
 	_hoid_task_copy_to_target__src=$(bobshell_locator_resolve "$1")
 
 	# if it is directory

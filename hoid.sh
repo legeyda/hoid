@@ -36,6 +36,9 @@ shelduck import ./setup.sh
 
 # main entry point
 hoid() {
+
+
+
 	: "${_hoid_recursion_depth=0}"
 	_hoid_recursion_depth=$(( _hoid_recursion_depth + 1 ))
 
@@ -55,7 +58,6 @@ hoid() {
 
 	hoid_cli_parse "$@"
 
-	_hoid_recursion_depth=$(( _hoid_recursion_depth - 1 ))
 }
 
 hoid_assert_no_recursion() {
@@ -116,12 +118,14 @@ hoid_subcommand() {
 	bobshell_result_set false
 	bobshell_event_fire hoid_event_subcommand "$@"
 	if bobshell_result_check; then
+	 	_hoid_recursion_depth=$(( _hoid_recursion_depth - 1 ))
 		return
 	fi
+	_hoid_recursion_depth=$(( _hoid_recursion_depth - 1 ))
 
 	bobshell_event_fire hoid_alt_diff_event
 	if bobshell_result_check; then
-		if [ copy != "$1" ] || [ "$_hoid_recursion_depth" -le 1 ]; then
+		if [ copy != "$1" ]; then
 			hoid_state_validate
 		fi
 		hoid_task "$@"
