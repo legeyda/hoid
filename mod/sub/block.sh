@@ -7,8 +7,8 @@ shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/un
 
 # shellcheck disable=SC2016
 bobshell_event_listen hoid_event_subcommand '
-	hoid_assert_no_recursion block subcommand
 	if [ block = "$1" ]; then
+		hoid_assert_no_recursion block subcommand
 		shift
 		bobshell_subcommand hoid_sub_block "$@"
 		bobshell_result_set true
