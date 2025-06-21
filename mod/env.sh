@@ -43,8 +43,9 @@ bobshell_mod_env_apply_arg() {
 	if ! bobshell_isset _bobshell_mod_env_apply_arg__value; then
 		bobshell_var_get "$_bobshell_mod_env_apply_arg__key"
 		if ! bobshell_result_check _bobshell_mod_env_apply_arg__value; then
-			unset _bobshell_mod_env_apply_arg__key _bobshell_mod_env_apply_arg__value
 			bobshell_result_set false "variable $_bobshell_mod_env_apply_arg__key undefined"
+			unset _bobshell_mod_env_apply_arg__key
+			return
 		fi
 	fi
 
