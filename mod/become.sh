@@ -117,13 +117,15 @@ hoid_mod_become_rewrite() {
 	fi
 
 	if bobshell_isset hoid_become_password; then
+		# todo when sudo password is used, input redirection does not work
+		# todo when sudo password is used, sshpass print auth errors
 		_hoid_mod_become_rewrite__sudo=$(bobshell_quote "$hoid_become_password")
 		_hoid_mod_become_rewrite__sudo="printf %s $_hoid_mod_become_rewrite__sudo | sudo -S"
 	else
 		_hoid_mod_become_rewrite__sudo=sudo
 	fi
 
-
+	
 	if bobshell_contains "$hoid_buffer" "'"; then
 		bobshell_buffer_rewrite_random="$(bobshell_random)$(bobshell_random)$(bobshell_random)"
 		hoid_buffer="set -eu;

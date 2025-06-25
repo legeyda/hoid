@@ -12,6 +12,7 @@ shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/un
 
 # import std tasks
 shelduck import ./task/command.sh
+shelduck import ./task/config.sh
 shelduck import ./task/copy.sh
 shelduck import ./task/directory.sh
 shelduck import ./task/script.sh
@@ -21,6 +22,7 @@ shelduck import ./task/reboot.sh
 shelduck import ./task/git.sh
 shelduck import ./task/docker.sh
 shelduck import ./task/install.sh
+shelduck import ./task/user.sh
 
 # import std drivers
 shelduck import ./driver/docker.sh
