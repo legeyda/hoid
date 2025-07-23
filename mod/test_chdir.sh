@@ -1,8 +1,13 @@
 
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/assert.sh
 shelduck import ../hoid.sh
+shelduck import ../util.sh
 
 test_chdir() {
+	hoid_testcontainer_run do_test_chdir
+}
+
+do_test_chdir() {
 	print_pwd='printf %s $(pwd)'
 
 	unset root
@@ -13,6 +18,10 @@ test_chdir() {
 	hoid script --output var:x "$print_pwd"
 	assert_isset x
 	assert_equals "$root" "$x"
+
+	if [ / = "$root" ]; then
+		root=
+	fi
 
 	reset
 	unset x
@@ -53,6 +62,6 @@ test_chdir() {
 	unset x
 	hoid script --output var:x "$print_pwd"
 	assert_isset x
-	assert_equals "/" "$x"
+	assert_equals / "$x"
 
 }

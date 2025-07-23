@@ -6,6 +6,7 @@ shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/un
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/misc/random.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/misc/defun.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/bobtest.sh
+shelduck import ./util.sh
 
 
 
@@ -169,7 +170,7 @@ shelduck() {
 
 
 import_hoid() {
-	SHELDUCK_URL_RULES="https://raw.githubusercontent.com/legeyda/hoid/refs/heads/main/=file://$(pwd)/"
+	SHELDUCK_URL_RULES="https://raw.githubusercontent.com/legeyda/hoid/refs/heads/main/=file://$(pwd)/,$SHELDUCK_URL_RULES"
 	export SHELDUCK_URL_RULES
 	shelduck import "$(pwd)/hoid.sh"
 }
@@ -180,20 +181,13 @@ run_hoid() {
 }
 
 run_test() {
-	if ! bobshell_isset HOID_TARGET; then
-		bobshell_die 'HOID_TARGET not set' # todo auto start docker target
-	fi
 	bobtest "$@"
 }
 
 run_debug() {
 	import_hoid
-	hoid --become true init
 	set -x
-
-	hoid_task_install_docker_verify
-
-	bobshell_die "DEBUG ($bobshell_result_size): $bobshell_result_1"
+	hoid_testcontainer_run hoid install proot
 }
 
 

@@ -30,7 +30,7 @@ hoid_buffer_write() {
 	hoid_buffer="${hoid_buffer:-}$*"
 }
 
-# fun: hoid_buffer_flush1
+# fun: hoid_buffer_flush
 # env: hoid_buffer
 hoid_buffer_flush() {
 	if [ -z "${hoid_buffer:-}" ]; then
@@ -41,12 +41,12 @@ hoid_buffer_flush() {
 	while bobshell_isset_1 "$@"; do
 		case "$1" in
 			(-i|--input)
-		bobshell_isset_2 "$@" || bobshell_die "hoid: option $1: argument expected: locator"
+				bobshell_isset_2 "$@" || bobshell_die "hoid: option $1: argument expected: locator"
 				_hoid_buffer_flush__input="$2"
 				shift 2
 				;;
 			(-o|--output)
-		bobshell_isset_2 "$@" || bobshell_die "hoid: option $1: argument expected: locator"
+				bobshell_isset_2 "$@" || bobshell_die "hoid: option $1: argument expected: locator"
 				_hoid_buffer_flush__output="$2"
 				shift 2
 				;;

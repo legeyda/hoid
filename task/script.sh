@@ -35,7 +35,7 @@ hoid_task_script() {
 		return
 	fi
 
-	hoid_buffer_flush
+	hoid_buffer_flush < /dev/null
 
 	# before event
 	bobshell_event_fire hoid_script_start_event
