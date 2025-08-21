@@ -7,9 +7,7 @@ shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/un
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/string.sh
 
 # cli parse
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/cli/default.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/cli/flag.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/cli/param.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/cli/setup.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/cli/parse.sh
 
 

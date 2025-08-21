@@ -3,7 +3,6 @@
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/string.sh
 
 shelduck import ../lineinfile.sh
-shelduck import ../lineinfile.sh
 
 
 hoid_task_install_pyenv() {
@@ -22,7 +21,7 @@ hoid_task_install_pyenv() {
 }
 
 hoid_task_install_pyenv__check() {
-	hoid command --output var:hoid_task_install_pyenv__check pyenv install --list
+	hoid script --output var:hoid_task_install_pyenv__check 'pyenv install --list 2>/dev/null || true'
 	if bobshell_contains "$hoid_task_install_pyenv__check" 3.13.5; then
 		bobshell_result_set true
 	else
@@ -32,13 +31,27 @@ hoid_task_install_pyenv__check() {
 
 
 hoid_task_install_pyenv__do() {
-	hoid package install curl git
-	
-	hoid script https://pyenv.run/
 
 	# shellcheck disable=SC2016
 	hoid script '# lineinfile remote function
 '"$hoid_task_lineinfile_function"'
+
+checkout_pyenv() {
+	: "${PYENV_ROOT:=$HOME/.pyenv}"
+	export PYENV_ROOT
+	if [ ! -x "$PYENV_ROOT/bin/pyenv" ]; then
+		mkdir -p "$PYENV_ROOT"
+		if command -v git 2>/dev/null; then
+			git clone https://github.com/pyenv/pyenv.git "$PYENV_ROOT"
+		else
+			docker run --interactive --rm --name=kvix-dev --env=HOME --env=PYENV_ROOT \
+				--volume="$PYENV_ROOT:$PYENV_ROOT" --workdir="$PYENV_ROOT" \
+				"--user=$(id -u):$(id -g)" \
+				alpine/git:v2.49.1 clone https://github.com/pyenv/pyenv.git .
+		fi
+	fi
+}
+checkout_pyenv
 
 # lineinfile arguments
 hoid_task_lineinfile__search_type=fixed

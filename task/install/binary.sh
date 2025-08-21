@@ -60,7 +60,10 @@ $hoid_task_install_binary_function
 "
 
 
-bobshell_cli_setup hoid_task_install_binary --var=_hoid_task_install_binary__remote --flag r remote-src
+bobshell_cli_setup hoid_task_install_binary --var=_hoid_task_install_binary__remote      --flag r remote-src
+bobshell_cli_setup hoid_task_install_binary --var=_hoid_task_install_binary__mustache    --flag m mustache
+bobshell_cli_setup hoid_task_install_binary --var=_hoid_task_install_binary__interpolate --flag i interpolate
+bobshell_cli_setup hoid_task_install_binary --var=_hoid_task_install_binary__secret      --flag s secret
 
 # fun: hoid_task_install_binary SRCLOCATOR [NAME]
 hoid_task_install_binary() {
@@ -68,14 +71,14 @@ hoid_task_install_binary() {
 	bobshell_cli_parse hoid_task_install_binary "$@"
 	shift "$bobshell_cli_shift"
 
-	if [ true = "$_hoid_task_install_binary__remote" ] && bobshell_locator_parse "$1"; then
+	if [ true = "${_hoid_task_install_binary__remote:-false}" ] && bobshell_locator_parse "$1"; then
 		bobshell_die "hoid_task_install_binary: sourcelocators not supported when remote flag is on "
 	fi
 
 	#
 	if bobshell_isset_2 "$@"; then
 		_hoid_task_install_binary__name="$2"
-	elif [ true = "$_hoid_task_install_binary__remote" ]; then
+	elif [ true = "${_hoid_task_install_binary__remote:-false}" ]; then
 		_hoid_task_install_binary__name=$(basename "$1")
 	elif bobshell_locator_is_file "$1" _hoid_task_install_binary__srcref; then
 		_hoid_task_install_binary__name=$(basename "$_hoid_task_install_binary__srcref")
@@ -94,7 +97,9 @@ hoid_task_install_binary() {
 
 
 	# 
-	hoid copy "$1" "$_hoid_task_install_binary__src"
+	hoid_task_install_binary_mapper "$1" var:_hoid_task_install_binary__buffer
+	hoid copy var:_hoid_task_install_binary__buffer "$_hoid_task_install_binary__src"
+	unset _hoid_task_install_binary__buffer
 
 	# shellcheck disable=SC2016
 	hoid --env _hoid_task_install_binary__src --env _hoid_task_install_binary__name script '
@@ -106,4 +111,18 @@ hoid_task_install_binary "$_hoid_task_install_binary__src" "$_hoid_task_install_
 	hoid block end
 	unset _hoid_task_install_binary__src _hoid_task_install_binary__name
 
+}
+
+hoid_task_install_binary_mapper() {
+	bobshell_resource_copy "$1" var:_hoid_task_install_binary_mapper__buffer
+	if [ true = "${_hoid_task_install_binary__secret:-false}" ]; then
+		bobshell_decrypt var:_hoid_task_install_binary_mapper__buffer var:_hoid_task_install_binary_mapper__buffer
+	fi
+	if [ true = "${_hoid_task_install_binary__mustache:-false}" ]; then
+		bobshell_mustache var:_hoid_task_install_binary_mapper__buffer var:_hoid_task_install_binary_mapper__buffer
+	fi
+	if [ true = "${_hoid_task_install_binary__interpolate:-false}" ]; then
+		bobshell_interpolate var:_hoid_task_install_binary_mapper__buffer var:_hoid_task_install_binary_mapper__buffer
+	fi
+	bobshell_resource_copy var:_hoid_task_install_binary_mapper__buffer "$2"
 }

@@ -11,8 +11,8 @@ bobshell_cli_setup hoid_task_install --var=hoid_task_install__bindir  --param --
 
 
 hoid_task_install() {
-	bobshell_cli_parse "$@"
-	shift $bobshell_cli_shift
+	bobshell_cli_parse hoid_task_install "$@"
+	shift "$bobshell_cli_shift"
 
 	_hoid_task_install__function="hoid_task_install_${1}"
 	if bobshell_command_available "$_hoid_task_install__function"; then
