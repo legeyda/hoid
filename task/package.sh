@@ -1,8 +1,8 @@
 
 
 
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/base.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/misc/subcommand.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/base.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/misc/subcommand.sh
 
 hoid_task_package() {
 	bobshell_subcommand hoid_task_package "$@"

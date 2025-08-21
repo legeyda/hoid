@@ -1,9 +1,9 @@
 
 
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/string.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/resource/copy.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/redirect/io.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/redirect/output.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/string.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/resource/copy.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/redirect/io.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/redirect/output.sh
 
 
 

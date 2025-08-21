@@ -1,9 +1,9 @@
 
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/string.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/str/quote.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/base.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/misc/subcommand.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/url.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/string.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/str/quote.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/base.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/misc/subcommand.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/url.sh
 shelduck import ./install/docker.sh
 
 hoid_task_docker() {

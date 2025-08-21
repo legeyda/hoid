@@ -1,5 +1,5 @@
 
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/assert.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/assert.sh
 shelduck import ../hoid.sh
 
 
@@ -9,7 +9,7 @@ test_run() {
 	hoid shelduck run --output var:test_run_output 'val:
 
 
-''shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/string.sh''
+''shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/string.sh''
 x=xyz
 x=$(bobshell_replace "$x" x 1)
 x=$(bobshell_replace "$x" y 2)

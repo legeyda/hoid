@@ -1,8 +1,8 @@
 
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/str/split.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/event/var/listen.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/template.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/string.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/str/split.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/event/var/listen.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/template.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/string.sh
 
 bobshell_event_listen hoid_setup_event hoid_find_setup_event_listener
 hoid_find_setup_event_listener() {

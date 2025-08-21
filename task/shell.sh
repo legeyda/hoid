@@ -1,6 +1,6 @@
 
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/string.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/locator/parse.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/string.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/locator/parse.sh
 
 hoid_task_shell() {
 	if bobshell_locator_parse "$*" && ! bobshell_starts_with "$*" /; then

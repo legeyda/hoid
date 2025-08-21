@@ -1,11 +1,11 @@
 #!/usr/bin/env shelduck_run
 set -eu
 
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/run.sh
-# shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/map.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/misc/random.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/misc/defun.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/bobtest.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/run.sh
+# shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/map.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/misc/random.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/misc/defun.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/bobtest.sh
 shelduck import ./util.sh
 
 
@@ -116,13 +116,13 @@ run_bundle_test() {
 	x=$(sh -c '
 . "$HOID_BUILD_ROOT/release/hoid_bundle.sh"
 shelduck import https://raw.githubusercontent.com/legeyda/hoid/refs/heads/main/hoid.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/string.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/string.sh
 
 bobshell_replace abc b 1
 
 ')
 
-	shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/assert.sh
+	shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/assert.sh
 	assert_equals a1c "$x"
 }
 
@@ -191,4 +191,4 @@ run_debug() {
 }
 
 
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/entry_point.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/entry_point.sh

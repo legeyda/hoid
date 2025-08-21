@@ -3,8 +3,8 @@
 
 
 shelduck import ./lineinfile.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/base.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/str/quote.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/base.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/str/quote.sh
 
 
 hoid_task_path_function=$(cat<<'EOF'

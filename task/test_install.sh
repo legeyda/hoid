@@ -1,5 +1,5 @@
 
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/assert.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/assert.sh
 shelduck import ../hoid.sh
 
 

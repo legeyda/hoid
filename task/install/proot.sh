@@ -1,6 +1,6 @@
 
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/base.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/random/int.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/base.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/random/int.sh
 shelduck import ./binary.sh
 
 

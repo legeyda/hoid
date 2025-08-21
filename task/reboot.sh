@@ -1,5 +1,5 @@
 
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/ssh.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/ssh.sh
 
 
 hoid_task_reboot() {

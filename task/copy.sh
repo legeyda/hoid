@@ -1,11 +1,11 @@
 
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/base.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/locator/resolve.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/locator/is_file.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/locator/is_readable.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/resource/copy.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/misc/random.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/template.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/base.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/locator/resolve.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/locator/is_file.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/locator/is_readable.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/resource/copy.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/misc/random.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/template.sh
 
 hoid_dir_is_not_empty() {
 	_hoid_dir_is_empty=$(ls -A "$1")

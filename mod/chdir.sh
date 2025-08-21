@@ -1,15 +1,15 @@
 
 
 
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/base.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/str/path/join.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/result/assert.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/buffer/config.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/buffer/printf.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/event/listen.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/event/var/set.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/event/var/unset.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/event/var/mimic.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/base.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/str/path/join.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/result/assert.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/buffer/config.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/buffer/printf.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/event/listen.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/event/var/set.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/event/var/unset.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/event/var/mimic.sh
 shelduck import ../util.sh
 
 

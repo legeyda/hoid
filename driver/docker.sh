@@ -1,5 +1,5 @@
 
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/base.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/base.sh
 
 # env: hoid_driver_ssh_address
 hoid_driver_docker() {

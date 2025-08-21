@@ -1,8 +1,8 @@
 
 
 #shelduck import https://raw.githubusercontent.com/legeyda/shelduck/refs/heads/main/shelduck.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/base.sh
-# shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/bobshell.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/base.sh
+# shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/bobshell.sh
 
 hoid_task_shelduck() {
 	case "$1" in
@@ -117,7 +117,7 @@ HOID_SHELDUCK_INSTALL_EOF
 	hoid script "$hoid_task_shelduck_install_script"
 	unset hoid_task_shelduck_install_script
 
-	hoid shelduck run "shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/install.sh
+	hoid shelduck run "shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/install.sh
 bobshell_install_init
 bobshell_install_put_executable var:hoid_task_shelduck_install_script '$hoid_task_shelduck_install_name'"
 

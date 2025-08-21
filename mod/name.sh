@@ -1,7 +1,7 @@
 
 
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/event/listen.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/event/var/mimic.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/event/listen.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/event/var/mimic.sh
 
 
 

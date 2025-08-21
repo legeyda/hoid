@@ -4,13 +4,13 @@
 
 
 
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/random/int.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/random/int.sh
 shelduck import ../path.sh
 
 
 hoid_task_install_binary_function=$(cat<<'EOF'
 
-# https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/base.sh
+# https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/base.sh
 bobshell_isset_2() {
 	eval "test \"\${2+defined}\" = defined"
 }

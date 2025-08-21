@@ -1,10 +1,10 @@
 
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/assert.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/assert.sh
 shelduck import ../hoid.sh
 
 test_env() {
 
-	test_env_script='val:shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/base.sh
+	test_env_script='val:shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/base.sh
 if bobshell_isset TVAR1; then
 	printf "TVAR1 is %s" "$TVAR1 is set"
 else

@@ -1,5 +1,5 @@
 
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/base.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/base.sh
 
 # hoid_build_string clear
 # hoid_build_string command echo hello

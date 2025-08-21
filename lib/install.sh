@@ -1,7 +1,7 @@
 
 
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/install.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/scope.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/install.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/scope.sh
 
 
 

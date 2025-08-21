@@ -1,7 +1,7 @@
 
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/base.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/string.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/assert.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/base.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/string.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/assert.sh
 shelduck import ../../util.sh
 shelduck import ./proot.sh
 shelduck import https://raw.githubusercontent.com/legeyda/hoid/refs/heads/main/hoid.sh

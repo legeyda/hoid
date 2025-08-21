@@ -1,6 +1,6 @@
 
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/url.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/result/set.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/url.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/result/set.sh
 
 
 

@@ -1,13 +1,13 @@
 
 # lib dependencies
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/base.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/util.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/misc/equals_any.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/event/fire.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/event/template.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/stack/set.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/result/set.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/result/check.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/base.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/util.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/misc/equals_any.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/event/fire.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/event/template.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/stack/set.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/result/set.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/result/check.sh
 
 
 # import std tasks

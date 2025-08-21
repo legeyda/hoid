@@ -3,12 +3,12 @@
 
 
 
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/base.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/string.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/base.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/string.sh
 
 # cli parse
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/cli/setup.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/cli/parse.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/cli/setup.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/cli/parse.sh
 
 
 

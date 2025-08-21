@@ -1,12 +1,12 @@
 
 
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/misc/eqvar.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/stack/push.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/stack/pop.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/stack/size.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/result/set.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/result/check.sh
-shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/unstable/event/fire.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/misc/eqvar.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/stack/push.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/stack/pop.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/stack/size.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/result/set.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/result/check.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/event/fire.sh
 
 
 hoid_state_validate() {
