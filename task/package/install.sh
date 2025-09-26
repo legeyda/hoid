@@ -15,15 +15,17 @@ hoid_task_package_install() {
 		fi
 		apt-get install --yes "$@"
     elif command -v yum &> /dev/null; then
-        sudo yum install -y "$@"
+        yum install -y "$@"
     elif command -v dnf &> /dev/null; then
-        sudo dnf install --assumeyes "$@"
+        dnf install --assumeyes "$@"
     elif command -v pacman &> /dev/null; then
-        sudo pacman -S --noconfirm "$@"
+        pacman -S --noconfirm "$@"
     elif command -v zypper &> /dev/null; then
-        sudo zypper install -y "$@"
+        zypper install -y "$@"
+    elif command -v apk &> /dev/null; then
+        apk add "$@"
     else
-        echo "no supported package manager (apt, yum, dnf, pacman, zypper)" >&2
+        echo "no supported package manager (apt, yum, dnf, pacman, zypper, apk)" >&2
         return 1
     fi
 }

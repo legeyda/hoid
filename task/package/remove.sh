@@ -7,20 +7,22 @@ hoid_task_package_remove() {
     if command -v apt-get &> /dev/null; then
 		apt-get remove --yes "$@"
     elif command -v yum &> /dev/null; then
-        sudo yum remove -y "$@"
+        yum remove -y "$@"
     elif command -v dnf &> /dev/null; then
-        sudo dnf remove --assumeyes "$@"
+        dnf remove --assumeyes "$@"
     elif command -v pacman &> /dev/null; then
-        sudo pacman -Rs --noconfirm "$@"
+        pacman -Rs --noconfirm "$@"
     elif command -v zypper &> /dev/null; then
-        sudo zypper remove -y "$@"
+        zypper remove -y "$@"
+    elif command -v apk &> /dev/null; then
+        apk del "$@"
     else
-        echo "no supported package manager (apt, yum, dnf, pacman, zypper)" >&2
+        echo "no supported package manager (apt, yum, dnf, pacman, zypper, apk)" >&2
         return 1
     fi
 }
 hoid_task_package_remove '"$hoid_task_package_remove_args"
-
+    unset hoid_task_package_remove_args
 }
 
 
