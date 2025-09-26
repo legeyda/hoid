@@ -2,6 +2,7 @@
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/base.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/event/var/set.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/event/var/unset.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/event/listen.sh
 
 
 

@@ -134,7 +134,9 @@ hoid_subcommand() {
 
 
 hoid_task() {
-	hoid_task_function="hoid_task_$1"
+	hoid_task_function=$(printf %s "$1" | tr - _)
+	hoid_task_function=hoid_task_"$hoid_task_function"
+
 	if ! bobshell_command_available "$hoid_task_function"; then
 		bobshell_die "hoid: task '$1' not available"
 	fi
