@@ -128,12 +128,17 @@ hoid_mod_become_rewrite() {
 	
 	if bobshell_contains "$hoid_buffer" "'"; then
 		bobshell_buffer_rewrite_random="$(bobshell_random)$(bobshell_random)$(bobshell_random)"
+
 		hoid_buffer="set -eu;
 script=\$(cat<""<\EOF_$bobshell_buffer_rewrite_random
 set -eu
 $hoid_buffer
 EOF_$bobshell_buffer_rewrite_random
 )
+script=\"
+hoid_orig_user=\$USER
+
+\$script\"
 $_hoid_mod_become_rewrite__sudo sh -c \"\$script\"
 "
 	else
