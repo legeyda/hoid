@@ -3,17 +3,19 @@ shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/ma
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/event/var/set.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/event/var/unset.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/event/listen.sh
-
-
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/str/quote.sh
 
 
 hoid_util_state_dump() {
 	while bobshell_isset_1 "$@"; do
 		if bobshell_isset "$1"; then
 			_hoid_util_state_dump__value=$(bobshell_getvar "$1")
-			printf "bobshell_event_var_set '%s' '%s'\n" "$1" "$_hoid_util_state_dump__value"
+			bobshell_str_quote "$_hoid_util_state_dump__value"
+			#printf '%s\n' 'echo DEBUG: I AM HERE (set) >&2'
+			printf "bobshell_event_var_set '%s' %s\n" "$1" "$bobshell_result_1"
 			unset _hoid_util_state_dump__value
 		else
+		    #printf '%s\n' 'echo DEBUG: I AM HERE (unset) >&2'
 			printf 'bobshell_event_var_unset %s\n' "$1"
 		fi
 		shift
@@ -42,7 +44,7 @@ mkcd() {
 	else
 		_mkcd__dir=$(mktemp -d)
 		cd "$_mkcd__dir"
-		unset _mkcd_dir	
+		unset _mkcd_dir
 	fi
 }
 
@@ -93,11 +95,11 @@ EOF
 
 	hoid buffer flush
 	hoid block end
-	
+
 	if [ true = "$_hoid_testcontainer_run__clean" ]; then
 		hoid_testcontainer_stop "$hoid_testcontainer_name" # todo comment out for debug
 	fi
-	unset _hoid_testcontainer_run__clean 
+	unset _hoid_testcontainer_run__clean
 }
 
 
