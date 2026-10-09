@@ -41,17 +41,17 @@ hoid_task_shelduck_run() {
 				;;
 		esac
 	done
-	
+
 	if ! bobshell_isset_1 "$@"; then
 		bobshell_die '"hoid shelduck run" requires at least 1 argument'
 	fi
-	
-	hoid_task_shelduck_run_script=$(shelduck resolve "$1")
+
+	hoid_task_shelduck_run_script=$(shelduck build "$1")
 	shift
 	hoid_task_shelduck_run_args=$(bobshell_quote "$@")
 	if [ -n "$hoid_task_shelduck_run_script" ]; then
 		hoid_task_shelduck_run_script="set -eu -- $hoid_task_shelduck_run_args;
-		
+
 $hoid_task_shelduck_run_script"
 	fi
 	unset hoid_task_shelduck_run_args
@@ -70,7 +70,7 @@ $hoid_task_shelduck_run_script"
 	hoid script "$@"
 }
 
-# fun: hoid shelduck install hoid 
+# fun: hoid shelduck install hoid
 hoid_task_shelduck_install() {
 
 
@@ -107,7 +107,7 @@ hoid_task_shelduck_install() {
 	hoid_task_shelduck_install_url="$1"
 	shift
 
-	hoid_task_shelduck_install_script=$(shelduck resolve "$hoid_task_shelduck_install_url")
+	hoid_task_shelduck_install_script=$(shelduck build "$hoid_task_shelduck_install_url")
 	hoid_task_shelduck_install_script="
 hoid_task_shelduck_install_script=$(cat <<HOID_SHELDUCK_INSTALL_EOF
 $hoid_task_shelduck_install_script
@@ -122,8 +122,3 @@ bobshell_install_init
 bobshell_install_put_executable var:hoid_task_shelduck_install_script '$hoid_task_shelduck_install_name'"
 
 }
-
-
-
-
-

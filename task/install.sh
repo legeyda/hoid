@@ -22,7 +22,7 @@ hoid_task_install() {
 		hoid_task_package_install "$@"
 	else
 		bobshell_die "hoid_task_install: unknown piece of software: $1"
-	fi	
+	fi
 	unset _hoid_task_install__function
 }
 
@@ -30,10 +30,9 @@ hoid_task_install_shelduck() {
 	hoid script https://github.com/legeyda/shelduck/releases/latest/download/install.sh
 }
 
-hoid_task_install_hoid() {	
+hoid_task_install_hoid() {
 	bobshell_die 'not implemented'
-	hoid_task_install_hoid_installer=$(shelduck resolve https://raw.githubusercontent.com/legeyda/shelduck/refs/heads/main/shelduck.sh)
+	hoid_task_install_hoid_installer=$(shelduck build https://raw.githubusercontent.com/legeyda/shelduck/refs/heads/main/shelduck.sh)
 	hoid script "$hoid_task_install_hoid_installer"
 	unset hoid_task_install_hoid_installer
 }
-

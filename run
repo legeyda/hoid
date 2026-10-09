@@ -67,11 +67,11 @@ run_build_repo() {
 "
 	unset _run_build__script _run_build__url _run_build__path
 
-	rm -rf "$_run_build_repo__temp/$1-$2.tar.gz" "$_run_build_repo__temp/$1-$2"	
+	rm -rf "$_run_build_repo__temp/$1-$2.tar.gz" "$_run_build_repo__temp/$1-$2"
 	unset _run_build_repo__temp
-	
-	
-	
+
+
+
 }
 
 run_build_hoid() {
@@ -132,7 +132,7 @@ hoid_compile() {
 	unset hoid_compile_cache_data
 	# shellcheck disable=SC2016
 	bobshell_defun shelduck_event_url 'bobshell_map_put hoid_compile_cache "$1" "$2"'
-	shelduck resolve "$1" > /dev/null
+	shelduck build "$1" > /dev/null
 	hoid_compile_random="$(bobshell_random)$(bobshell_random)$(bobshell_random)"
 	# shellcheck disable=SC2016
 	printf '
@@ -145,7 +145,7 @@ EOF_HOID_COMPILE_%s
 	# shellcheck disable=SC2016
 	printf %s '
 # fun: shelduck import http://example.com/file.sh
-# txt: mock shelduck 
+# txt: mock shelduck
 shelduck() {
 	if [ "$1" != import ]; then
 		bobshell_die "(offline mock) shelduck: import only supported"

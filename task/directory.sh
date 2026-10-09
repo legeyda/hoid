@@ -2,7 +2,7 @@
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/base.sh
 
 hoid_task_directory_src() {
-	shelduck resolve https://raw.githubusercontent.com/legeyda/hoid/refs/heads/main/task/directory.sh
+	shelduck build https://raw.githubusercontent.com/legeyda/hoid/refs/heads/main/task/directory.sh
 }
 
 hoid_task_directory() {
@@ -22,7 +22,7 @@ hoid_task_directory() {
 			(-g|--group)
 				bobshell_die 'group not implemented'
 				;;
-					
+
 			(*)
 				hoid_task_directory_path="$1"
 				if bobshell_isset_2 "$@"; then
