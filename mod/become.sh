@@ -77,7 +77,7 @@ bobshell_event_listen hoid_event_state_dump hoid_mod_become_state_dump
 
 
 hoid_mod_become_init() {
-	
+
 	if bobshell_isset hoid_alt_become; then
 		bobshell_event_var_set hoid_become "$hoid_alt_become"
 		unset hoid_alt_become
@@ -88,7 +88,7 @@ hoid_mod_become_init() {
 	else
 		bobshell_event_var_set hoid_become false
 	fi
-	
+
 
 	if bobshell_isset hoid_alt_become_password; then
 		bobshell_event_var_set hoid_become_password "$hoid_alt_become_password"
@@ -119,19 +119,19 @@ hoid_mod_become_rewrite() {
 	if bobshell_isset hoid_become_password; then
 		# todo when sudo password is used, input redirection does not work
 		# todo when sudo password is used, sshpass print auth errors
+
 		_hoid_mod_become_rewrite__sudo=$(bobshell_quote "$hoid_become_password")
-		_hoid_mod_become_rewrite__sudo="printf %s $_hoid_mod_become_rewrite__sudo | sudo -S"
+		_hoid_mod_become_rewrite__sudo="printf %s $_hoid_mod_become_rewrite__sudo | sudo -S -v
+sudo"
 	else
 		_hoid_mod_become_rewrite__sudo=sudo
 	fi
 
-	
-	if bobshell_contains "$hoid_buffer" "'"; then
-		bobshell_buffer_rewrite_random="$(bobshell_random)$(bobshell_random)$(bobshell_random)"
-
+	bobshell_buffer_rewrite_random="$(bobshell_random)$(bobshell_random)$(bobshell_random)"
+	if [ "${#hoid_buffer}" -lt 65536 ]; then
 		hoid_buffer="set -eu;
 script=\$(cat<""<\EOF_$bobshell_buffer_rewrite_random
-set -eu
+set -eux
 $hoid_buffer
 EOF_$bobshell_buffer_rewrite_random
 )
@@ -141,12 +141,33 @@ hoid_orig_user=\$USER
 \$script\"
 $_hoid_mod_become_rewrite__sudo sh -c \"\$script\"
 "
+
 	else
-		hoid_buffer="set -eu; $_hoid_mod_become_rewrite__sudo sh -c 'set -eu; $hoid_buffer'"
+		hoid_buffer='set -eu;
+tmpfile=/tmp/'"$bobshell_buffer_rewrite_random"'
+
+cat > $tmpfile <''<\EOF_'"$bobshell_buffer_rewrite_random"'
+set -eux
+'"$hoid_buffer"'
+EOF_'"$bobshell_buffer_rewrite_random"'
+
+script="
+hoid_orig_user=$USER
+. $tmpfile
+rm $tmpfile
+"'
+
 	fi
+
+	hoid_buffer="$hoid_buffer"'
+
+# do run if not already root
+if [ $(id -u) -eq 0 ]; then
+	sh -c "$script"
+else
+	'"$_hoid_mod_become_rewrite__sudo"' sh -c "$script"
+fi'
+
 	unset _hoid_mod_become_rewrite__sudo
 }
 bobshell_event_listen hoid_event_buffer_rewrite hoid_mod_become_rewrite
-
-
-

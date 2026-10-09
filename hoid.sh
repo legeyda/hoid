@@ -8,6 +8,7 @@ shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/ma
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/stack/set.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/result/set.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/result/check.sh
+shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/misc/log.sh
 
 
 # import std tasks
@@ -28,7 +29,7 @@ shelduck import ./setup.sh
 # main entry point
 hoid() {
 
-
+	bobshell_event_template hoid_event_cli_options '{}'
 
 	: "${_hoid_recursion_depth=0}"
 	_hoid_recursion_depth=$(( _hoid_recursion_depth + 1 ))

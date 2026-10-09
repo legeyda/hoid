@@ -50,7 +50,7 @@ hoid_task_shelduck_run() {
 	shift
 	hoid_task_shelduck_run_args=$(bobshell_quote "$@")
 	if [ -n "$hoid_task_shelduck_run_script" ]; then
-		hoid_task_shelduck_run_script="set -- $hoid_task_shelduck_run_args;
+		hoid_task_shelduck_run_script="set -eu -- $hoid_task_shelduck_run_args;
 		
 $hoid_task_shelduck_run_script"
 	fi

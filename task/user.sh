@@ -18,6 +18,18 @@ bobshell_cli_setup hoid_task_user_cli --var=_hoid_task_user__uid --param u uid
 bobshell_cli_setup hoid_task_user_cli --var=_hoid_task_user__ssh_copy_id --flag ssh-copy-id
 bobshell_cli_setup hoid_task_user_cli --var=_hoid_task_user__ssh_id_file --param i ssh-id-file
 
+
+#
+# todo hide account from login screen
+# https://askubuntu.com/a/575390
+# /var/lib/AccountsService/users/USERNAME
+# [User]
+# SystemAccount=true
+# sudo systemctl restart accounts-daemon.service
+
+
+
+
 # use: hoid_task_user --ssh-copy-id "$HOME/.ssh/ubuntu24server/wongadmin" --ssh-keygen always
 # use: hoid_task_user --ssh-copy-id --ssh-id-file "$HOME/.ssh/ubuntu24server/wongadmin" --ssh-keygen
 hoid_task_user() {
