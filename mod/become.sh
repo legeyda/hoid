@@ -139,7 +139,6 @@ script=\"
 hoid_orig_user=\$USER
 
 \$script\"
-$_hoid_mod_become_rewrite__sudo sh -c \"\$script\"
 "
 
 	else

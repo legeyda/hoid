@@ -61,7 +61,7 @@ hoid_task_script() {
 	if bobshell_isset _hoid_task_script__output; then
 		set -- "$@" --output "$_hoid_task_script__output"
 	fi
-	
+
 	hoid_buffer_flush "$@"
 }
 

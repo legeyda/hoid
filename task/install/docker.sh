@@ -8,7 +8,7 @@ hoid_task_install_docker() {
 	# https://docs.docker.com/engine/install/ubuntu/#install-using-the-convenience-script
 	set -x
 	hoid --become true --name 'install docker engine' block start
-	
+
 	hoid_task_install_docker_verify
 	if ! bobshell_result_check; then
 		_hoid_task_install_docker__script=$(bobshell_fetch_url 'https://get.docker.com/') # todo? bobshell_resource_copy 'https://get.docker.com/' var:_hoid_task_install_docker__script
@@ -24,8 +24,8 @@ hoid_task_install_docker() {
 	# https://docs.docker.com/engine/install/linux-postinstall/#manage-docker-as-a-non-root-user
 	hoid script 'groupadd docker || true'
 	# shellcheck disable=SC2016
-	hoid script 'if [ "$USER" != root ]; then # todo always true
-		usermod -aG docker $USER
+	hoid script 'if [ "$hoid_orig_user" != root ]; then
+		usermod -aG docker "$hoid_orig_user"
 	fi'
 	#hoid command newgrp docker
 
@@ -33,7 +33,9 @@ hoid_task_install_docker() {
 	hoid command systemctl enable docker.service
 	hoid command systemctl enable containerd.service
 
+
 	hoid block end
+	hoid buffer flush
 }
 
 
