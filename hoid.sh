@@ -10,6 +10,21 @@ shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/ma
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/result/check.sh
 shelduck import https://raw.githubusercontent.com/legeyda/bobshell/refs/heads/main/misc/log.sh
 
+# shellcheck disable=SC2016
+bobshell_event_template hoid_event_cli_options '
+	while bobshell_isset_1 "$@"; do
+		case "$1" in
+			{}
+			(-*)
+				bobshell_die "hoid: unrecognized option $1"
+				;;
+			(*)
+				break
+				;;
+		esac
+		hoid_cli_opts=true
+	done
+	hoid_subcommand "$@"'
 
 # import std tasks
 shelduck import ./task/_all.sh
@@ -28,8 +43,6 @@ shelduck import ./setup.sh
 
 # main entry point
 hoid() {
-
-	bobshell_event_template hoid_event_cli_options '{}'
 
 	: "${_hoid_recursion_depth=0}"
 	_hoid_recursion_depth=$(( _hoid_recursion_depth + 1 ))
@@ -82,21 +95,7 @@ hoid_cli_parse() {
 }
 
 
-# shellcheck disable=SC2016
-bobshell_event_template hoid_event_cli_options '
-	while bobshell_isset_1 "$@"; do
-		case "$1" in
-			{}
-			(-*)
-				bobshell_die "hoid: unrecognized option $1"
-				;;
-			(*)
-				break
-				;;
-		esac
-		hoid_cli_opts=true
-	done
-	hoid_subcommand "$@"'
+
 
 
 hoid_subcommand() {
